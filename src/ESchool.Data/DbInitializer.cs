@@ -42,7 +42,7 @@ namespace ESchool.Data
             RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager)
         {
-            var roles = new string[] { "Administrators", "Supervisors", "Moderators", "Registereds" };
+            var roles = new string[] { "Administrators", "Supervisors", "Moderators", "Registereds", "Guests" };
 
             foreach (var roleName in roles)
             {

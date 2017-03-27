@@ -15,7 +15,8 @@
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.1",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.1",
     "Microsoft.Extensions.Configuration.Json": "1.1.1",
-    "ESchool.Admin": "1.0.0-*"
+    "ESchool.Admin": "1.0.0-*",
+    "NLog.Web.AspNetCore": "4.3.1"
   },
 
   "tools": {
@@ -47,7 +48,8 @@
       "wwwroot",
       "**/*.cshtml",
       "appsettings.json",
-      "web.config"
+      "web.config",
+      "nlog.config"
     ]
   },
 
