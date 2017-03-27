@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "ESchool.DomainModels": "1.0.0-*",
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.1",
+    "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.1",
+    "Microsoft.EntityFrameworkCore.Tools": "1.1.0",
+    "Microsoft.Extensions.Configuration": "1.1.1",
+    "NETStandard.Library": "1.6.1"
+  },
+
+  "tools": {
+    "Microsoft.EntityFrameworkCore.Tools": "1.1.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}
