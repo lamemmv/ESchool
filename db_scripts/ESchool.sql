@@ -1,142 +1,6 @@
 USE [ESchool]
 GO
-/****** Object:  Table [dbo].[Schools]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Schools](
-	[Id] [int] NOT NULL,
-	[Name] [nvarchar](250) NOT NULL,
-	[Address] [nvarchar](500) NULL,
- CONSTRAINT [PK_School] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Roles](
-	[Id] [int] NOT NULL,
-	[Name] [nvarchar](250) NOT NULL,
-	[Description] [nvarchar](500) NULL,
- CONSTRAINT [PK_Roles] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Users]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Users](
-	[Id] [int] NOT NULL,
-	[Username] [nchar](50) NOT NULL,
-	[Password] [nchar](50) NOT NULL,
-	[Domain] [nchar](100) NULL,
-	[Email] [nchar](50) NULL,
-	[Activated] [bit] NULL,
- CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[QuestionTags]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[QuestionTags](
-	[Id] [int] NOT NULL,
-	[QuestionTag] [nvarchar](250) NOT NULL,
-	[Description] [nvarchar](max) NULL,
- CONSTRAINT [PK_QuestionTags] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[PermissionSets]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[PermissionSets](
-	[Id] [int] NOT NULL,
-	[Name] [nvarchar](100) NOT NULL,
-	[Description] [nvarchar](500) NULL,
- CONSTRAINT [PK_PermissionSets] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[ExamPaper]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[ExamPaper](
-	[Id] [int] NOT NULL,
-	[ExamPaper] [nvarchar](250) NOT NULL,
- CONSTRAINT [PK_ExamPaper] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Examination]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Examination](
-	[Id] [int] NOT NULL,
-	[Name] [nvarchar](250) NULL,
-	[ExamDate] [datetime] NOT NULL,
- CONSTRAINT [PK_Examination] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Classes]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Classes](
-	[Id] [int] NOT NULL,
-	[Name] [nvarchar](150) NOT NULL,
- CONSTRAINT [PK_Classes] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Modules]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Modules](
-	[Id] [int] NOT NULL,
-	[Name] [nvarchar](100) NOT NULL,
-	[Description] [nvarchar](250) NULL,
- CONSTRAINT [PK_Modules] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Parents]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[Parents]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -155,7 +19,131 @@ CREATE TABLE [dbo].[Parents](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[NewsCategories]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[Id] [int] NOT NULL,
+	[Username] [nchar](50) NOT NULL,
+	[Password] [nchar](50) NOT NULL,
+	[Domain] [nchar](100) NULL,
+	[Email] [nchar](50) NULL,
+	[Activated] [bit] NULL,
+ CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Schools]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Schools](
+	[Id] [int] NOT NULL,
+	[Name] [nvarchar](250) NOT NULL,
+	[Address] [nvarchar](500) NULL,
+ CONSTRAINT [PK_School] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Roles](
+	[Id] [int] NOT NULL,
+	[Name] [nvarchar](250) NOT NULL,
+	[Description] [nvarchar](500) NULL,
+ CONSTRAINT [PK_Roles] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[QTags]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[QTags](
+	[Id] [int] NOT NULL,
+	[Name] [nvarchar](250) NOT NULL,
+	[Description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_QuestionTags] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PermissionSets]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PermissionSets](
+	[Id] [int] NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+	[Description] [nvarchar](500) NULL,
+ CONSTRAINT [PK_PermissionSets] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Questions]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Questions](
+	[Id] [int] NOT NULL,
+	[Question] [nvarchar](500) NOT NULL,
+	[DSS] [int] NOT NULL,
+	[Description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_Questions] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Modules]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Modules](
+	[Id] [int] NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+	[Description] [nvarchar](250) NULL,
+ CONSTRAINT [PK_Modules] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Exams]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Exams](
+	[Id] [int] NOT NULL,
+	[Name] [nvarchar](250) NULL,
+	[ExamDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_Examination] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[NewsCategories]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -169,110 +157,51 @@ CREATE TABLE [dbo].[NewsCategories](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[News]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[ExamPaper]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[News](
+CREATE TABLE [dbo].[ExamPaper](
 	[Id] [int] NOT NULL,
-	[CategoryId] [int] NOT NULL,
-	[Title] [nvarchar](250) NOT NULL,
-	[Body] [nvarchar](max) NULL,
-	[CreatedDate] [datetime] NULL,
-	[CreatedBy] [int] NULL,
-	[PublishedDate] [datetime] NULL,
- CONSTRAINT [PK_News] PRIMARY KEY CLUSTERED 
+	[ExamPaper] [nvarchar](250) NOT NULL,
+ CONSTRAINT [PK_ExamPaper] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Permissions]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[Courses]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[Permissions](
+CREATE TABLE [dbo].[Courses](
 	[Id] [int] NOT NULL,
-	[PermissionSetId] [int] NOT NULL,
-	[Name] [nvarchar](100) NOT NULL,
-	[Description] [nvarchar](250) NULL,
- CONSTRAINT [PK_Permissions] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC,
-	[PermissionSetId] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Questions]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Questions](
-	[Id] [int] NOT NULL,
-	[Question] [nvarchar](500) NOT NULL,
-	[DSS] [int] NOT NULL,
-	[QuestionTagId] [int] NULL,
-	[Description] [nvarchar](max) NULL,
- CONSTRAINT [PK_Questions] PRIMARY KEY CLUSTERED 
+	[Name] [nvarchar](150) NOT NULL,
+ CONSTRAINT [PK_Classes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Students]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[Answers]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[Students](
+CREATE TABLE [dbo].[Answers](
 	[Id] [int] NOT NULL,
-	[FirstName] [nvarchar](150) NULL,
-	[LastName] [nvarchar](50) NULL,
-	[Birthday] [date] NULL,
-	[PhoneNumber] [nchar](15) NULL,
-	[ParentId] [int] NOT NULL,
- CONSTRAINT [PK_Students] PRIMARY KEY CLUSTERED 
+	[QuestionId] [int] NOT NULL,
+	[Answer] [nchar](10) NOT NULL,
+	[Body] [nvarchar](250) NULL,
+ CONSTRAINT [PK_Answers] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserRoles]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[UserRoles](
-	[Id] [int] NOT NULL,
-	[UserId] [int] NOT NULL,
-	[RoleId] [int] NOT NULL,
- CONSTRAINT [PK_UserRoles] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[UserActionLogs]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[UserActionLogs](
-	[Id] [int] NOT NULL,
-	[UserId] [int] NOT NULL,
-	[Action] [int] NOT NULL,
-	[ActionDate] [datetime] NOT NULL,
-	[Comment] [nvarchar](500) NULL,
- CONSTRAINT [PK_UserActionLogs] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[ACL]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[ACL]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -292,92 +221,26 @@ CREATE TABLE [dbo].[ACL](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Registration]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[News]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[Registration](
+CREATE TABLE [dbo].[News](
 	[Id] [int] NOT NULL,
-	[StudentId] [int] NOT NULL,
-	[ClassId] [int] NOT NULL,
-	[RegisteredDate] [datetime] NULL,
-	[InputScore] [decimal](18, 2) NULL,
-	[EndDate] [datetime] NULL,
- CONSTRAINT [PK_Registration] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[StudentTuition]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[StudentTuition](
-	[Id] [int] NOT NULL,
-	[StudentId] [int] NOT NULL,
-	[Tuition] [decimal](18, 2) NULL,
+	[CategoryId] [int] NOT NULL,
+	[Title] [nvarchar](250) NOT NULL,
+	[Body] [nvarchar](max) NULL,
 	[CreatedDate] [datetime] NULL,
-	[Comment] [nvarchar](500) NULL,
- CONSTRAINT [PK_StudentTuition] PRIMARY KEY CLUSTERED 
+	[CreatedBy] [int] NULL,
+	[PublishedDate] [datetime] NULL,
+ CONSTRAINT [PK_News] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentTracking]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[StudentTracking](
-	[Id] [int] NOT NULL,
-	[StudentId] [int] NOT NULL,
-	[Action] [int] NOT NULL,
-	[TimeStamp] [datetime] NOT NULL,
-	[Comment] [nvarchar](500) NULL,
- CONSTRAINT [PK_StudentTracking] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[StudentSchool]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[StudentSchool](
-	[Id] [int] NOT NULL,
-	[StudentId] [int] NOT NULL,
-	[SchoolId] [int] NOT NULL,
-	[InputScore] [decimal](18, 2) NULL,
- CONSTRAINT [PK_StudentSchool] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[StudentExam]    Script Date: 03/28/2017 08:52:37 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[StudentExam](
-	[Id] [int] NOT NULL,
-	[ExamId] [int] NOT NULL,
-	[StudentId] [int] NOT NULL,
-	[Grade] [decimal](18, 2) NULL,
-	[Comment] [nvarchar](500) NULL,
- CONSTRAINT [PK_StudentExam] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[QuestionExamPaper]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[QuestionExamPaper]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -393,23 +256,107 @@ CREATE TABLE [dbo].[QuestionExamPaper](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Answers]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[Permissions]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[Answers](
+CREATE TABLE [dbo].[Permissions](
 	[Id] [int] NOT NULL,
-	[QuestionId] [int] NOT NULL,
-	[Answer] [nchar](10) NOT NULL,
-	[Body] [nvarchar](250) NULL,
- CONSTRAINT [PK_Answers] PRIMARY KEY CLUSTERED 
+	[PermissionSetId] [int] NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+	[Description] [nvarchar](250) NULL,
+ CONSTRAINT [PK_Permissions] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC,
+	[PermissionSetId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Students]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Students](
+	[Id] [int] NOT NULL,
+	[FirstName] [nvarchar](150) NULL,
+	[LastName] [nvarchar](50) NULL,
+	[Birthday] [date] NULL,
+	[PhoneNumber] [nchar](15) NULL,
+	[ParentId] [int] NOT NULL,
+ CONSTRAINT [PK_Students] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[NotifyLogs]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[UserRoles]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[UserRoles](
+	[Id] [int] NOT NULL,
+	[UserId] [int] NOT NULL,
+	[RoleId] [int] NOT NULL,
+ CONSTRAINT [PK_UserRoles] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UserActionLogs]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[UserActionLogs](
+	[Id] [int] NOT NULL,
+	[UserId] [int] NOT NULL,
+	[Action] [int] NOT NULL,
+	[ActionDate] [datetime] NOT NULL,
+	[Comment] [nvarchar](500) NULL,
+ CONSTRAINT [PK_UserActionLogs] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[StudentTuition]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[StudentTuition](
+	[Id] [int] NOT NULL,
+	[StudentId] [int] NOT NULL,
+	[Tuition] [decimal](18, 2) NULL,
+	[CreatedDate] [datetime] NULL,
+	[Comment] [nvarchar](500) NULL,
+	[CourseId] [int] NULL,
+ CONSTRAINT [PK_StudentTuition] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[QuestionTags]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[QuestionTags](
+	[Id] [int] NOT NULL,
+	[QTagId] [int] NOT NULL,
+	[QuestionId] [int] NOT NULL,
+ CONSTRAINT [PK_QuestionTags_1] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[NotifyLogs]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -426,7 +373,75 @@ CREATE TABLE [dbo].[NotifyLogs](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ExamResults]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Table [dbo].[StudentTracking]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[StudentTracking](
+	[Id] [int] NOT NULL,
+	[StudentId] [int] NOT NULL,
+	[Action] [int] NOT NULL,
+	[TimeStamp] [datetime] NOT NULL,
+	[Comment] [nvarchar](500) NULL,
+ CONSTRAINT [PK_StudentTracking] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[StudentSchool]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[StudentSchool](
+	[Id] [int] NOT NULL,
+	[StudentId] [int] NOT NULL,
+	[SchoolId] [int] NOT NULL,
+	[InputScore] [decimal](18, 2) NULL,
+ CONSTRAINT [PK_StudentSchool] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[StudentExam]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[StudentExam](
+	[Id] [int] NOT NULL,
+	[ExamId] [int] NOT NULL,
+	[StudentId] [int] NOT NULL,
+	[Grade] [decimal](18, 2) NULL,
+	[Comment] [nvarchar](500) NULL,
+ CONSTRAINT [PK_StudentExam] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Registration]    Script Date: 03/28/2017 11:37:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Registration](
+	[Id] [int] NOT NULL,
+	[StudentId] [int] NOT NULL,
+	[CourseId] [int] NOT NULL,
+	[RegisteredDate] [datetime] NULL,
+	[InputScore] [decimal](18, 2) NULL,
+	[EndDate] [datetime] NULL,
+ CONSTRAINT [PK_Registration] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ExamResults]    Script Date: 03/28/2017 11:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -443,169 +458,175 @@ CREATE TABLE [dbo].[ExamResults](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Default [DF_Examination_ExamDate]    Script Date: 03/28/2017 08:52:37 ******/
-ALTER TABLE [dbo].[Examination] ADD  CONSTRAINT [DF_Examination_ExamDate]  DEFAULT (getdate()) FOR [ExamDate]
+/****** Object:  Default [DF_Examination_ExamDate]    Script Date: 03/28/2017 11:37:55 ******/
+ALTER TABLE [dbo].[Exams] ADD  CONSTRAINT [DF_Examination_ExamDate]  DEFAULT (getdate()) FOR [ExamDate]
 GO
-/****** Object:  Default [DF_NotifyLogs_SentDate]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Default [DF_NotifyLogs_SentDate]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[NotifyLogs] ADD  CONSTRAINT [DF_NotifyLogs_SentDate]  DEFAULT (getdate()) FOR [SentDate]
 GO
-/****** Object:  Default [DF_StudentTracking_TimeStamp]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Default [DF_StudentTracking_TimeStamp]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[StudentTracking] ADD  CONSTRAINT [DF_StudentTracking_TimeStamp]  DEFAULT (getdate()) FOR [TimeStamp]
 GO
-/****** Object:  Default [DF_UserActionLogs_ActionDate]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  Default [DF_UserActionLogs_ActionDate]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[UserActionLogs] ADD  CONSTRAINT [DF_UserActionLogs_ActionDate]  DEFAULT (getdate()) FOR [ActionDate]
 GO
-/****** Object:  ForeignKey [FK_ACL_Modules]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_ACL_Modules]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[ACL]  WITH CHECK ADD  CONSTRAINT [FK_ACL_Modules] FOREIGN KEY([ModuleId])
 REFERENCES [dbo].[Modules] ([Id])
 GO
 ALTER TABLE [dbo].[ACL] CHECK CONSTRAINT [FK_ACL_Modules]
 GO
-/****** Object:  ForeignKey [FK_ACL_PermissionSets]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_ACL_PermissionSets]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[ACL]  WITH CHECK ADD  CONSTRAINT [FK_ACL_PermissionSets] FOREIGN KEY([PermissionSetId])
 REFERENCES [dbo].[PermissionSets] ([Id])
 GO
 ALTER TABLE [dbo].[ACL] CHECK CONSTRAINT [FK_ACL_PermissionSets]
 GO
-/****** Object:  ForeignKey [FK_ACL_Roles]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_ACL_Roles]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[ACL]  WITH CHECK ADD  CONSTRAINT [FK_ACL_Roles] FOREIGN KEY([RoleId])
 REFERENCES [dbo].[Roles] ([Id])
 GO
 ALTER TABLE [dbo].[ACL] CHECK CONSTRAINT [FK_ACL_Roles]
 GO
-/****** Object:  ForeignKey [FK_Answers_Questions]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_Answers_Questions]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[Answers]  WITH CHECK ADD  CONSTRAINT [FK_Answers_Questions] FOREIGN KEY([QuestionId])
 REFERENCES [dbo].[Questions] ([Id])
 GO
 ALTER TABLE [dbo].[Answers] CHECK CONSTRAINT [FK_Answers_Questions]
 GO
-/****** Object:  ForeignKey [FK_ExamResults_Answers]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_ExamResults_Answers]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[ExamResults]  WITH CHECK ADD  CONSTRAINT [FK_ExamResults_Answers] FOREIGN KEY([AnswerId])
 REFERENCES [dbo].[Answers] ([Id])
 GO
 ALTER TABLE [dbo].[ExamResults] CHECK CONSTRAINT [FK_ExamResults_Answers]
 GO
-/****** Object:  ForeignKey [FK_ExamResults_ExamPaper]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_ExamResults_ExamPaper]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[ExamResults]  WITH CHECK ADD  CONSTRAINT [FK_ExamResults_ExamPaper] FOREIGN KEY([ExamPaperId])
 REFERENCES [dbo].[ExamPaper] ([Id])
 GO
 ALTER TABLE [dbo].[ExamResults] CHECK CONSTRAINT [FK_ExamResults_ExamPaper]
 GO
-/****** Object:  ForeignKey [FK_ExamResults_Questions]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_ExamResults_Questions]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[ExamResults]  WITH CHECK ADD  CONSTRAINT [FK_ExamResults_Questions] FOREIGN KEY([QuestionId])
 REFERENCES [dbo].[Questions] ([Id])
 GO
 ALTER TABLE [dbo].[ExamResults] CHECK CONSTRAINT [FK_ExamResults_Questions]
 GO
-/****** Object:  ForeignKey [FK_ExamResults_Students]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_ExamResults_Students]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[ExamResults]  WITH CHECK ADD  CONSTRAINT [FK_ExamResults_Students] FOREIGN KEY([SudentId])
 REFERENCES [dbo].[Students] ([Id])
 GO
 ALTER TABLE [dbo].[ExamResults] CHECK CONSTRAINT [FK_ExamResults_Students]
 GO
-/****** Object:  ForeignKey [FK_News_NewsCategories]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_News_NewsCategories]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[News]  WITH CHECK ADD  CONSTRAINT [FK_News_NewsCategories] FOREIGN KEY([CategoryId])
 REFERENCES [dbo].[NewsCategories] ([Id])
 GO
 ALTER TABLE [dbo].[News] CHECK CONSTRAINT [FK_News_NewsCategories]
 GO
-/****** Object:  ForeignKey [FK_NotifyLogs_News]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_NotifyLogs_News]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[NotifyLogs]  WITH CHECK ADD  CONSTRAINT [FK_NotifyLogs_News] FOREIGN KEY([NewsId])
 REFERENCES [dbo].[News] ([Id])
 GO
 ALTER TABLE [dbo].[NotifyLogs] CHECK CONSTRAINT [FK_NotifyLogs_News]
 GO
-/****** Object:  ForeignKey [FK_Permissions_PermissionSets]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_Permissions_PermissionSets]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[Permissions]  WITH CHECK ADD  CONSTRAINT [FK_Permissions_PermissionSets] FOREIGN KEY([PermissionSetId])
 REFERENCES [dbo].[PermissionSets] ([Id])
 GO
 ALTER TABLE [dbo].[Permissions] CHECK CONSTRAINT [FK_Permissions_PermissionSets]
 GO
-/****** Object:  ForeignKey [FK_QuestionExamPaper_ExamPaper]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_QuestionExamPaper_ExamPaper]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[QuestionExamPaper]  WITH CHECK ADD  CONSTRAINT [FK_QuestionExamPaper_ExamPaper] FOREIGN KEY([ExamPaperId])
 REFERENCES [dbo].[ExamPaper] ([Id])
 GO
 ALTER TABLE [dbo].[QuestionExamPaper] CHECK CONSTRAINT [FK_QuestionExamPaper_ExamPaper]
 GO
-/****** Object:  ForeignKey [FK_QuestionExamPaper_Questions]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_QuestionExamPaper_Questions]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[QuestionExamPaper]  WITH CHECK ADD  CONSTRAINT [FK_QuestionExamPaper_Questions] FOREIGN KEY([QuestionId])
 REFERENCES [dbo].[Questions] ([Id])
 GO
 ALTER TABLE [dbo].[QuestionExamPaper] CHECK CONSTRAINT [FK_QuestionExamPaper_Questions]
 GO
-/****** Object:  ForeignKey [FK_Questions_QuestionTags]    Script Date: 03/28/2017 08:52:37 ******/
-ALTER TABLE [dbo].[Questions]  WITH CHECK ADD  CONSTRAINT [FK_Questions_QuestionTags] FOREIGN KEY([QuestionTagId])
-REFERENCES [dbo].[QuestionTags] ([Id])
+/****** Object:  ForeignKey [FK_QuestionTags_QTags]    Script Date: 03/28/2017 11:37:55 ******/
+ALTER TABLE [dbo].[QuestionTags]  WITH CHECK ADD  CONSTRAINT [FK_QuestionTags_QTags] FOREIGN KEY([QTagId])
+REFERENCES [dbo].[QTags] ([Id])
 GO
-ALTER TABLE [dbo].[Questions] CHECK CONSTRAINT [FK_Questions_QuestionTags]
+ALTER TABLE [dbo].[QuestionTags] CHECK CONSTRAINT [FK_QuestionTags_QTags]
 GO
-/****** Object:  ForeignKey [FK_Registration_Classes1]    Script Date: 03/28/2017 08:52:37 ******/
-ALTER TABLE [dbo].[Registration]  WITH CHECK ADD  CONSTRAINT [FK_Registration_Classes1] FOREIGN KEY([ClassId])
-REFERENCES [dbo].[Classes] ([Id])
+/****** Object:  ForeignKey [FK_QuestionTags_Questions]    Script Date: 03/28/2017 11:37:55 ******/
+ALTER TABLE [dbo].[QuestionTags]  WITH CHECK ADD  CONSTRAINT [FK_QuestionTags_Questions] FOREIGN KEY([QuestionId])
+REFERENCES [dbo].[Questions] ([Id])
 GO
-ALTER TABLE [dbo].[Registration] CHECK CONSTRAINT [FK_Registration_Classes1]
+ALTER TABLE [dbo].[QuestionTags] CHECK CONSTRAINT [FK_QuestionTags_Questions]
 GO
-/****** Object:  ForeignKey [FK_Registration_Students]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_Registration_Courses]    Script Date: 03/28/2017 11:37:55 ******/
+ALTER TABLE [dbo].[Registration]  WITH CHECK ADD  CONSTRAINT [FK_Registration_Courses] FOREIGN KEY([CourseId])
+REFERENCES [dbo].[Courses] ([Id])
+GO
+ALTER TABLE [dbo].[Registration] CHECK CONSTRAINT [FK_Registration_Courses]
+GO
+/****** Object:  ForeignKey [FK_Registration_Students]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[Registration]  WITH CHECK ADD  CONSTRAINT [FK_Registration_Students] FOREIGN KEY([StudentId])
 REFERENCES [dbo].[Students] ([Id])
 GO
 ALTER TABLE [dbo].[Registration] CHECK CONSTRAINT [FK_Registration_Students]
 GO
-/****** Object:  ForeignKey [FK_StudentExam_Examination]    Script Date: 03/28/2017 08:52:37 ******/
-ALTER TABLE [dbo].[StudentExam]  WITH CHECK ADD  CONSTRAINT [FK_StudentExam_Examination] FOREIGN KEY([ExamId])
-REFERENCES [dbo].[Examination] ([Id])
+/****** Object:  ForeignKey [FK_StudentExam_Exams]    Script Date: 03/28/2017 11:37:55 ******/
+ALTER TABLE [dbo].[StudentExam]  WITH CHECK ADD  CONSTRAINT [FK_StudentExam_Exams] FOREIGN KEY([ExamId])
+REFERENCES [dbo].[Exams] ([Id])
 GO
-ALTER TABLE [dbo].[StudentExam] CHECK CONSTRAINT [FK_StudentExam_Examination]
+ALTER TABLE [dbo].[StudentExam] CHECK CONSTRAINT [FK_StudentExam_Exams]
 GO
-/****** Object:  ForeignKey [FK_StudentExam_Students]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_StudentExam_Students]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[StudentExam]  WITH CHECK ADD  CONSTRAINT [FK_StudentExam_Students] FOREIGN KEY([StudentId])
 REFERENCES [dbo].[Students] ([Id])
 GO
 ALTER TABLE [dbo].[StudentExam] CHECK CONSTRAINT [FK_StudentExam_Students]
 GO
-/****** Object:  ForeignKey [FK_Students_Parents]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_Students_Parents]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[Students]  WITH CHECK ADD  CONSTRAINT [FK_Students_Parents] FOREIGN KEY([ParentId])
 REFERENCES [dbo].[Parents] ([Id])
 GO
 ALTER TABLE [dbo].[Students] CHECK CONSTRAINT [FK_Students_Parents]
 GO
-/****** Object:  ForeignKey [FK_StudentSchool_Schools]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_StudentSchool_Schools]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[StudentSchool]  WITH CHECK ADD  CONSTRAINT [FK_StudentSchool_Schools] FOREIGN KEY([SchoolId])
 REFERENCES [dbo].[Schools] ([Id])
 GO
 ALTER TABLE [dbo].[StudentSchool] CHECK CONSTRAINT [FK_StudentSchool_Schools]
 GO
-/****** Object:  ForeignKey [FK_StudentSchool_Students]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_StudentSchool_Students]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[StudentSchool]  WITH CHECK ADD  CONSTRAINT [FK_StudentSchool_Students] FOREIGN KEY([StudentId])
 REFERENCES [dbo].[Students] ([Id])
 GO
 ALTER TABLE [dbo].[StudentSchool] CHECK CONSTRAINT [FK_StudentSchool_Students]
 GO
-/****** Object:  ForeignKey [FK_StudentTracking_Students]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_StudentTracking_Students]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[StudentTracking]  WITH CHECK ADD  CONSTRAINT [FK_StudentTracking_Students] FOREIGN KEY([StudentId])
 REFERENCES [dbo].[Students] ([Id])
 GO
 ALTER TABLE [dbo].[StudentTracking] CHECK CONSTRAINT [FK_StudentTracking_Students]
 GO
-/****** Object:  ForeignKey [FK_StudentTuition_Students]    Script Date: 03/28/2017 08:52:37 ******/
-ALTER TABLE [dbo].[StudentTuition]  WITH CHECK ADD  CONSTRAINT [FK_StudentTuition_Students] FOREIGN KEY([StudentId])
-REFERENCES [dbo].[Students] ([Id])
+/****** Object:  ForeignKey [FK_StudentTuition_Courses]    Script Date: 03/28/2017 11:37:55 ******/
+ALTER TABLE [dbo].[StudentTuition]  WITH CHECK ADD  CONSTRAINT [FK_StudentTuition_Courses] FOREIGN KEY([CourseId])
+REFERENCES [dbo].[Courses] ([Id])
 GO
-ALTER TABLE [dbo].[StudentTuition] CHECK CONSTRAINT [FK_StudentTuition_Students]
+ALTER TABLE [dbo].[StudentTuition] CHECK CONSTRAINT [FK_StudentTuition_Courses]
 GO
-/****** Object:  ForeignKey [FK_UserActionLogs_Users]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_UserActionLogs_Users]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[UserActionLogs]  WITH CHECK ADD  CONSTRAINT [FK_UserActionLogs_Users] FOREIGN KEY([UserId])
 REFERENCES [dbo].[Users] ([Id])
 GO
 ALTER TABLE [dbo].[UserActionLogs] CHECK CONSTRAINT [FK_UserActionLogs_Users]
 GO
-/****** Object:  ForeignKey [FK_UserRoles_Roles]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_UserRoles_Roles]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[UserRoles]  WITH CHECK ADD  CONSTRAINT [FK_UserRoles_Roles] FOREIGN KEY([RoleId])
 REFERENCES [dbo].[Roles] ([Id])
 GO
 ALTER TABLE [dbo].[UserRoles] CHECK CONSTRAINT [FK_UserRoles_Roles]
 GO
-/****** Object:  ForeignKey [FK_UserRoles_Users]    Script Date: 03/28/2017 08:52:37 ******/
+/****** Object:  ForeignKey [FK_UserRoles_Users]    Script Date: 03/28/2017 11:37:55 ******/
 ALTER TABLE [dbo].[UserRoles]  WITH CHECK ADD  CONSTRAINT [FK_UserRoles_Users] FOREIGN KEY([UserId])
 REFERENCES [dbo].[Users] ([Id])
 GO
