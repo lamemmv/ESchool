@@ -1,0 +1,8 @@
+{
+  "name": "ESchool",
+  "private": true,
+  "dependencies": {
+    "alertify.js" : "0.3.11",
+    "font-awesome": "latest"
+  }
+}

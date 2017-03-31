@@ -1,0 +1,60 @@
+<div class="col-lg-6">
+    <div class="box">
+        <div class="box-header"></div>
+        <div class="box-body">
+            <div class="form-group">
+                <label for="questionTagName">Tên</label>
+                <input id="questionTagName" 
+                    type="text" 
+                    class="form-control"
+                    [(ngModel)]="questionTag.name" />
+            </div>
+            <div class="form-group">
+                <label for="questionTagDescription">Ghi chú</label>
+                <textarea id="questionTagDescription" 
+                    class="form-control"
+                    [(ngModel)]="questionTag.description"></textarea>
+            </div>
+            <button type="button" 
+                class="btn btn-info btn-sm pull-right" 
+                data-widget="Add question tag" 
+                data-toggle="tooltip" 
+                title="Add question tag" 
+                data-original-title="Add question tag"
+                (click)="addQuestionTag()">
+                <i class="fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+        
+        <div class="box-header">
+            <h3>Danh sách loại câu hỏi</h3>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered table-hover dataTable">
+                <thead>
+                    <tr>
+                        <th class="col-md-4">Tên</th>
+                        <th class="col-md-6">Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let qtag of questionTags'>
+                        <td class="col-md-4">{{qtag.name}}</td>
+                        <td class="col-md-6">{{qtag.description}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer clearfix">
+            <ul class="pagination pagination-sm no-margin pull-right">
+            <li><a href="#">«</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">»</a></li>
+            </ul>
+        </div>
+    </div>    
+    
+</div>
