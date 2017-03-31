@@ -1,5 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+//import { FormsModule } from '@angular/forms';
+
 import { SchoolHomeComponent } from '../components/school-app.component';
 import { StudentListComponent } from '../components/students/student-list.component';
 import { QuestionTagsComponent } from '../components/questionTags/question-tags.component';
@@ -17,7 +20,10 @@ export { SchoolHomeComponent };
     StudentListComponent, 
     QuestionTagsComponent, 
     QuestionsComponent],
-  imports: [BrowserModule, routing],
+  imports: [BrowserModule, 
+    CommonModule, 
+    //FormsModule, 
+    routing],
   providers: []//[SlimLoadingBarService]
 })
 export class MainModule {}
