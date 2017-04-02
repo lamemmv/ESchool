@@ -1,0 +1,19 @@
+﻿» Installation
+
+Package Manager Console commands are installed with the Microsoft.EntityFrameworkCore.Tools package.
+
+To open the console, follow these steps.
+
+- Open Visual Studio 2015
+- Tools ‣ Nuget Package Manager ‣ Package Manager Console
+- Execute Install-Package Microsoft.EntityFrameworkCore.Tools -Pre
+
+
+Add-Migration Initialize
+Remove-Migration Initialize -f
+Update-Database Initialize
+
+
+» IdentityServer4 Adding migrations
+- Add-Migration InitialIdentityServerPersistedGrantDbMigration -c PersistedGrantDbContext -o Migrations/IdentityServer/PersistedGrantDb
+- Add-Migration InitialIdentityServerConfigurationDbMigration -c ConfigurationDbContext -o Migrations/IdentityServer/ConfigurationDb
