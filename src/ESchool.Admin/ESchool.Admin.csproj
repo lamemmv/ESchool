@@ -12,8 +12,4 @@
     <ProjectReference Include="..\ESchool.Services\ESchool.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
