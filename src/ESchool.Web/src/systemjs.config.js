@@ -12,7 +12,7 @@
     map: {
       // our app is within the app folder
       'app': 'app',
-
+      'translation': 'app/shared/translate',
       // angular bundles
       '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
       '@angular/common': 'npm:@angular/common/bundles/common.umd.js',
@@ -22,6 +22,9 @@
       '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
+      'ng2-bootstrap': 'npm:ng2-bootstrap/bundles/ng2-bootstrap.umd.js',
+      // 'ng2-bootstrap': 'npm:ng2-bootstrap',
+      'moment': 'npm:moment/moment.js',
 
       // other libraries
       'rxjs':                      'npm:rxjs',
@@ -39,7 +42,8 @@
       },
       rxjs: {
         defaultExtension: 'js'
-      }
+      },
+      translation: { main: 'index.js',  defaultExtension: 'js' }
     }
   });
 })(this);

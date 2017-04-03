@@ -2,9 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule }   from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 
+import { AlertModule } from 'ng2-bootstrap'; 
+
 import { NotificationService } from './../shared/utils/notification.service';
+
 import { QuestionTag } from './question-tags.model';
-import { QuestionTagsService } from './question-tags.service'
+import { AlertModel } from './../shared/models/alerts';
+import { QuestionTagsService } from './question-tags.service';
 
 @Component({
   selector: 'question-tags',
@@ -13,14 +17,18 @@ import { QuestionTagsService } from './question-tags.service'
 export class QuestionTagsComponent implements OnInit  {
     private questionTag: QuestionTag;
     private questionTags: QuestionTag[];
+    private alert: AlertModel;
     constructor(private questionTagsService: QuestionTagsService,
       private notificationService: NotificationService){
-
     }
 
     ngOnInit() {
       this.questionTag = new QuestionTag();
       this.questionTags = [];
+      this.alert = {
+        type: '',
+        message: ''
+      };
       this.getQuestionTags();
     };
 

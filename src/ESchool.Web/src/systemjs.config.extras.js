@@ -5,7 +5,7 @@
 // (function (global) {
 //   System.config({
 //     packages: {
-//       // add packages here
+//       'translation': 'app/shared/translate'
 //     }
 //   });
 // })(this);

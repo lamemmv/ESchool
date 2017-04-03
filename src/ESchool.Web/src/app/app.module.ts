@@ -5,6 +5,7 @@ import {
   RouterModule,
   PreloadAllModules
 } from '@angular/router';
+import { Ng2BootstrapModule } from 'ng2-bootstrap';
 
 import { ConfigService } from './shared/utils/config.service';
 import { NotificationService } from './shared/utils/notification.service';
@@ -20,11 +21,13 @@ import { ROUTES } from './app.routes';
   imports:      [ BrowserModule,
     HttpModule,
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules }),
+    Ng2BootstrapModule.forRoot(),
     QuestionTagsModule,
     QuestionsModule,
     QuestionPapersModule ],
   declarations: [ AppComponent,
-    HomeComponent ],
+    HomeComponent 
+    ],
     providers: [
         ConfigService,
         NotificationService,
