@@ -5,6 +5,7 @@ import { FormsModule }   from '@angular/forms';
 import { AlertModule } from 'ng2-bootstrap'; 
 
 import { NotificationService } from './../shared/utils/notification.service';
+import { TranslateService } from './../shared/translate';
 
 import { QuestionTag } from './question-tags.model';
 import { AlertModel } from './../shared/models/alerts';
@@ -18,8 +19,10 @@ export class QuestionTagsComponent implements OnInit  {
     private questionTag: QuestionTag;
     private questionTags: QuestionTag[];
     private alert: AlertModel;
+    private DESCRIPTION: string;
     constructor(private questionTagsService: QuestionTagsService,
-      private notificationService: NotificationService){
+      private notificationService: NotificationService,
+      private _translate: TranslateService){
     }
 
     ngOnInit() {
@@ -30,6 +33,8 @@ export class QuestionTagsComponent implements OnInit  {
         message: ''
       };
       this.getQuestionTags();
+
+      this.DESCRIPTION = this._translate.instant('DESCRIPTION');
     };
 
     getQuestionTags=()=>{
