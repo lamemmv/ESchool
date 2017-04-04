@@ -4,5 +4,6 @@ export const LANG_EN_TRANS = {
     'ADD': 'Add',
     'QUESTION_TAG_LIST': 'Question tag list',
     'NAME': 'Name',
-    'DESCRIPTION': 'Description'
+    'DESCRIPTION': 'Description',
+    'EXAM_MANAGEMENT': 'Exam management'
 };

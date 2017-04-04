@@ -4,6 +4,7 @@ import { FormsModule }   from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AlertModule } from 'ng2-bootstrap';
+import { ModalComponent, ModalHeaderComponent, ModalBodyComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService }   from './../shared/translate';
 

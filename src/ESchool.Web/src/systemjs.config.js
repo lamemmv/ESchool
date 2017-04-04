@@ -23,9 +23,9 @@
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
       'ng2-bootstrap': 'npm:ng2-bootstrap/bundles/ng2-bootstrap.umd.js',
-      // 'ng2-bootstrap': 'npm:ng2-bootstrap',
       'moment': 'npm:moment/moment.js',
-
+      'ng2-bs3-modal': 'node_modules/ng2-bs3-modal',
+      'angular2-modal': 'npm:angular2-modal',
       // other libraries
       'rxjs':                      'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
@@ -43,7 +43,9 @@
       rxjs: {
         defaultExtension: 'js'
       },
-      translation: { main: 'index.js',  defaultExtension: 'js' }
+      translation: { main: 'index.js',  defaultExtension: 'js' },
+      'ng2-bs3-modal': { defaultExtension: 'js', main: 'ng2-bs3-modal.js'},
+      'angular2-modal': { defaultExtension: 'js', main: 'bundles/angular2-modal.umd' }
     }
   });
 })(this);

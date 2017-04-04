@@ -33,14 +33,16 @@
             <table class="table table-bordered table-hover dataTable">
                 <thead>
                     <tr>
-                        <th class="col-md-4">{{'NAME' | translate }}</th>
-                        <th class="col-md-6">{{'DESCRIPTION' | translate }}</th>
+                        <th class="col-sm-4">{{'NAME' | translate }}</th>
+                        <th class="col-sm-8">{{'DESCRIPTION' | translate }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor='let qtag of questionTags'>
-                        <td class="col-md-4">{{qtag.name}}</td>
-                        <td class="col-md-6">{{qtag.description}}</td>
+                    <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;'  
+                        [ngClass]="{ odd: odd, even: even }"
+                        role="row">
+                        <td class="col-sm-4">{{qtag.name}}</td>
+                        <td class="col-sm-8">{{qtag.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag(qtag)"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -54,6 +56,17 @@
             <li><a href="#">»</a></li>
             </ul>
         </div>
-    </div>    
-    
+    </div>  
+    <!--<bs-modal #modal>
+        <bs-modal-header>
+            <h4 class="modal-title">I'm a modal!</h4>
+        </bs-modal-header>
+        <bs-modal-body>
+            Hello World!
+        </bs-modal-body>
+        <bs-modal-footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="modal.dismiss()">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="modal.close()">Ok</button>
+        </bs-modal-footer>
+    </bs-modal>-->
 </div>
