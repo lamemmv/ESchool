@@ -74,12 +74,19 @@ namespace ESchool.Admin.Controllers
         {
             if (id.HasValue && id.Value > 0)
             {
-                var code = await _questionService.DeleteAsync(id.Value);
+                var entity = await _questionService.FindAsync(id.Value);
 
-                return ServerErrorCode(code);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                var effectedRows = await _questionService.DeleteAsync(entity);
+
+                return Accepted();
             }
 
-            return BadRequestErrorCode(ErrorCode.InvalidEntityId);
+            return BadRequest(ErrorCode.InvalidEntityId);
         }
     }
 }
