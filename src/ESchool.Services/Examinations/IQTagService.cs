@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ESchool.Domain;
 using ESchool.Domain.Entities.Examinations;
 
 namespace ESchool.Services.Examinations
@@ -13,10 +12,10 @@ namespace ESchool.Services.Examinations
 
         Task<IEnumerable<QTag>> GetListAsync();
 
-        Task<ErrorCode> CreateAsync(QTag entity);
+        Task<int> CreateAsync(QTag entity);
 
-        Task<ErrorCode> UpdateAsync(QTag entity);
+        Task<int> UpdateAsync(QTag entity);
 
-        Task<ErrorCode> DeleteAsync(int id);
+        Task<int> DeleteAsync(QTag entity);
     }
 }

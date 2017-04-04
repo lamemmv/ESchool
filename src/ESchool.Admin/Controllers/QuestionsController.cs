@@ -35,7 +35,12 @@ namespace ESchool.Admin.Controllers
                 var entity = _mapper.Map<Question>(viewModel);
                 var code = await _questionService.CreateAsync(entity, viewModel.QTagIds);
 
-                return ServerErrorCode(code);
+                if (code == ErrorCode.Success)
+                {
+                    return CreatedAtAction(nameof(Post), entity.Id);
+                }
+
+                return Ok(code);
             }
 
             return BadRequestErrorCode(ModelState);
@@ -74,7 +79,7 @@ namespace ESchool.Admin.Controllers
                 return ServerErrorCode(code);
             }
 
-            return BadRequestErrorCode(ErrorCode.InvalidIdEntity);
+            return BadRequestErrorCode(ErrorCode.InvalidEntityId);
         }
     }
 }

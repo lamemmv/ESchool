@@ -36,7 +36,7 @@ namespace ESchool.Admin.Controllers
                 return ServerErrorCode(code);
             }
 
-            return BadRequestErrorCode(ErrorCode.InvalidIdEntity);
+            return BadRequestErrorCode(ErrorCode.InvalidEntityId);
         }
 
         [HttpDelete]
@@ -49,7 +49,7 @@ namespace ESchool.Admin.Controllers
                 return ServerErrorCode(code);
             }
 
-            return BadRequestErrorCode(ErrorCode.InvalidIdEntity);
+            return BadRequestErrorCode(ErrorCode.InvalidEntityId);
         }
 
         [NonAction]

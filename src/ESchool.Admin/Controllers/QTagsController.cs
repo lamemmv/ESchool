@@ -32,13 +32,20 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = _mapper.Map<QTag>(viewModel);
+                var entity = await _qtagService.FindAsync(viewModel.Name.Trim());
+
+                if (entity != null)
+                {
+                    return Ok(ErrorCode.DuplicateEntity);
+                }
+
+                entity = _mapper.Map<QTag>(viewModel);
                 var code = await _qtagService.CreateAsync(entity);
 
-                return ServerErrorCode(code);
+                return Created(nameof(Post), entity.Id);
             }
 
-            return BadRequestErrorCode(ModelState);
+            return BadRequest(ModelState);
         }
 
         [HttpPut]
@@ -46,21 +53,21 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = await _qtagService.FindAsync(viewModel.Id);
+                var entity = await _qtagService.FindAsync(viewModel.Name.Trim());
 
-                if (entity == null)
+                if (entity != null && entity.Id != viewModel.Id)
                 {
-                    return NotFoundErrorCode();
+                    return Ok(ErrorCode.DuplicateEntity);
                 }
 
                 entity.Name = viewModel.Name.Trim();
                 entity.Description = viewModel.Description.TrimNull();
-                var code = await _qtagService.UpdateAsync(entity);
+                var effectedRows = await _qtagService.UpdateAsync(entity);
 
-                return ServerErrorCode(code);
+                return Accepted(effectedRows);
             }
 
-            return BadRequestErrorCode(ModelState);
+            return BadRequest(ModelState);
         }
 
         [HttpDelete]
@@ -68,12 +75,19 @@ namespace ESchool.Admin.Controllers
         {
             if (id.HasValue && id.Value > 0)
             {
-                var code = await _qtagService.DeleteAsync(id.Value);
+                var entity = await _qtagService.FindAsync(id.Value);
 
-                return ServerErrorCode(code);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                var effectedRows = await _qtagService.DeleteAsync(entity);
+
+                return Accepted(effectedRows);
             }
 
-            return BadRequestErrorCode(ErrorCode.InvalidIdEntity);
+            return BadRequest(ErrorCode.InvalidEntityId);
         }
     }
 }

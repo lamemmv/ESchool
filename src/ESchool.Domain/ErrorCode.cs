@@ -7,7 +7,7 @@ namespace ESchool.Domain
         Success = 0,
 
         DuplicateEntity = 1,
-        InvalidIdEntity = 2,
+        InvalidEntityId = 2,
 
         NotFound = HttpStatusCode.NotFound,
         BadRequest = HttpStatusCode.BadRequest

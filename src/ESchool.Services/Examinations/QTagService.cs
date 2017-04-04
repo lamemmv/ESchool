@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data.Repositories;
-using ESchool.Domain;
 using ESchool.Domain.Entities.Examinations;
 
 namespace ESchool.Services.Examinations
@@ -35,44 +34,19 @@ namespace ESchool.Services.Examinations
                 .GetListAsync();
         }
 
-        public async Task<ErrorCode> CreateAsync(QTag entity)
+        public async Task<int> CreateAsync(QTag entity)
         {
-            var qtag = await FindAsync(entity.Name);
-
-            if (qtag != null)
-            {
-                return ErrorCode.DuplicateEntity;
-            }
-
-            await _qtagRepository.CreateCommitAsync(entity);
-
-            return ErrorCode.Success;
+            return await _qtagRepository.CreateCommitAsync(entity);
         }
 
-        public async Task<ErrorCode> UpdateAsync(QTag entity)
+        public async Task<int> UpdateAsync(QTag entity)
         {
-            var qtag = await FindAsync(entity.Name);
-
-            if (qtag != null && qtag.Id != entity.Id)
-            {
-                return ErrorCode.DuplicateEntity;
-            }
-
-            await _qtagRepository.UpdateCommitAsync(entity);
-
-            return ErrorCode.Success;
+            return await _qtagRepository.UpdateCommitAsync(entity);
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(QTag entity)
         {
-            var entity = await FindAsync(id);
-
-            if (entity != null)
-            {
-                await _qtagRepository.DeleteCommitAsync(entity);
-            }
-
-            return ErrorCode.Success;
+            return await _qtagRepository.DeleteCommitAsync(entity);
         }
     }
 }
