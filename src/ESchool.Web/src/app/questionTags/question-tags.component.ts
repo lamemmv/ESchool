@@ -3,6 +3,9 @@ import { CommonModule }   from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 
 import { AlertModule } from 'ng2-bootstrap'; 
+import { ModalComponent, 
+  ModalHeaderComponent, 
+  ModalBodyComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
@@ -14,6 +17,9 @@ import { QuestionTagsService } from './question-tags.service';
 @Component({
   selector: 'question-tags',
   templateUrl: './question-tags.component.html',
+  styleUrls: [
+    './question-tags.style.css'
+  ]
 })
 export class QuestionTagsComponent implements OnInit  {
     private questionTag: QuestionTag;
@@ -57,5 +63,9 @@ export class QuestionTagsComponent implements OnInit  {
           error => {
               self.notificationService.printErrorMessage('Failed to create question tag. ' + error);
           });
+    };
+
+    removeQTag=(qtag: QuestionTag)=>{
+      console.log(qtag.name);
     };
   }
