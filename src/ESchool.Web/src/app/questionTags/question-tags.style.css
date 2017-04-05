@@ -15,3 +15,18 @@ table tr:hover td span.remove {
     visibility: visible;
 
 }
+
+.field-required {
+    margin-top: 2px;
+    height: 35px;
+    line-height: 0px;
+}
+
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}
+
+.btn.cancel{
+    margin-left: 10px;
+}

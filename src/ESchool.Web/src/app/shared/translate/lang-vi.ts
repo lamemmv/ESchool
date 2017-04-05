@@ -11,5 +11,6 @@ export const LANG_VI_TRANS = {
     'BUTTON_OK': 'Chấp nhận',
     'BUTTON_CANCEL': 'Hủy',
     'SAVED': 'Đã lưu',
-    'UPDATE': 'Cập nhật'
+    'UPDATE': 'Cập nhật',
+    'NAME_REQUIRED': 'Tên không được để trống'
 };

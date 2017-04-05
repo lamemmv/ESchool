@@ -1,25 +1,28 @@
 <div class="col-lg-6">
-    <span defaultOverlayTarget></span>
-    <div class="box">
+    <form #questionTagForm="ngForm" (ngSubmit)="submitForm(questionTagForm.valid)" class="box">
         <alert *ngIf="alert.type" [type]="alert.type" dismissible="true" dismissOnTimeout="3000">{{alert.message}}
         </alert>
         <div class="box-header"></div>
         <div class="box-body">
-            <div class="form-group">
-                <label for="questionTagName">{{'NAME' | translate }}</label>
-                <input id="questionTagName" type="text" class="form-control" [(ngModel)]="questionTag.name" />
+            <div class="form-group required">
+                <label for="questionTagName" class="control-label">{{'NAME' | translate }}</label>
+                <input id="questionTagName" name="questionTagName" type="text" class="form-control" [(ngModel)]="questionTag.name" #questionTagName="ngModel"
+                    required />
+                <div *ngIf="questionTagName.errors && (questionTagName.dirty || questionTagName.touched)" class="alert alert-danger field-required">
+                    <div [hidden]="!questionTagName.errors.required">
+                        {{ 'NAME_REQUIRED' | translate }}
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label for="questionTagDescription">{{ DESCRIPTION }}</label>
-                <textarea id="questionTagDescription" class="form-control" [(ngModel)]="questionTag.description"></textarea>
+                <textarea id="questionTagDescription" name="questionTagDescription" class="form-control" [(ngModel)]="questionTag.description"
+                    #questionTagDescription="ngModel"></textarea>
             </div>
-            <button type="submit" *ngIf="!questionTag.id" 
-                class="btn btn-primary" (click)="addQuestionTag()"><i class="fa fa-plus"></i> 
+            <button type="submit" 
+                class="btn btn-primary" 
+                [disabled]="!questionTagForm.form.valid"><i class="fa fa-plus"></i> 
                 {{ 'ADD' | translate }}
-            </button>
-            <button type="submit" *ngIf="questionTag.id" 
-                class="btn btn-primary" (click)="updateQuestionTag()"><i class="fa fa-pencil-square-o"></i> 
-                {{ 'UPDATE' | translate }}
             </button>
         </div>
 
@@ -36,7 +39,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;' [ngClass]="{ odd: odd, even: even }"
-                        role="row" (click)="openEditDialog(qtag)">
+                        role="row" (click)="showChildModal(qtag)">
                         <td class="col-sm-4">{{qtag.name}}</td>
                         <td class="col-sm-8">{{qtag.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag(qtag)"></span></td>
                     </tr>
@@ -51,6 +54,59 @@
                 <li><a href="#">3</a></li>
                 <li><a href="#">»</a></li>
             </ul>
+        </div>
+    </form>
+    <!--Modal-->
+    <div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title pull-left">{{ 'CONFIRMATION' | translate }}</h4>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="childModal.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form #questionTagEditForm="ngForm">
+                        <div class="form-group required">
+                            <label for="editQuestionTagName" class="control-label">{{'NAME' | translate }}</label> 
+                            <input id="editQuestionTagName" 
+                                name="editQuestionTagName" 
+                                type="text" 
+                                class="form-control" 
+                                [(ngModel)]="editQuestionTag.name" 
+                                #editQuestionTagName="ngModel"
+                                required />
+                            <div *ngIf="editQuestionTagName.errors && (editQuestionTagName.dirty || editQuestionTagName.touched)" 
+                                class="alert alert-danger field-required">
+                                <div [hidden]="!editQuestionTagName.errors.required">
+                                    {{ 'NAME_REQUIRED' | translate }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editQuestionTagDescription">{{ DESCRIPTION }}</label>
+                            <textarea id="editQuestionTagDescription" 
+                                name="editQuestionTagDescription" 
+                                class="form-control" 
+                                [(ngModel)]="editQuestionTag.description"
+                                #editQuestionTagDescription="ngModel"></textarea>
+                        </div>                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" 
+                        class="btn btn-default pull-right cancel" 
+                        (click)="cancelUpdate()">{{ 'BUTTON_CANCEL' | translate }}</button>
+                    <button type="submit" 
+                        class="btn btn-primary pull-right" 
+                        [disabled]="!questionTagEditForm.form.valid"
+                        (click)="updateQuestionTag()"><i class="fa fa-pencil-square-o"></i> 
+                        {{ 'UPDATE' | translate }}
+                    </button>                    
+                </div>
+            </div>
         </div>
     </div>
 </div>

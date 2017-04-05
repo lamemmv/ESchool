@@ -23,10 +23,8 @@
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
       'ng2-bootstrap': 'npm:ng2-bootstrap/bundles/ng2-bootstrap.umd.js',
+      //'ng2-bootstrap/modal': 'npm:ng2-bootstrap/modal',
       'moment': 'npm:moment/moment.js',
-      //'ng2-bs3-modal': 'node_modules/ng2-bs3-modal',
-      //'angular2-modal': 'npm:angular2-modal',
-      //'angular2-modal/plugins/bootstrap': 'npm:angular2-modal/bundles/',
       'ng2-bootstrap-modal': 'npm:ng2-bootstrap-modal',
       // other libraries
       'rxjs':                      'npm:rxjs',
@@ -47,15 +45,14 @@
         defaultExtension: 'js'
       },
       translation: { main: 'index.js',  defaultExtension: 'js' },
-      /*'ng2-bs3-modal': { defaultExtension: 'js', main: 'ng2-bs3-modal.js'},
-      'angular2-modal': { defaultExtension: 'js', main: 'bundles/angular2-modal.umd' },
-      'angular2-modal/plugins/bootstrap': {
-         defaultExtension: 'js', main: 'angular2-modal.bootstrap.umd'
-      },*/
       'ng2-bootstrap-modal': {
         main: 'index.js',
         defaultExtension: 'js'
-      }
+      }/*,
+      'ng2-bootstrap/modal': {
+        main: 'index.js',
+        defaultExtension: 'js'
+      }*/
     }
   });
 })(this);

@@ -11,5 +11,6 @@ export const LANG_EN_TRANS = {
     'BUTTON_OK': 'OK',
     'BUTTON_CANCEL': 'Cancel',
     'SAVED': 'Saved',
-    'UPDATE': 'Update'
+    'UPDATE': 'Update',
+    'NAME_REQUIRED': 'Name is required'
 };

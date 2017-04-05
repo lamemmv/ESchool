@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 import { AlertModule } from 'ng2-bootstrap';
+import { ModalDirective } from 'ng2-bootstrap';
 import { DialogService } from "ng2-bootstrap-modal";
 
 import { NotificationService } from './../shared/utils/notification.service';
@@ -21,10 +21,14 @@ import { QuestionTagsService } from './question-tags.service';
   ]
 })
 export class QuestionTagsComponent implements OnInit {
+  @ViewChild('childModal')
+  public childModal: ModalDirective;
   private questionTag: QuestionTag;
+  private editQuestionTag: QuestionTag;
   private questionTags: QuestionTag[];
   private alert: AlertModel;
   private DESCRIPTION: string;
+
   constructor(private questionTagsService: QuestionTagsService,
     private notificationService: NotificationService,
     private _translate: TranslateService,
@@ -33,13 +37,13 @@ export class QuestionTagsComponent implements OnInit {
 
   ngOnInit() {
     this.questionTag = new QuestionTag();
+    this.editQuestionTag = new QuestionTag();
     this.questionTags = [];
     this.alert = {
       type: '',
       message: ''
     };
     this.getQuestionTags();
-
     this.DESCRIPTION = this._translate.instant('DESCRIPTION');
   };
 
@@ -57,8 +61,10 @@ export class QuestionTagsComponent implements OnInit {
   addQuestionTag = () => {
     var self = this;
     self.questionTagsService.create(self.questionTag)
-      .subscribe((questionTagCreated) => {
-        self.questionTag = questionTagCreated;
+      .subscribe((id: number) => {
+        self.questionTag.id = id;
+        self.alert.type = 'success';
+        self.alert.message = this._translate.instant('SAVED');
         self.getQuestionTags();
       },
       error => {
@@ -95,15 +101,31 @@ export class QuestionTagsComponent implements OnInit {
 
   updateQuestionTag = () => {
     var self = this;
-    self.questionTagsService.update(self.questionTag)
+    self.questionTagsService.update(self.editQuestionTag)
       .subscribe((questionTagCreated) => {
         self.alert.type = 'success';
         self.alert.message = this._translate.instant('SAVED');
         self.getQuestionTags();
-        self.questionTag = new QuestionTag();
+        self.editQuestionTag = new QuestionTag();
+        self.childModal.hide();
       },
       error => {
         self.notificationService.printErrorMessage('Failed to update question tag. ' + error);
       });
+  };
+
+  submitForm = (isValid: boolean) => {
+    if (isValid) {
+      this.addQuestionTag();
+    }
+  };
+
+  showChildModal(qtag: QuestionTag): void {
+    this.editQuestionTag = Object.assign({}, qtag);
+    this.childModal.show();
+  };
+
+  cancelUpdate = () => {
+    this.childModal.hide();
   };
 }
