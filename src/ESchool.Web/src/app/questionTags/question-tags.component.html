@@ -1,31 +1,28 @@
 <div class="col-lg-6">
+    <span defaultOverlayTarget></span>
     <div class="box">
-        <alert *ngIf="alert.type" 
-            [type]="alert.type" 
-            dismissible="true">{{alert.message}}
+        <alert *ngIf="alert.type" [type]="alert.type" dismissible="true">{{alert.message}}
         </alert>
         <div class="box-header"></div>
         <div class="box-body">
             <div class="form-group">
                 <label for="questionTagName">{{'NAME' | translate }}</label>
-                <input id="questionTagName" 
-                    type="text" 
-                    class="form-control"
-                    [(ngModel)]="questionTag.name" />
+                <input id="questionTagName" type="text" class="form-control" [(ngModel)]="questionTag.name" />
             </div>
             <div class="form-group">
                 <label for="questionTagDescription">{{ DESCRIPTION }}</label>
-                <textarea id="questionTagDescription" 
-                    class="form-control"
-                    [(ngModel)]="questionTag.description"></textarea>
+                <textarea id="questionTagDescription" class="form-control" [(ngModel)]="questionTag.description"></textarea>
             </div>
-            <button type="submit" 
-                class="btn btn-primary"
-                (click)="addQuestionTag()"><i class="fa fa-plus"></i> 
+            <button type="submit" *ngIf="!questionTag.id" 
+                class="btn btn-primary" (click)="addQuestionTag()"><i class="fa fa-plus"></i> 
                 {{ 'ADD' | translate }}
             </button>
+            <button type="submit" *ngIf="questionTag.id" 
+                class="btn btn-primary" (click)="updateQuestionTag()"><i class="fa fa-pencil-square-o"></i> 
+                {{ 'UPDATE' | translate }}
+            </button>
         </div>
-        
+
         <div class="box-header">
             <h3>{{'QUESTION_TAG_LIST' | translate }}</h3>
         </div>
@@ -38,9 +35,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;'  
-                        [ngClass]="{ odd: odd, even: even }"
-                        role="row">
+                    <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;' [ngClass]="{ odd: odd, even: even }"
+                        role="row" (click)="openEditDialog(qtag)">
                         <td class="col-sm-4">{{qtag.name}}</td>
                         <td class="col-sm-8">{{qtag.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag(qtag)"></span></td>
                     </tr>
@@ -49,24 +45,12 @@
         </div>
         <div class="box-footer clearfix">
             <ul class="pagination pagination-sm no-margin pull-right">
-            <li><a href="#">«</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">»</a></li>
+                <li><a href="#">«</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">»</a></li>
             </ul>
         </div>
-    </div>  
-    <!--<bs-modal #modal>
-        <bs-modal-header>
-            <h4 class="modal-title">I'm a modal!</h4>
-        </bs-modal-header>
-        <bs-modal-body>
-            Hello World!
-        </bs-modal-body>
-        <bs-modal-footer>
-            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="modal.dismiss()">Cancel</button>
-            <button type="button" class="btn btn-primary" (click)="modal.close()">Ok</button>
-        </bs-modal-footer>
-    </bs-modal>-->
+    </div>
 </div>

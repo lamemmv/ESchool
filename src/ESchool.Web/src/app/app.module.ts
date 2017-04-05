@@ -6,8 +6,8 @@ import {
   PreloadAllModules
 } from '@angular/router';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
-import { ModalModule } from 'angular2-modal';
-
+//import { ModalModule } from 'angular2-modal';
+import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 //import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService }   from './shared/translate';
 
 import { ConfigService } from './shared/utils/config.service';
@@ -25,7 +25,8 @@ import { ROUTES } from './app.routes';
         HttpModule,
         RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules }),
         Ng2BootstrapModule.forRoot(),
-        ModalModule.forRoot(),
+        //ModalModule.forRoot(),
+        BootstrapModalModule,
         QuestionTagsModule,
         QuestionsModule,
         QuestionPapersModule 

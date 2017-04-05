@@ -1,0 +1,17 @@
+table tr:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+td span.remove {
+    visibility: hidden;
+}
+
+td span.remove:hover {
+    visibility: visible;
+}
+
+table tr:hover td span.remove {
+    visibility: visible;
+
+}

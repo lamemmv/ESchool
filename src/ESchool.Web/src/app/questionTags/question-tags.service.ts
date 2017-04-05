@@ -8,29 +8,47 @@ import { AppService } from './../shared/app.service';
 
 @Injectable()
 export class QuestionTagsService {
-  private _baseUrl: string = '';
+    private _baseUrl: string = '';
 
-  constructor(private http: Http, 
-  private configService: ConfigService, 
-  private appService: AppService) {
+    constructor(private http: Http,
+        private configService: ConfigService,
+        private appService: AppService) {
         this._baseUrl = configService.getAdminApiURI();
-  }
+    }
 
-    get=()=>{
+    get = () => {
         var self = this;
         return this.http.get(this._baseUrl + 'qtags')
             .map((res: Response) => {
                 return res.json();
             })
-            .catch(self.appService.handleError); 
+            .catch(self.appService.handleError);
     };
 
-    create =(params: any)=>{
+    create = (qtag: any) => {
         var self = this;
-        return this.http.post(this._baseUrl + 'qtags', params)
+        return this.http.post(this._baseUrl + 'qtags', qtag)
             .map((res: Response) => {
                 return res.json();
             })
-            .catch(self.appService.handleError); 
+            .catch(self.appService.handleError);
+    };
+
+    update = (qtag: any) => {
+        var self = this;
+        return this.http.put(this._baseUrl + 'qtags', qtag)
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(self.appService.handleError);
+    };
+
+    delete = (id: number) => {
+        var self = this;
+        return this.http.delete(this._baseUrl + 'qtags', { params: { id: id } })
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(self.appService.handleError);
     };
 }

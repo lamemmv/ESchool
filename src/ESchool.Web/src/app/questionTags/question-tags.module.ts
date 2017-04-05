@@ -4,11 +4,11 @@ import { FormsModule }   from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AlertModule } from 'ng2-bootstrap';
-import { ModalComponent, ModalHeaderComponent, ModalBodyComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService }   from './../shared/translate';
 
-import { QuestionTagsComponent } from './question-tags.component'
+import { QuestionTagsComponent } from './question-tags.component';
+import { ConfirmDialogComponent } from './../shared/modals/confirm-dialog.component';
 import { QuestionTagsService } from './question-tags.service';
 
 @NgModule({
@@ -20,12 +20,16 @@ import { QuestionTagsService } from './question-tags.service';
     ],
     declarations: [
         QuestionTagsComponent,
+        ConfirmDialogComponent,
         TranslatePipe
     ],
     providers: [
         QuestionTagsService,
         TRANSLATION_PROVIDERS, 
         TranslateService
-    ]
+    ],
+    entryComponents: [
+        ConfirmDialogComponent
+  ]
 })
 export class QuestionTagsModule { }
