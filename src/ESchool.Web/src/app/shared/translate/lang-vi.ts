@@ -12,5 +12,8 @@ export const LANG_VI_TRANS = {
     'BUTTON_CANCEL': 'Hủy',
     'SAVED': 'Đã lưu',
     'UPDATE': 'Cập nhật',
-    'NAME_REQUIRED': 'Tên không được để trống'
+    'NAME_REQUIRED': 'Tên không được để trống',
+    'EDIT_QUESTION_TAG_TITLE': 'Sửa loại câu hỏi',
+    'SEARCH': 'Tìm',
+    'SEARCH_QUESTION_TAGS': 'Tìm loại câu hỏi'
 };

@@ -12,5 +12,8 @@ export const LANG_EN_TRANS = {
     'BUTTON_CANCEL': 'Cancel',
     'SAVED': 'Saved',
     'UPDATE': 'Update',
-    'NAME_REQUIRED': 'Name is required'
+    'NAME_REQUIRED': 'Name is required',
+    'EDIT_QUESTION_TAG_TITLE': 'Edit question tag',
+    'SEARCH': 'Search',
+    'SEARCH_QUESTION_TAGS': 'Search question tags'
 };

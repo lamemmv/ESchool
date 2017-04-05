@@ -17,17 +17,18 @@ import { QuestionTagsService } from './question-tags.service';
   selector: 'question-tags',
   templateUrl: './question-tags.component.html',
   styleUrls: [
-    './question-tags.style.css'
+    './question-tags.style.css',
+    './../../plugins/datatables/dataTables.bootstrap.css'
   ]
 })
 export class QuestionTagsComponent implements OnInit {
   @ViewChild('childModal')
   public childModal: ModalDirective;
   private questionTag: QuestionTag;
-  private editQuestionTag: QuestionTag;
   private questionTags: QuestionTag[];
   private alert: AlertModel;
   private DESCRIPTION: string;
+  private keyword: string;
 
   constructor(private questionTagsService: QuestionTagsService,
     private notificationService: NotificationService,
@@ -37,7 +38,7 @@ export class QuestionTagsComponent implements OnInit {
 
   ngOnInit() {
     this.questionTag = new QuestionTag();
-    this.editQuestionTag = new QuestionTag();
+    this.keyword = '';
     this.questionTags = [];
     this.alert = {
       type: '',
@@ -72,7 +73,8 @@ export class QuestionTagsComponent implements OnInit {
       });
   };
 
-  removeQTag = (qtag: QuestionTag) => {
+  removeQTag = (event: any, qtag: QuestionTag) => {
+    event.stopPropagation();
     var self = this;
     this.dialogService.addDialog(ConfirmDialogComponent, {
       title: this._translate.instant('CONFIRMATION'),
@@ -101,12 +103,12 @@ export class QuestionTagsComponent implements OnInit {
 
   updateQuestionTag = () => {
     var self = this;
-    self.questionTagsService.update(self.editQuestionTag)
+    self.questionTagsService.update(self.questionTag)
       .subscribe((questionTagCreated) => {
         self.alert.type = 'success';
         self.alert.message = this._translate.instant('SAVED');
         self.getQuestionTags();
-        self.editQuestionTag = new QuestionTag();
+        self.questionTag = new QuestionTag();
         self.childModal.hide();
       },
       error => {
@@ -114,18 +116,30 @@ export class QuestionTagsComponent implements OnInit {
       });
   };
 
-  submitForm = (isValid: boolean) => {
-    if (isValid) {
+  submitForm = () => {
+    if (this.questionTag.id) {
+      this.updateQuestionTag();
+    } else {
       this.addQuestionTag();
     }
   };
 
   showChildModal(qtag: QuestionTag): void {
-    this.editQuestionTag = Object.assign({}, qtag);
+    this.questionTag = Object.assign({}, qtag);
     this.childModal.show();
   };
 
   cancelUpdate = () => {
     this.childModal.hide();
+  };
+
+  filterQuestionTags = (keyword: string) => {
+    let filteredItems = [];
+    if (!keyword) {
+      filteredItems = Object.assign([], this.questionTags);
+    }
+    else {
+      filteredItems = this.questionTags.filter(item => item.name == keyword);
+    }
   };
 }
