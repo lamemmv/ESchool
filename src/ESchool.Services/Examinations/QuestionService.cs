@@ -20,7 +20,9 @@ namespace ESchool.Services.Examinations
 
         public async Task<Question> FindAsync(int id)
         {
-            return await _questionRepository.FindAsync(id);
+            return await _questionRepository.Query
+                .Include(q => q.Answers)
+                .GetSingleAsync(q => q.Id == id);
         }
 
         public async Task<IEnumerable<Question>> GetListAsync(int page, int size)
@@ -59,16 +61,9 @@ namespace ESchool.Services.Examinations
             return ErrorCode.Success;
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(Question entity)
         {
-            var entity = await FindAsync(id);
-
-            if (entity != null)
-            {
-                await _questionRepository.DeleteCommitAsync(entity);
-            }
-
-            return ErrorCode.Success;
+            return await _questionRepository.DeleteCommitAsync(entity);
         }
     }
 }

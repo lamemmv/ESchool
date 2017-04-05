@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ESchool.Data.Repositories;
 using ESchool.Domain.Entities.Examinations;
+using ESchool.Domain.Entities.Systems;
 using ESchool.Services.Examinations;
 using ESchool.Services.Infrastructure.Cache;
 using ESchool.Services.Systems;
@@ -31,8 +32,9 @@ namespace ESchool.Services.Infrastructure.Extensions
             // Infrastructure.
             services.AddScoped<IMemoryCacheService, MemoryCacheService>();
 
-			// Logs.
-			services.AddScoped<ILogService, LogService>();
+            // Systems.
+            services.AddScoped<IRepository<Log>, Repository<Log>>();
+            services.AddScoped<ILogService, LogService>();
 
             // Examinations.
             services.AddScoped<IRepository<QTag>, Repository<QTag>>();

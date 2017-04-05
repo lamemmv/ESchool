@@ -53,14 +53,22 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = await _qtagService.FindAsync(viewModel.Name.Trim());
+                var entity = await _qtagService.FindAsync(viewModel.Id);
 
-                if (entity != null && entity.Id != viewModel.Id)
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                viewModel.Name = viewModel.Name.Trim();
+                var duplicateEntity = await _qtagService.FindAsync(viewModel.Name);
+
+                if (duplicateEntity != null && duplicateEntity.Id != viewModel.Id)
                 {
                     return Ok(ErrorCode.DuplicateEntity);
                 }
 
-                entity.Name = viewModel.Name.Trim();
+                entity.Name = viewModel.Name;
                 entity.Description = viewModel.Description.TrimNull();
                 var effectedRows = await _qtagService.UpdateAsync(entity);
 

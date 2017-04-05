@@ -15,6 +15,6 @@ namespace ESchool.Services.Examinations
 
         Task<ErrorCode> UpdateAsync(Question entity, int[] qtagIds);
 
-        Task<ErrorCode> DeleteAsync(int id);
+        Task<int> DeleteAsync(Question entity);
     }
 }

@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ESchool.Admin.Controllers
 {
-    public class LogController : AdminController
+    public class LogsController : AdminController
     {
         private readonly ILogService _logService;
 
-        public LogController(ILogService logService)
+        public LogsController(ILogService logService)
         {
             _logService = logService;
         }
@@ -31,12 +31,19 @@ namespace ESchool.Admin.Controllers
         {
             if (id.HasValue && id.Value > 0)
             {
-                var code = await _logService.DeleteAsync(id.Value);
+                var entity = await _logService.FindAsync(id.Value);
 
-                return ServerErrorCode(code);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                var effectedRows = await _logService.DeleteAsync(entity);
+
+                return Accepted(effectedRows);
             }
 
-            return BadRequestErrorCode(ErrorCode.InvalidEntityId);
+            return BadRequest(ErrorCode.InvalidEntityId);
         }
 
         [HttpDelete]
@@ -44,12 +51,19 @@ namespace ESchool.Admin.Controllers
         {
             if (ids != null && ids.Length > 0)
             {
-                var code = await _logService.DeleteAsync(ids);
+                var entities = await _logService.FindAsync(ids);
 
-                return ServerErrorCode(code);
+                if (entities == null)
+                {
+                    return NotFound();
+                }
+
+                var effectedRows = await _logService.DeleteAsync(entities);
+
+                return Accepted(effectedRows);
             }
 
-            return BadRequestErrorCode(ErrorCode.InvalidEntityId);
+            return BadRequest(ErrorCode.InvalidEntityId);
         }
 
         [NonAction]
