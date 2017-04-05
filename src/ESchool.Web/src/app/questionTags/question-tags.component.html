@@ -1,7 +1,7 @@
 <div class="col-lg-6">
     <span defaultOverlayTarget></span>
     <div class="box">
-        <alert *ngIf="alert.type" [type]="alert.type" dismissible="true">{{alert.message}}
+        <alert *ngIf="alert.type" [type]="alert.type" dismissible="true" dismissOnTimeout="3000">{{alert.message}}
         </alert>
         <div class="box-header"></div>
         <div class="box-body">
