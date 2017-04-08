@@ -5,6 +5,17 @@ import { AlertModule } from 'ng2-bootstrap';
 import { ModalDirective } from 'ng2-bootstrap';
 import { DialogService } from "ng2-bootstrap-modal";
 
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+
+// Observable class extensions
+import 'rxjs/add/observable/of';
+
+// Observable operators
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
 import { ConfirmDialogComponent } from './../shared/modals/confirm-dialog.component';
@@ -26,9 +37,11 @@ export class QuestionTagsComponent implements OnInit {
   public childModal: ModalDirective;
   private questionTag: QuestionTag;
   private questionTags: QuestionTag[];
+  private originalQTags: QuestionTag[];
   private alert: AlertModel;
   private DESCRIPTION: string;
-  private keyword: string;
+  private searchTerms = new Subject<string>();
+  filteredList = new Observable<QuestionTag[]>();
 
   constructor(private questionTagsService: QuestionTagsService,
     private notificationService: NotificationService,
@@ -38,14 +51,30 @@ export class QuestionTagsComponent implements OnInit {
 
   ngOnInit() {
     this.questionTag = new QuestionTag();
-    this.keyword = '';
     this.questionTags = [];
+    this.originalQTags = [];
     this.alert = {
       type: '',
       message: ''
     };
     this.getQuestionTags();
     this.DESCRIPTION = this._translate.instant('DESCRIPTION');
+
+    this.filteredList = this.searchTerms
+      .debounceTime(1000)        // wait 300ms after each keystroke before considering the term
+      .distinctUntilChanged()   // ignore if next search term is same as previous
+      .switchMap(term => term   // switch to new observable each time the term changes
+        // return the http search observable
+        ? this.search(term)
+        // or the observable of empty heroes if there was no search term
+        : Observable.of<QuestionTag[]>([]))
+      .catch(error => {
+        // TODO: add real error handling
+        console.log(error);
+        return Observable.of<QuestionTag[]>([]);
+      });
+
+      
   };
 
   getQuestionTags = () => {
@@ -53,6 +82,7 @@ export class QuestionTagsComponent implements OnInit {
     self.questionTagsService.get()
       .subscribe((questionTags) => {
         self.questionTags = questionTags;
+        self.originalQTags = self.cloneArray(self.questionTags);
       },
       error => {
         self.notificationService.printErrorMessage('Failed to load question tags. ' + error);
@@ -136,10 +166,42 @@ export class QuestionTagsComponent implements OnInit {
   filterQuestionTags = (keyword: string) => {
     let filteredItems = [];
     if (!keyword) {
-      filteredItems = Object.assign([], this.questionTags);
+      filteredItems = this.cloneArray(this.originalQTags);
     }
     else {
-      filteredItems = this.questionTags.filter(item => item.name == keyword);
+      filteredItems = this.originalQTags.filter(item => item.name.indexOf(keyword) > -1);
+    }
+
+    this.questionTags = this.cloneArray(filteredItems);
+  };
+
+  search(term: string): Observable<QuestionTag[]> {
+    var self = this;
+    let filtered: QuestionTag[] = [];
+    console.log(term);
+
+    if (!term.trim()) {
+      self.questionTags = self.cloneArray(self.originalQTags);
+      return Observable.of(self.originalQTags);
+    } else {
+      let items = this.originalQTags.filter(qtag => qtag.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
+      self.questionTags = self.cloneArray(items);
+      return Observable.of(items);
     }
   };
+
+  onKeyStroke(keyword: string): void {
+    this.searchTerms.next(keyword);
+    if (!keyword.trim()) {
+      this.questionTags = this.cloneArray(this.originalQTags);
+    }
+  };
+
+  cloneArray(src: any[]) {
+    let arr: any[] = [];
+    src.forEach((x) => {
+      arr.push(Object.assign({}, x));
+    });
+    return arr;
+  }
 }

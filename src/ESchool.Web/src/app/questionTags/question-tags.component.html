@@ -21,13 +21,16 @@
                 <div class="col-sm-6">
                     <div class="dataTables_filter"> 
                         <label>{{ 'SEARCH' | translate }}
-                            <input type="search" 
-                                class="form-control input-sm" 
+                            <input #searchBox class="form-control input-sm" 
                                 placeholder="{{'SEARCH_QUESTION_TAGS' | translate}}"
-                                [(ngModel)]="keyword" 
-                                (input)="filterQuestionTags(keyword)" />
+                                (keyup)="onKeyStroke(searchBox.value)" />
                         </label>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div *ngFor="let hero of filteredList | async"
+                    class="search-result" >
                 </div>
             </div>
             <div class="row">
@@ -40,7 +43,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;' [ngClass]="{ odd: odd, even: even }"
+                            <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;' 
+                                [ngClass]="{ odd: odd, even: even }"
                                 role="row" (click)="showChildModal(qtag)">
                                 <td class="col-sm-4">{{qtag.name}}</td> 
                                 <td class="col-sm-8">{{qtag.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag($event, qtag)"></span></td>
