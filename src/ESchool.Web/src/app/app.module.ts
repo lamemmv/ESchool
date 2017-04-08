@@ -6,9 +6,9 @@ import {
   PreloadAllModules
 } from '@angular/router';
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
-//import { ModalModule } from 'angular2-modal';
+import { Ng2BreadcrumbModule, BreadcrumbService } from 'ng2-breadcrumb/ng2-breadcrumb';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
-//import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService }   from './shared/translate';
+import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService, TranslateModule }   from './shared/translate';
 
 import { ConfigService } from './shared/utils/config.service';
 import { NotificationService } from './shared/utils/notification.service';
@@ -25,22 +25,23 @@ import { ROUTES } from './app.routes';
         HttpModule,
         RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules }),
         Ng2BootstrapModule.forRoot(),
-        //ModalModule.forRoot(),
+        Ng2BreadcrumbModule.forRoot(),
         BootstrapModalModule,
         QuestionTagsModule,
         QuestionsModule,
-        QuestionPapersModule 
+        QuestionPapersModule,
+        TranslateModule 
     ],
   declarations: [ AppComponent,
-        HomeComponent,
-        //TranslatePipe 
+        HomeComponent
     ],
     providers: [
         ConfigService,
         NotificationService,
         AppService,
-        //TRANSLATION_PROVIDERS, 
-        //TranslateService
+        BreadcrumbService,
+        TRANSLATION_PROVIDERS, 
+        TranslateService
     ],
   bootstrap:    [ AppComponent ]
 })

@@ -23,7 +23,7 @@
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
       'ng2-bootstrap': 'npm:ng2-bootstrap/bundles/ng2-bootstrap.umd.js',
-      //'ng2-bootstrap/modal': 'npm:ng2-bootstrap/modal',
+      'ng2-breadcrumb': 'npm:ng2-breadcrumb',
       'moment': 'npm:moment/moment.js',
       'ng2-bootstrap-modal': 'npm:ng2-bootstrap-modal',
       // other libraries
@@ -48,11 +48,11 @@
       'ng2-bootstrap-modal': {
         main: 'index.js',
         defaultExtension: 'js'
-      }/*,
-      'ng2-bootstrap/modal': {
-        main: 'index.js',
+      },
+      'ng2-breadcrumb': {
+        main: 'ng2-breadcrumb.js',
         defaultExtension: 'js'
-      }*/
+      }
     }
   });
 })(this);
