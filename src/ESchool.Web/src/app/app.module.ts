@@ -8,6 +8,7 @@ import {
 import { Ng2BootstrapModule } from 'ng2-bootstrap';
 import { Ng2BreadcrumbModule, BreadcrumbService } from 'ng2-breadcrumb/ng2-breadcrumb';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
+
 import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService, TranslateModule }   from './shared/translate';
 
 import { ConfigService } from './shared/utils/config.service';
@@ -30,7 +31,7 @@ import { ROUTES } from './app.routes';
         QuestionTagsModule,
         QuestionsModule,
         QuestionPapersModule,
-        TranslateModule 
+        TranslateModule
     ],
   declarations: [ AppComponent,
         HomeComponent

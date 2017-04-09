@@ -83,6 +83,15 @@
                                 [(ngModel)]="question.content" 
                                 #editQuestionTagName="ngModel"
                                 required />
+                            <!--<ckeditor
+                                [(ngModel)]="question.content"
+                                [config]="{uiColor: '#99000'}"
+                                (change)="onChange($event)"
+                                (ready)="onReady($event)"
+                                (focus)="onFocus($event)"
+                                (blur)="onBlur($event)"
+                                debounce="500">
+                            </ckeditor>-->
                             <div *ngIf="editQuestionTagName.errors && (editQuestionTagName.dirty || editQuestionTagName.touched)" 
                                 class="alert alert-danger field-required">
                                 <div [hidden]="!editQuestionTagName.errors.required">

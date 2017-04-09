@@ -6,6 +6,9 @@ import { BreadcrumbService } from 'ng2-breadcrumb/ng2-breadcrumb';
 @Component({
   selector: 'eschool-app',
   templateUrl: './app.component.html',
+  styleUrls: [
+    "./app.style.css"
+  ]
 })
 export class AppComponent {
   constructor(private _translate: TranslateService,

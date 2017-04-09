@@ -26,6 +26,7 @@
       'ng2-breadcrumb': 'npm:ng2-breadcrumb',
       'moment': 'npm:moment/moment.js',
       'ng2-bootstrap-modal': 'npm:ng2-bootstrap-modal',
+      "ng2-ckeditor": "npm:ng2-ckeditor",
       // other libraries
       'rxjs':                      'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
@@ -52,6 +53,10 @@
       'ng2-breadcrumb': {
         main: 'ng2-breadcrumb.js',
         defaultExtension: 'js'
+      },
+      "ng2-ckeditor": {
+        "main": "lib/index.js",
+        "defaultExtension": "js",
       }
     }
   });
