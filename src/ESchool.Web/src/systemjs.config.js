@@ -22,7 +22,7 @@
       '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
-      'ng2-bootstrap': 'npm:ng2-bootstrap/bundles/ng2-bootstrap.umd.js',
+      'ng2-bootstrap': 'npm:ng2-bootstrap/bundles/ngx-bootstrap.umd.js',
       'ng2-breadcrumb': 'npm:ng2-breadcrumb',
       'moment': 'npm:moment/moment.js',
       'ng2-bootstrap-modal': 'npm:ng2-bootstrap-modal',
