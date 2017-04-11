@@ -1,47 +1,58 @@
 <div class="col-lg-6">
-    <span defaultOverlayTarget></span>
     <div class="box">
         <alert *ngIf="alert.type" [type]="alert.type" dismissible="true" dismissOnTimeout="3000">{{alert.message}}
         </alert>
-        <div class="box-header"></div>
-        <div class="box-body">
-            <div class="form-group">
-                <label for="questionTagName">{{'NAME' | translate }}</label>
-                <input id="questionTagName" type="text" class="form-control" [(ngModel)]="questionTag.name" />
-            </div>
-            <div class="form-group">
-                <label for="questionTagDescription">{{ DESCRIPTION }}</label>
-                <textarea id="questionTagDescription" class="form-control" [(ngModel)]="questionTag.description"></textarea>
-            </div>
-            <button type="submit" *ngIf="!questionTag.id" 
-                class="btn btn-primary" (click)="addQuestionTag()"><i class="fa fa-plus"></i> 
-                {{ 'ADD' | translate }}
-            </button>
-            <button type="submit" *ngIf="questionTag.id" 
-                class="btn btn-primary" (click)="updateQuestionTag()"><i class="fa fa-pencil-square-o"></i> 
-                {{ 'UPDATE' | translate }}
-            </button>
-        </div>
-
         <div class="box-header">
-            <h3>{{'QUESTION_TAG_LIST' | translate }}</h3>
+            <h3 class="box-title">{{'QUESTION_TAG_LIST' | translate }}</h3>
         </div>
         <div class="box-body">
-            <table class="table table-bordered table-hover dataTable">
-                <thead>
-                    <tr>
-                        <th class="col-sm-4">{{'NAME' | translate }}</th>
-                        <th class="col-sm-8">{{'DESCRIPTION' | translate }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;' [ngClass]="{ odd: odd, even: even }"
-                        role="row" (click)="openEditDialog(qtag)">
-                        <td class="col-sm-4">{{qtag.name}}</td>
-                        <td class="col-sm-8">{{qtag.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag(qtag)"></span></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="dataTables_length">
+                        <label>
+                            <button type="submit" 
+                                class="btn btn-primary pull-right" 
+                                (click)="showChildModal()"><i class="fa fa-plus"></i> 
+                                {{ 'ADD' | translate }}
+                            </button>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="dataTables_filter"> 
+                        <label>{{ 'SEARCH' | translate }}
+                            <input #searchBox class="form-control input-sm" 
+                                placeholder="{{'SEARCH_QUESTION_TAGS' | translate}}"
+                                (keyup)="onKeyStroke(searchBox.value)" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div *ngFor="let hero of filteredList | async"
+                    class="search-result" >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-hover dataTable">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-4">{{'NAME' | translate }}</th>
+                                <th class="col-sm-8">{{'DESCRIPTION' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;' 
+                                [ngClass]="{ odd: odd, even: even }"
+                                role="row" (click)="showChildModal(qtag)">
+                                <td class="col-sm-4">{{qtag.name}}</td> 
+                                <td class="col-sm-8">{{qtag.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag($event, qtag)"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>                
+            </div>            
         </div>
         <div class="box-footer clearfix">
             <ul class="pagination pagination-sm no-margin pull-right">
@@ -51,6 +62,61 @@
                 <li><a href="#">3</a></li>
                 <li><a href="#">»</a></li>
             </ul>
+        </div>
+    </div>
+    <!--Modal-->
+    <div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title pull-left">{{ 'EDIT_QUESTION_TAG_TITLE' | translate }}</h4>
+                    <!--<button type="button" class="close pull-right" aria-label="Close" (click)="childModal.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>-->
+                </div>
+                <div class="modal-body">
+                    <form #questionTagEditForm="ngForm">
+                        <div class="form-group required">
+                            <label for="editQuestionTagName" class="control-label">{{'NAME' | translate }}</label> 
+                            <input id="editQuestionTagName" 
+                                name="editQuestionTagName" 
+                                type="text" 
+                                class="form-control" 
+                                [(ngModel)]="questionTag.name" 
+                                #editQuestionTagName="ngModel"
+                                required />
+                            <div *ngIf="editQuestionTagName.errors && (editQuestionTagName.dirty || editQuestionTagName.touched)" 
+                                class="alert alert-danger field-required">
+                                <div [hidden]="!editQuestionTagName.errors.required">
+                                    {{ 'NAME_REQUIRED' | translate }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editQuestionTagDescription">{{ DESCRIPTION }}</label>
+                            <textarea id="editQuestionTagDescription" 
+                                name="editQuestionTagDescription" 
+                                class="form-control" 
+                                [(ngModel)]="questionTag.description"
+                                #editQuestionTagDescription="ngModel"></textarea>
+                        </div>                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" 
+                        class="btn btn-default pull-right cancel" 
+                        (click)="cancelUpdate()"><i class="fa fa-times"></i>
+                        {{ 'BUTTON_CANCEL' | translate }}
+                    </button>
+                    <button type="submit" 
+                        class="btn btn-primary pull-right" 
+                        [disabled]="!questionTagEditForm.form.valid"
+                        (click)="submitForm()"><i class="fa fa-pencil-square-o"></i> 
+                        {{ 'UPDATE' | translate }}
+                    </button>                    
+                </div>
+            </div>
         </div>
     </div>
 </div>

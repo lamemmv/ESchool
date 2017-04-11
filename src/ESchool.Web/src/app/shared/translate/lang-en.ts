@@ -11,5 +11,13 @@ export const LANG_EN_TRANS = {
     'BUTTON_OK': 'OK',
     'BUTTON_CANCEL': 'Cancel',
     'SAVED': 'Saved',
-    'UPDATE': 'Update'
+    'UPDATE': 'Update',
+    'NAME_REQUIRED': 'Name is required',
+    'EDIT_QUESTION_TAG_TITLE': 'Edit question tag',
+    'SEARCH': 'Search',
+    'SEARCH_QUESTION_TAGS': 'Search question tags',
+    'QUESTION_TAGS': 'Question tags',
+    'QUESTIONS': 'Questions',
+    'QUESTION_LIST': 'Question list',
+    'CONTENT': 'Content'
 };

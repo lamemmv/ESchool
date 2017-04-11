@@ -11,5 +11,13 @@ export const LANG_VI_TRANS = {
     'BUTTON_OK': 'Chấp nhận',
     'BUTTON_CANCEL': 'Hủy',
     'SAVED': 'Đã lưu',
-    'UPDATE': 'Cập nhật'
+    'UPDATE': 'Cập nhật',
+    'NAME_REQUIRED': 'Tên không được để trống',
+    'EDIT_QUESTION_TAG_TITLE': 'Sửa loại câu hỏi',
+    'SEARCH': 'Tìm',
+    'SEARCH_QUESTION_TAGS': 'Tìm loại câu hỏi',
+    'QUESTION_TAGS': 'Loại câu hỏi',
+    'QUESTIONS': 'Câu hỏi',
+    'QUESTION_LIST': 'Danh sách câu hỏi',
+    'CONTENT': 'Nội dung'
 };

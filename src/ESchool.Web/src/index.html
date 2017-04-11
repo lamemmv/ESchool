@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
@@ -30,13 +31,14 @@
     <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
     <link href="bower_components/alertify.js/themes/alertify.core.css" rel="stylesheet" />
     <link href="bower_components/alertify.js/themes/alertify.bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
     <script src="bower_components/alertify.js/lib/alertify.min.js"></script>
     <!-- Polyfill(s) for older browsers -->
     <script src="node_modules/core-js/client/shim.min.js"></script>
 
     <script src="node_modules/zone.js/dist/zone.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.6.2/ckeditor.js"></script>
     <script src="systemjs.config.js"></script>
     <script>
       System.import('main.js').catch(function(err){ console.error(err); });
