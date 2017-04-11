@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Domain.Entities.Systems;
+using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Systems
 {
@@ -9,12 +10,10 @@ namespace ESchool.Services.Systems
     {
 		Task<Log> FindAsync(int id);
 
-        Task<IEnumerable<Log>> FindAsync(int[] ids);
-
         Task<IEnumerable<Log>> GetListAsync(DateTime fromData, DateTime toDate, string level, int page, int size);
 
-        Task<int> DeleteAsync(Log entity);
+        Task<ErrorCode> DeleteAsync(int id);
 
-		Task<int> DeleteAsync(IEnumerable<Log> entities);
+		Task<ErrorCode> DeleteAsync(int[] ids);
 	}
 }

@@ -6,9 +6,9 @@ namespace ESchool.Domain.Entities.Examinations
     {
         public string Content { get; set; }
 
-        public int DSS { get; set; }
-
         public string Description { get; set; }
+
+        public int Type { get; set; }
 
         public virtual ICollection<QuestionTag> QuestionTags { get; set; }
 

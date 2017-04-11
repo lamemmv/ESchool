@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.Domain;
 using ESchool.Domain.Entities.Examinations;
+using ESchool.Domain.Enums;
 using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Examinations;
-using ESchool.Services.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -35,15 +34,10 @@ namespace ESchool.Admin.Controllers
                 var entity = _mapper.Map<Question>(viewModel);
                 var code = await _questionService.CreateAsync(entity, viewModel.QTagIds);
 
-                if (code == ErrorCode.Success)
-                {
-                    return CreatedAtAction(nameof(Post), entity.Id);
-                }
-
-                return Ok(code);
+                return PostResult(code, entity.Id);
             }
 
-            return BadRequestErrorCode(ModelState);
+            return BadRequest(ModelState);
         }
 
         [HttpPut]
@@ -51,22 +45,13 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = await _questionService.FindAsync(viewModel.Id);
-
-                if (entity == null)
-                {
-                    return NotFoundErrorCode();
-                }
-
-                entity.Content = viewModel.Content.Trim();
-                entity.DSS = viewModel.DSS;
-                entity.Description = viewModel.Description.TrimNull();
+                var entity = _mapper.Map<Question>(viewModel);
                 var code = await _questionService.UpdateAsync(entity, viewModel.QTagIds);
 
-                return ServerErrorCode(code);
+                return PutResult(code);
             }
 
-            return BadRequestErrorCode(ModelState);
+            return BadRequest(ModelState);
         }
 
         [HttpDelete]
@@ -74,16 +59,9 @@ namespace ESchool.Admin.Controllers
         {
             if (id.HasValue && id.Value > 0)
             {
-                var entity = await _questionService.FindAsync(id.Value);
+                var code = await _questionService.DeleteAsync(id.Value);
 
-                if (entity == null)
-                {
-                    return NotFound();
-                }
-
-                var effectedRows = await _questionService.DeleteAsync(entity);
-
-                return Accepted();
+                return DeleteResult(code);
             }
 
             return BadRequest(ErrorCode.InvalidEntityId);

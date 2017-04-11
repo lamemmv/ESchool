@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ESchool.Domain.Entities.Examinations;
 
 namespace ESchool.Domain.ViewModels.Examinations
 {
@@ -8,13 +7,12 @@ namespace ESchool.Domain.ViewModels.Examinations
         [Required]
         public string Content { get; set; }
 
-        [Required]
-        public int DSS { get; set; }
-
         public string Description { get; set; }
+
+        public int Type { get; set; }
 
         public int[] QTagIds { get; set; }
 
-        public Answer[] Answers { get; set; }
+        public AnswerCreateViewModel[] Answers { get; set; }
     }
 }

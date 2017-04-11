@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using ESchool.Domain;
 using ESchool.Domain.Entities.Examinations;
+using ESchool.Domain.Enums;
 using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Examinations;
-using ESchool.Services.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -32,17 +31,10 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = await _qtagService.FindAsync(viewModel.Name.Trim());
-
-                if (entity != null)
-                {
-                    return Ok(ErrorCode.DuplicateEntity);
-                }
-
-                entity = _mapper.Map<QTag>(viewModel);
+                var entity = _mapper.Map<QTag>(viewModel);
                 var code = await _qtagService.CreateAsync(entity);
 
-                return Created(nameof(Post), entity.Id);
+                return PostResult(code, entity.Id);
             }
 
             return BadRequest(ModelState);
@@ -53,26 +45,10 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = await _qtagService.FindAsync(viewModel.Id);
+                var entity = _mapper.Map<QTag>(viewModel);
+                var code = await _qtagService.UpdateAsync(entity);
 
-                if (entity == null)
-                {
-                    return NotFound();
-                }
-
-                viewModel.Name = viewModel.Name.Trim();
-                var duplicateEntity = await _qtagService.FindAsync(viewModel.Name);
-
-                if (duplicateEntity != null && duplicateEntity.Id != viewModel.Id)
-                {
-                    return Ok(ErrorCode.DuplicateEntity);
-                }
-
-                entity.Name = viewModel.Name;
-                entity.Description = viewModel.Description.TrimNull();
-                var effectedRows = await _qtagService.UpdateAsync(entity);
-
-                return Accepted(effectedRows);
+                return PutResult(code);
             }
 
             return BadRequest(ModelState);
@@ -83,16 +59,9 @@ namespace ESchool.Admin.Controllers
         {
             if (id.HasValue && id.Value > 0)
             {
-                var entity = await _qtagService.FindAsync(id.Value);
+                var code = await _qtagService.DeleteAsync(id.Value);
 
-                if (entity == null)
-                {
-                    return NotFound();
-                }
-
-                var effectedRows = await _qtagService.DeleteAsync(entity);
-
-                return Accepted(effectedRows);
+                return DeleteResult(code);
             }
 
             return BadRequest(ErrorCode.InvalidEntityId);

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ESchool.Domain;
 using ESchool.Domain.Entities.Examinations;
+using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Examinations
 {
@@ -15,6 +15,6 @@ namespace ESchool.Services.Examinations
 
         Task<ErrorCode> UpdateAsync(Question entity, int[] qtagIds);
 
-        Task<int> DeleteAsync(Question entity);
+        Task<ErrorCode> DeleteAsync(int id);
     }
 }

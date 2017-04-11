@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace ESchool.Domain
+namespace ESchool.Domain.Enums
 {
     public enum ErrorCode
     {

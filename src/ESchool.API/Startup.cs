@@ -118,7 +118,7 @@ namespace ESchool.API
             }
 
             app.UseIdentity();
-            //app.UseIdentityServer();
+            app.UseIdentityServer();
             //app.UseIdentityServerAuthentication(
             //	new IdentityServerAuthenticationOptions
             //	{

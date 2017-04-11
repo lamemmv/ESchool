@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ESchool.Domain;
 using ESchool.Domain.Entities.Systems;
+using ESchool.Domain.Enums;
 using ESchool.Services.Systems;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -31,16 +31,9 @@ namespace ESchool.Admin.Controllers
         {
             if (id.HasValue && id.Value > 0)
             {
-                var entity = await _logService.FindAsync(id.Value);
+                var code = await _logService.DeleteAsync(id.Value);
 
-                if (entity == null)
-                {
-                    return NotFound();
-                }
-
-                var effectedRows = await _logService.DeleteAsync(entity);
-
-                return Accepted(effectedRows);
+                return DeleteResult(code);
             }
 
             return BadRequest(ErrorCode.InvalidEntityId);
@@ -51,16 +44,9 @@ namespace ESchool.Admin.Controllers
         {
             if (ids != null && ids.Length > 0)
             {
-                var entities = await _logService.FindAsync(ids);
+                var code = await _logService.DeleteAsync(ids);
 
-                if (entities == null)
-                {
-                    return NotFound();
-                }
-
-                var effectedRows = await _logService.DeleteAsync(entities);
-
-                return Accepted(effectedRows);
+                return DeleteResult(code);
             }
 
             return BadRequest(ErrorCode.InvalidEntityId);

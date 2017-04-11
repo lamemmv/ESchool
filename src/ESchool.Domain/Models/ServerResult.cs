@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ESchool.Domain.Enums;
 
 namespace ESchool.Domain.Models
 {

@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data.Repositories;
-using ESchool.Domain;
 using ESchool.Domain.Entities.Examinations;
+using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Examinations
 {
@@ -28,6 +28,7 @@ namespace ESchool.Services.Examinations
         public async Task<IEnumerable<Question>> GetListAsync(int page, int size)
         {
             return await _questionRepository.Query
+                .Include(q => q.Answers)
                 .Sort(o => o.OrderBy(t => t.Id))
                 .GetListAsync(page, size);
         }
@@ -47,13 +48,26 @@ namespace ESchool.Services.Examinations
 
         public async Task<ErrorCode> UpdateAsync(Question entity, int[] qtagIds)
         {
-            if (qtagIds == null || qtagIds.Length == 0)
+            var updatedEntity = await _questionRepository.Query
+                .Include(q => q.Answers)
+                .GetSingleAsync(q => q.Id == entity.Id);
+
+            if (entity == null)
             {
-                entity.QuestionTags = null;
+                return ErrorCode.NotFound;
             }
-            else
+
+            updatedEntity.Content = entity.Content;
+            updatedEntity.Description = entity.Description;
+            updatedEntity.Type = entity.Type;
+            updatedEntity.Answers.Clear();
+
+            if (entity.Answers != null)
             {
-                var currentQTagIds = entity.QuestionTags.Select(t => t.QTagId).ToList();
+                foreach (var answer in entity.Answers)
+                {
+                    updatedEntity.Answers.Add(answer);
+                }
             }
 
             await _questionRepository.UpdateCommitAsync(entity);
@@ -61,9 +75,20 @@ namespace ESchool.Services.Examinations
             return ErrorCode.Success;
         }
 
-        public async Task<int> DeleteAsync(Question entity)
+        public async Task<ErrorCode> DeleteAsync(int id)
         {
-            return await _questionRepository.DeleteCommitAsync(entity);
+            var entity = await _questionRepository.Query
+                .Include(q => q.Answers)
+                .GetSingleAsync(q => q.Id == id);
+
+            if (entity == null)
+            {
+                return ErrorCode.NotFound;
+            }
+
+            await _questionRepository.DeleteCommitAsync(entity);
+
+            return ErrorCode.Success;
         }
     }
 }

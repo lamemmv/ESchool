@@ -15,15 +15,23 @@ namespace ESchool.Domain
 		private void ViewModelsToModels()
 		{
             CreateMap<QTagCreateViewModel, QTag>()
-                .ForMember(vm => vm.Name, map => map.MapFrom(s => s.Name.Trim()))
-                .ForMember(vm => vm.Description, map => map.MapFrom(s => TrimNull(s.Description)));
+                .ForMember(vm => vm.Name,
+                    map => map.MapFrom(s => s.Name.Trim()))
+                .ForMember(vm => vm.Description,
+                    map => map.MapFrom(s => TrimNull(s.Description)));
+            CreateMap<QTagUpdateViewModel, QTag>()
+                .ForMember(vm => vm.Name,
+                    map => map.MapFrom(s => s.Name.Trim()))
+                .ForMember(vm => vm.Description,
+                    map => map.MapFrom(s => TrimNull(s.Description)));
             CreateMap<QuestionCreateViewModel, Question>()
-                .ForMember(vm => vm.Content, map => map.MapFrom(s => s.Content.Trim()))
-                .ForMember(vm => vm.Description, map => map.MapFrom(s => TrimNull(s.Description)));
-            //CreateMap<CreateMenuViewModel, Menu>()
-            //	.ForMember(vm => vm.Name, map => map.MapFrom(s => s.Name.Trim()))
-            //	.ForMember(vm => vm.Description, map => map.MapFrom(s => s.Description.TrimNull()))
-            //	.ForMember(vm => vm.IconName, map => map.MapFrom(s => s.IconName.TrimNull()));
+                .ForMember(vm => vm.Content,
+                    map => map.MapFrom(s => s.Content.Trim()))
+                .ForMember(vm => vm.Description,
+                    map => map.MapFrom(s => TrimNull(s.Description)));
+            CreateMap<AnswerCreateViewModel, Answer>()
+                .ForMember(vm => vm.AnswerName, map => map.MapFrom(s => s.AnswerName.Trim()))
+                .ForMember(vm => vm.Body, map => map.MapFrom(s => s.Body.Trim()));
 
             //CreateMap<Schedule, ScheduleViewModel>()
             //   .ForMember(vm => vm.Creator,

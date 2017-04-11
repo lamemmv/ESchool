@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data.Repositories;
 using ESchool.Domain.Entities.Systems;
+using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Systems
 {
@@ -21,13 +22,6 @@ namespace ESchool.Services.Systems
             return await _logRepository.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Log>> FindAsync(int[] ids)
-        {
-            return await _logRepository.Query
-                .Filter(l => ids.Contains(l.Id))
-                .GetListAsync();
-        }
-
         public async Task<IEnumerable<Log>> GetListAsync(DateTime fromData, DateTime toDate, string level, int page, int size)
         {
             return await _logRepository.Query
@@ -37,19 +31,25 @@ namespace ESchool.Services.Systems
                 .GetListAsync(page, size);
         }
 
-        public async Task<int> DeleteAsync(Log entity)
+        public async Task<ErrorCode> DeleteAsync(int id)
         {
-            return await _logRepository.DeleteCommitAsync(entity);
-        }
+            var entity = await FindAsync(id);
 
-        public async Task<int> DeleteAsync(IEnumerable<Log> entities)
-        {
-            foreach (var entity in entities)
+            if (entity == null)
             {
-                _logRepository.Delete(entity);
+                return ErrorCode.NotFound;
             }
 
-            return await _logRepository.CommitAsync();
+            await _logRepository.DeleteCommitAsync(entity);
+
+            return ErrorCode.Success;
+        }
+
+        public async Task<ErrorCode> DeleteAsync(int[] ids)
+        {
+            await _logRepository.DeleteCommitAsync(l => ids.Contains(l.Id));
+
+            return ErrorCode.Success;
         }
     }
 }

@@ -77,26 +77,22 @@ namespace ESchool.Data
             builder.ToTable("QTags").HasKey(p => p.Id);
 
             builder.Property(p => p.Name).IsRequired().HasMaxLength(256);
-
-            builder.Property(p => p.Description).HasMaxLength(512);
         }
 
         private void Map(EntityTypeBuilder<Question> builder)
         {
             builder.ToTable("Questions").HasKey(p => p.Id);
 
-            builder.Property(p => p.Content).HasMaxLength(32);
-
-            builder.Property(p => p.Description).HasMaxLength(512);
+            builder.Property(p => p.Content).IsRequired();
         }
 
         private void Map(EntityTypeBuilder<Answer> builder)
         {
             builder.ToTable("Answers").HasKey(p => p.Id);
 
-            builder.Property(p => p.Content).IsRequired().HasMaxLength(256);
+            builder.Property(p => p.AnswerName).IsRequired().HasMaxLength(32);
 
-            builder.Property(p => p.Body).IsRequired().HasMaxLength(512);
+            builder.Property(p => p.Body).IsRequired();
 
             builder.HasOne(a => a.Question)
                 .WithMany(q => q.Answers)
