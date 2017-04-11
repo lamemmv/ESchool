@@ -6,6 +6,7 @@ import { AlertModule } from 'ng2-bootstrap';
 
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
+import { UtilitiesService } from './../shared/utils/utilities.service';
 import { QuestionsService } from './questions.service';
 import { QuestionTagsService } from './../questionTags/question-tags.service';
 import { AlertModel } from './../shared/models/alerts';
@@ -26,12 +27,14 @@ export class EditQuestionComponent implements OnInit {
   private questionTags: QuestionTag[];
   private view = new QuestionView();
   private questionTypes: QuestionType[] = new Array();
+  private answerName: string = 'A';
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
     private router: Router,
     private questionTagsService: QuestionTagsService,
-    private questionService: QuestionsService) { }
+    private questionService: QuestionsService,
+    private utilitiesService: UtilitiesService) { }
 
   ngOnInit() {
     this.alert = {
@@ -106,7 +109,7 @@ export class EditQuestionComponent implements OnInit {
 
   save(): void {
     var self = this;
-    /*self.questionService.create(self.question)
+    self.questionService.create(self.question)
       .subscribe((id: number) => {
         self.question.id = id;
         self.alert.type = 'success';
@@ -114,14 +117,17 @@ export class EditQuestionComponent implements OnInit {
       },
       error => {
         self.notificationService.printErrorMessage('Failed to create question. ' + error);
-      });*/
+      });
   };
 
   addAnswer(): void {
-    this.question.answers.push({ body: '', dss: false, answerName: '' });
+    if (this.question.answers.length > 0) {
+      this.answerName = this.utilitiesService.nextChar(this.answerName);
+    }
+    this.question.answers.push({ body: '', dss: false, answerName: this.answerName });
   };
 
-  removeAnswer(answer: Answer): void { 
+  removeAnswer(answer: Answer): void {
     let index = this.question.answers.indexOf(answer);
     this.question.answers.splice(index, 1);
   };

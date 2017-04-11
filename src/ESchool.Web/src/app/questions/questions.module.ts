@@ -11,6 +11,7 @@ import { TRANSLATION_PROVIDERS, TranslateModule, TranslateService }   from './..
 import { QuestionsComponent } from './questions.component';
 import { EditQuestionComponent } from './question-edit.component';
 import { QuestionsService } from './questions.service';
+import { UtilitiesService } from './../shared/utils/utilities.service';
 
 import { QuestionsRoutingModule } from './questions-routing.module';
 
@@ -33,7 +34,8 @@ import { QuestionsRoutingModule } from './questions-routing.module';
     providers: [
         QuestionsService,
         TRANSLATION_PROVIDERS, 
-        TranslateService
+        TranslateService,
+        UtilitiesService
     ]
 })
 export class QuestionsModule { }
