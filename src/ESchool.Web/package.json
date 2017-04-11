@@ -42,7 +42,8 @@
     "zone.js": "0.8.5",
     "ng2-breadcrumb":"0.5.8",
     "ng2-ckeditor":"1.1.6",
-    "bootstrap":"3.3.7"
+    "bootstrap":"3.3.7",
+    "ng2-select":"1.2.0"
   },
   "devDependencies": {
     "concurrently": "^3.2.0",

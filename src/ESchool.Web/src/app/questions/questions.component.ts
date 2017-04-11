@@ -1,15 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AlertModule } from 'ng2-bootstrap';
-import { ModalDirective } from 'ng2-bootstrap';
-import { DialogService } from "ng2-bootstrap-modal";
 
 import { NotificationService } from './../shared/utils/notification.service';
-import { TranslateService }   from './../shared/translate';
+import { TranslateService } from './../shared/translate';
 
 import { AlertModel } from './../shared/models/alerts';
-import { Question } from './question.model'
+import { Question } from './question.model';
 
 @Component({
   selector: 'questions',
@@ -20,11 +18,10 @@ import { Question } from './question.model'
   ]
 })
 export class QuestionsComponent implements OnInit {
-  @ViewChild('childModal')
-  public childModal: ModalDirective;
   private alert: AlertModel;
-  private question = new Question();
-  constructor(_translate: TranslateService) {
+  private questions : Question[];
+  constructor(_translate: TranslateService,
+    private router: Router) {
 
   }
 
@@ -35,4 +32,7 @@ export class QuestionsComponent implements OnInit {
     };
   };
 
+  addQuestion(): void {
+    this.router.navigate(['/question/create']);
+   };
 }

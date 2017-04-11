@@ -1,4 +1,5 @@
 <div class="col-lg-6">
+    <router-outlet></router-outlet>
     <div class="box">
         <alert *ngIf="alert.type" [type]="alert.type" dismissible="true" dismissOnTimeout="3000">{{alert.message}}
         </alert>
@@ -12,7 +13,7 @@
                         <label>
                             <button type="submit" 
                                 class="btn btn-primary pull-right" 
-                                (click)="showChildModal()"><i class="fa fa-plus"></i> 
+                                (click)="addQuestion()"><i class="fa fa-plus"></i> 
                                 {{ 'ADD' | translate }}
                             </button>
                         </label>
@@ -22,7 +23,7 @@
                     <div class="dataTables_filter"> 
                         <label>{{ 'SEARCH' | translate }}
                             <input #searchBox class="form-control input-sm" 
-                                placeholder="{{'SEARCH_QUESTION_TAGS' | translate}}"
+                                placeholder="{{'PLACEHOLDER_SEARCH_QUESTIONS' | translate}}"
                                 (keyup)="onKeyStroke(searchBox.value)" />
                         </label>
                     </div>
@@ -43,11 +44,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;' 
+                            <tr *ngFor='let qt of questions; let index=index; let odd=odd; let even=even;' 
                                 [ngClass]="{ odd: odd, even: even }"
-                                role="row" (click)="showChildModal(qtag)">
-                                <td class="col-sm-4">{{qtag.content}}</td> 
-                                <td class="col-sm-8">{{qtag.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag($event, qtag)"></span></td>
+                                role="row">
+                                <td class="col-sm-4">{{qt.content}}</td> 
+                                <td class="col-sm-8">{{qt.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag($event, qtag)"></span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -62,67 +63,6 @@
                 <li><a href="#">3</a></li>
                 <li><a href="#">»</a></li>
             </ul>
-        </div>
-    </div>
-    <!--Modal-->
-    <div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title pull-left">{{ 'EDIT_QUESTION_TAG_TITLE' | translate }}</h4>
-                </div>
-                <div class="modal-body">
-                    <form #questionTagEditForm="ngForm">
-                        <div class="form-group required">
-                            <label for="editQuestionTagName" class="control-label">{{'CONTENT' | translate }}</label> 
-                            <input id="editQuestionTagName" 
-                                name="editQuestionTagName" 
-                                type="text" 
-                                class="form-control" 
-                                [(ngModel)]="question.content" 
-                                #editQuestionTagName="ngModel"
-                                required />
-                            <!--<ckeditor
-                                [(ngModel)]="question.content"
-                                [config]="{uiColor: '#99000'}"
-                                (change)="onChange($event)"
-                                (ready)="onReady($event)"
-                                (focus)="onFocus($event)"
-                                (blur)="onBlur($event)"
-                                debounce="500">
-                            </ckeditor>-->
-                            <div *ngIf="editQuestionTagName.errors && (editQuestionTagName.dirty || editQuestionTagName.touched)" 
-                                class="alert alert-danger field-required">
-                                <div [hidden]="!editQuestionTagName.errors.required">
-                                    {{ 'NAME_REQUIRED' | translate }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="editQuestionTagDescription">{{ DESCRIPTION }}</label>
-                            <textarea id="editQuestionTagDescription" 
-                                name="editQuestionTagDescription" 
-                                class="form-control" 
-                                [(ngModel)]="question.description"
-                                #editQuestionTagDescription="ngModel"></textarea>
-                        </div>                        
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" 
-                        class="btn btn-default pull-right cancel" 
-                        (click)="cancelUpdate()"><i class="fa fa-times"></i>
-                        {{ 'BUTTON_CANCEL' | translate }}
-                    </button>
-                    <button type="submit" 
-                        class="btn btn-primary pull-right" 
-                        [disabled]="!questionTagEditForm.form.valid"
-                        (click)="submitForm()"><i class="fa fa-pencil-square-o"></i> 
-                        {{ 'UPDATE' | translate }}
-                    </button>                    
-                </div>
-            </div>
         </div>
     </div>
 </div>

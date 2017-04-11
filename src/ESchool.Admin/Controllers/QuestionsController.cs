@@ -26,7 +26,7 @@ namespace ESchool.Admin.Controllers
             return await _questionService.GetListAsync(page ?? DefaultPage, size ?? DefaultSize);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<Question> Get(int id)
         {
             return await _questionService.FindAsync(id);

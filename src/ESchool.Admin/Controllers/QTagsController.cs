@@ -26,7 +26,7 @@ namespace ESchool.Admin.Controllers
             return await _qtagService.GetListAsync();
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<QTag> Get(int id)
         {
             return await _qtagService.FindAsync(id);

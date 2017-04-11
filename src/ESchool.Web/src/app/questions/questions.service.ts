@@ -24,4 +24,22 @@ export class QuestionsService {
             })
             .catch(self.appService.handleError); 
     };
+
+    getById(id: number){
+        var self = this;
+        return this.http.get(this._baseUrl + 'questions/' + id)
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(self.appService.handleError); 
+    };
+
+    create(request: any) {
+        var self = this;
+        return this.http.post(this._baseUrl + 'questions', request)
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(self.appService.handleError); 
+    };
 }

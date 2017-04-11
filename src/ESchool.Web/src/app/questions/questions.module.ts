@@ -1,26 +1,34 @@
-import { NgModule }       from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
-import { AlertModule, ModalModule } from 'ng2-bootstrap';
+import { AlertModule } from 'ng2-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
+import { SelectModule } from 'ng2-select';
 
 import { TRANSLATION_PROVIDERS, TranslateModule, TranslateService }   from './../shared/translate';
-import { QuestionsComponent } from './questions.component'
+import { QuestionsComponent } from './questions.component';
+import { EditQuestionComponent } from './question-edit.component';
 import { QuestionsService } from './questions.service';
+
+import { QuestionsRoutingModule } from './questions-routing.module';
 
 @NgModule({
     imports: [
         CommonModule,
+        BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         AlertModule.forRoot(),
-        ModalModule.forRoot(),
         TranslateModule,
-        CKEditorModule 
+        CKEditorModule,
+        SelectModule,
+        QuestionsRoutingModule 
     ],
     declarations: [
-        QuestionsComponent
+        QuestionsComponent,
+        EditQuestionComponent
     ],
     providers: [
         QuestionsService,
