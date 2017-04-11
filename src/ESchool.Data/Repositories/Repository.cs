@@ -20,23 +20,21 @@ namespace ESchool.Data.Repositories
         {
             get
             {
-                return new RepositoryQuery<T>(this);
+                return new RepositoryQuery<T>(DbSet);
+            }
+        }
+
+        public RepositoryQuery<T> QueryNoTracking
+        {
+            get
+            {
+                return new RepositoryQuery<T>(DbSet.AsNoTracking());
             }
         }
 
         public async Task<T> FindAsync(object id)
         {
             return await DbSet.FindAsync(id);
-        }
-
-        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await DbSet.SingleOrDefaultAsync(predicate);
-        }
-
-        public async Task<T> GetFirstAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await DbSet.FirstOrDefaultAsync(predicate);
         }
 
         #region Create, Update, Delete, Commit
@@ -103,31 +101,6 @@ namespace ESchool.Data.Repositories
         }
 
         #endregion
-
-        public IQueryable<T> GetQueryable(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            List<Expression<Func<T, object>>> includeProperties = null)
-        {
-            var query = DbSet.AsNoTracking();
-
-            if (includeProperties != null)
-            {
-                includeProperties.ForEach(i => { query = query.Include(i); });
-            }
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (orderBy != null)
-            {
-                query = orderBy(query);
-            }
-
-            return query;
-        }
 
         private DbSet<T> DbSet
         {

@@ -26,6 +26,12 @@ namespace ESchool.Admin.Controllers
             return await _questionService.GetListAsync(page ?? DefaultPage, size ?? DefaultSize);
         }
 
+        [HttpGet]
+        public async Task<Question> Get(int id)
+        {
+            return await _questionService.FindAsync(id);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]QuestionCreateViewModel viewModel)
         {

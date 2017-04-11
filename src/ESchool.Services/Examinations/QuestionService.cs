@@ -20,14 +20,15 @@ namespace ESchool.Services.Examinations
 
         public async Task<Question> FindAsync(int id)
         {
-            return await _questionRepository.Query
+            return await _questionRepository.QueryNoTracking
                 .Include(q => q.Answers)
-                .GetSingleAsync(q => q.Id == id);
+                .Filter(q => q.Id == id)
+                .GetSingleAsync();
         }
 
         public async Task<IEnumerable<Question>> GetListAsync(int page, int size)
         {
-            return await _questionRepository.Query
+            return await _questionRepository.QueryNoTracking
                 .Include(q => q.Answers)
                 .Sort(o => o.OrderBy(t => t.Id))
                 .GetListAsync(page, size);
@@ -50,7 +51,8 @@ namespace ESchool.Services.Examinations
         {
             var updatedEntity = await _questionRepository.Query
                 .Include(q => q.Answers)
-                .GetSingleAsync(q => q.Id == entity.Id);
+                .Filter(q => q.Id == entity.Id)
+                .GetSingleAsync();
 
             if (entity == null)
             {
@@ -79,7 +81,8 @@ namespace ESchool.Services.Examinations
         {
             var entity = await _questionRepository.Query
                 .Include(q => q.Answers)
-                .GetSingleAsync(q => q.Id == id);
+                .Filter(q => q.Id == id)
+                .GetSingleAsync();
 
             if (entity == null)
             {

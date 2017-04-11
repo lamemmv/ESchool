@@ -10,15 +10,15 @@ namespace ESchool.Data.Repositories
 {
     public sealed class RepositoryQuery<T> where T : class, new()
     {
-        private readonly IRepository<T> _repository;
+        private IQueryable<T> _queryable;
         private readonly List<Expression<Func<T, object>>> _includeProperties;
 
         private Expression<Func<T, bool>> _filter;
         private Func<IQueryable<T>, IOrderedQueryable<T>> _orderByQuerable;
 
-        public RepositoryQuery(IRepository<T> repository)
+        public RepositoryQuery(IQueryable<T> queryable)
         {
-            _repository = repository;
+            _queryable = queryable;
             _includeProperties = new List<Expression<Func<T, object>>>();
         }
 
@@ -40,29 +40,29 @@ namespace ESchool.Data.Repositories
             return this;
         }
 
-        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetSingleAsync()
         {
-            return await _repository.GetSingleAsync(predicate);
+            return await GetQueryable().SingleOrDefaultAsync();
         }
 
-        public async Task<T> GetFirstAsync(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetFirstAsync()
         {
-            return await _repository.GetFirstAsync(predicate);
+            return await GetQueryable().FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<T>> GetListAsync(int page, int size)
         {
-            int totalItems = await _repository.GetQueryable(_filter).CountAsync();
+            var query = GetQueryable();
+
+            int totalItems = await query.CountAsync();
 
             if (totalItems == 0)
             {
                 return new PagedList<T>(Enumerable.Empty<T>(), page, size, totalItems);
             }
 
-            var pagedList = await _repository
-                .GetQueryable(_filter, _orderByQuerable, _includeProperties)
+            var pagedList = await query
                 .Skip((page - 1) * size).Take(size)
-                .AsNoTracking()
                 .ToListAsync();
 
             return pagedList.ToPagedList(page, size, totalItems);
@@ -70,10 +70,27 @@ namespace ESchool.Data.Repositories
 
         public async Task<IEnumerable<T>> GetListAsync()
         {
-            return await _repository
-                .GetQueryable(_filter, _orderByQuerable, _includeProperties)
-                .AsNoTracking()
-                .ToListAsync();
+            return await GetQueryable().ToListAsync();
+        }
+
+        private IQueryable<T> GetQueryable()
+        {
+            if (_includeProperties != null)
+            {
+                _includeProperties.ForEach(i => { _queryable = _queryable.Include(i); });
+            }
+
+            if (_filter != null)
+            {
+                _queryable = _queryable.Where(_filter);
+            }
+
+            if (_orderByQuerable != null)
+            {
+                _queryable = _orderByQuerable(_queryable);
+            }
+
+            return _queryable;
         }
     }
 }

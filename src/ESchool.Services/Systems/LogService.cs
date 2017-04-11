@@ -24,7 +24,7 @@ namespace ESchool.Services.Systems
 
         public async Task<IEnumerable<Log>> GetListAsync(DateTime fromData, DateTime toDate, string level, int page, int size)
         {
-            return await _logRepository.Query
+            return await _logRepository.QueryNoTracking
                 .Filter(l => (l.Logged.Date >= fromData.Date && l.Logged.Date <= toDate.Date) ||
                     string.Equals(l.Level, level, StringComparison.OrdinalIgnoreCase))
                 .Sort(o => o.OrderByDescending(l => l.Id))

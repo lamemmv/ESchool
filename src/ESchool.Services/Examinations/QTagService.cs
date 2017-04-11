@@ -24,21 +24,21 @@ namespace ESchool.Services.Examinations
 
         public async Task<IEnumerable<QTag>> GetListAsync()
         {
-            return await _qtagRepository.Query
+            return await _qtagRepository.QueryNoTracking
                 .Sort(o => o.OrderBy(t => t.Name))
                 .GetListAsync();
         }
 
         public async Task<ErrorCode> CreateAsync(QTag entity)
         {
-            var createdEntity = await FindAsync(entity.Name);
+            var duplicateEntity = await FindAsync(entity.Name);
 
-            if (createdEntity != null)
+            if (duplicateEntity != null)
             {
                 return ErrorCode.DuplicateEntity;
             }
 
-            await _qtagRepository.CreateCommitAsync(createdEntity);
+            await _qtagRepository.CreateCommitAsync(entity);
 
             return ErrorCode.Success;
         }
@@ -82,8 +82,9 @@ namespace ESchool.Services.Examinations
 
         private async Task<QTag> FindAsync(string name)
         {
-            return await _qtagRepository.GetSingleAsync(
-                t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return await _qtagRepository.QueryNoTracking
+                .Filter(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                .GetSingleAsync();
         }
     }
 }

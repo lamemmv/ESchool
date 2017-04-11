@@ -26,6 +26,12 @@ namespace ESchool.Admin.Controllers
             return await _qtagService.GetListAsync();
         }
 
+        [HttpGet]
+        public async Task<QTag> Get(int id)
+        {
+            return await _qtagService.FindAsync(id);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]QTagCreateViewModel viewModel)
         {

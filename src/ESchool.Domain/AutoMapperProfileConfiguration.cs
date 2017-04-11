@@ -29,6 +29,11 @@ namespace ESchool.Domain
                     map => map.MapFrom(s => s.Content.Trim()))
                 .ForMember(vm => vm.Description,
                     map => map.MapFrom(s => TrimNull(s.Description)));
+            CreateMap<QuestionUpdateViewModel, Question>()
+                .ForMember(vm => vm.Content,
+                    map => map.MapFrom(s => s.Content.Trim()))
+                .ForMember(vm => vm.Description,
+                    map => map.MapFrom(s => TrimNull(s.Description)));
             CreateMap<AnswerCreateViewModel, Answer>()
                 .ForMember(vm => vm.AnswerName, map => map.MapFrom(s => s.AnswerName.Trim()))
                 .ForMember(vm => vm.Body, map => map.MapFrom(s => s.Body.Trim()));
