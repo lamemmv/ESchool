@@ -13,7 +13,7 @@ namespace ESchool.Services.Examinations
 
         Task<ErrorCode> CreateAsync(QTag entity);
 
-        Task<ErrorCode> UpdateAsync(QTag entity);
+        Task<ErrorCode> UpdateAsync(int id, QTag entity);
 
         Task<ErrorCode> DeleteAsync(int id);
     }

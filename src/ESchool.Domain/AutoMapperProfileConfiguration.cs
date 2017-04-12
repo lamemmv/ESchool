@@ -19,17 +19,7 @@ namespace ESchool.Domain
                     map => map.MapFrom(s => s.Name.Trim()))
                 .ForMember(vm => vm.Description,
                     map => map.MapFrom(s => TrimNull(s.Description)));
-            CreateMap<QTagUpdateViewModel, QTag>()
-                .ForMember(vm => vm.Name,
-                    map => map.MapFrom(s => s.Name.Trim()))
-                .ForMember(vm => vm.Description,
-                    map => map.MapFrom(s => TrimNull(s.Description)));
             CreateMap<QuestionCreateViewModel, Question>()
-                .ForMember(vm => vm.Content,
-                    map => map.MapFrom(s => s.Content.Trim()))
-                .ForMember(vm => vm.Description,
-                    map => map.MapFrom(s => TrimNull(s.Description)));
-            CreateMap<QuestionUpdateViewModel, Question>()
                 .ForMember(vm => vm.Content,
                     map => map.MapFrom(s => s.Content.Trim()))
                 .ForMember(vm => vm.Description,

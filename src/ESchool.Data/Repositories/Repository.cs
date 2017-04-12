@@ -54,7 +54,7 @@ namespace ESchool.Data.Repositories
 
         public void Update(T entity)
         {
-            var dbEntityEntry = DbSet.Add(entity);
+            var dbEntityEntry = DbSet.Update(entity);
             dbEntityEntry.State = EntityState.Modified;
         }
 

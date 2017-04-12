@@ -9,18 +9,24 @@ namespace ESchool.Services.Examinations
 {
     public class QuestionService : IQuestionService
     {
-        private readonly IRepository<QTag> _qtagRepository;
+        private readonly IRepository<QuestionTag> _questionTagRepository;
         private readonly IRepository<Question> _questionRepository;
+        private readonly IRepository<Answer> _answerRepository;
 
-        public QuestionService(IRepository<QTag> qtagRepository, IRepository<Question> questionRepository)
+        public QuestionService(
+            IRepository<QuestionTag> questionTagRepository,
+            IRepository<Question> questionRepository,
+            IRepository<Answer> answerRepository)
         {
-            _qtagRepository = qtagRepository;
+            _questionTagRepository = questionTagRepository;
             _questionRepository = questionRepository;
+            _answerRepository = answerRepository;
         }
 
         public async Task<Question> FindAsync(int id)
         {
             return await _questionRepository.QueryNoTracking
+                .Include(q => q.QuestionTags)
                 .Include(q => q.Answers)
                 .Filter(q => q.Id == id)
                 .GetSingleAsync();
@@ -29,6 +35,7 @@ namespace ESchool.Services.Examinations
         public async Task<IEnumerable<Question>> GetListAsync(int page, int size)
         {
             return await _questionRepository.QueryNoTracking
+                .Include(q => q.QuestionTags)
                 .Include(q => q.Answers)
                 .Sort(o => o.OrderBy(t => t.Id))
                 .GetListAsync(page, size);
@@ -38,8 +45,7 @@ namespace ESchool.Services.Examinations
         {
             if (qtagIds != null && qtagIds.Length > 0)
             {
-                //entity.QuestionTags = qtagIds.Select(t => new QuestionTag { QTagId = t }).ToList();
-                //entity. _qtagRepository.Query().Filter(t => qtagIds.Contains(t.Id))
+                entity.QuestionTags = qtagIds.Select(t => new QuestionTag { QTagId = t }).ToList();
             }
 
             await _questionRepository.CreateCommitAsync(entity);
@@ -47,14 +53,11 @@ namespace ESchool.Services.Examinations
             return ErrorCode.Success;
         }
 
-        public async Task<ErrorCode> UpdateAsync(Question entity, int[] qtagIds)
+        public async Task<ErrorCode> UpdateAsync(int id, Question entity, int[] qtagIds)
         {
-            var updatedEntity = await _questionRepository.Query
-                .Include(q => q.Answers)
-                .Filter(q => q.Id == entity.Id)
-                .GetSingleAsync();
+            var updatedEntity = await _questionRepository.FindAsync(id);
 
-            if (entity == null)
+            if (updatedEntity == null)
             {
                 return ErrorCode.NotFound;
             }
@@ -62,17 +65,22 @@ namespace ESchool.Services.Examinations
             updatedEntity.Content = entity.Content;
             updatedEntity.Description = entity.Description;
             updatedEntity.Type = entity.Type;
-            updatedEntity.Answers.Clear();
 
-            if (entity.Answers != null)
+            // Delete current QTags & Answers.
+            _questionTagRepository.Delete(qt => qt.QuestionId == id);
+            _answerRepository.Delete(a => a.QuestionId == id);
+
+            if (qtagIds != null && qtagIds.Length > 0)
             {
-                foreach (var answer in entity.Answers)
-                {
-                    updatedEntity.Answers.Add(answer);
-                }
+                updatedEntity.QuestionTags = qtagIds.Select(t => new QuestionTag { QTagId = t }).ToList();
             }
 
-            await _questionRepository.UpdateCommitAsync(entity);
+            if (entity.Answers != null && entity.Answers.Count > 0)
+            {
+                updatedEntity.Answers = entity.Answers;
+            }
+
+            await _questionRepository.UpdateCommitAsync(updatedEntity);
 
             return ErrorCode.Success;
         }

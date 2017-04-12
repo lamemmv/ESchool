@@ -26,7 +26,7 @@ namespace ESchool.Admin.Controllers
             return await _qtagService.GetListAsync();
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<QTag> Get(int id)
         {
             return await _qtagService.FindAsync(id);
@@ -46,13 +46,13 @@ namespace ESchool.Admin.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put([FromBody]QTagUpdateViewModel viewModel)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody]QTagCreateViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
                 var entity = _mapper.Map<QTag>(viewModel);
-                var code = await _qtagService.UpdateAsync(entity);
+                var code = await _qtagService.UpdateAsync(id, entity);
 
                 return PutResult(code);
             }
@@ -60,12 +60,12 @@ namespace ESchool.Admin.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int? id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id.HasValue && id.Value > 0)
+            if (id > 0)
             {
-                var code = await _qtagService.DeleteAsync(id.Value);
+                var code = await _qtagService.DeleteAsync(id);
 
                 return DeleteResult(code);
             }

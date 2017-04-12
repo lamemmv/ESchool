@@ -43,9 +43,9 @@ namespace ESchool.Services.Examinations
             return ErrorCode.Success;
         }
 
-        public async Task<ErrorCode> UpdateAsync(QTag entity)
+        public async Task<ErrorCode> UpdateAsync(int id, QTag entity)
         {
-            var updatedEntity = await FindAsync(entity.Id);
+            var updatedEntity = await FindAsync(id);
 
             if (updatedEntity == null)
             {
@@ -54,14 +54,14 @@ namespace ESchool.Services.Examinations
 
             var duplicateEntity = await FindAsync(entity.Name);
 
-            if (duplicateEntity != null && duplicateEntity.Id != entity.Id)
+            if (duplicateEntity != null && duplicateEntity.Id != id)
             {
                 return ErrorCode.DuplicateEntity;
             }
 
             updatedEntity.Name = entity.Name;
             updatedEntity.Description = entity.Description;
-            await _qtagRepository.UpdateCommitAsync(entity);
+            await _qtagRepository.UpdateCommitAsync(updatedEntity);
 
             return ErrorCode.Success;
         }

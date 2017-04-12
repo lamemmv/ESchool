@@ -26,12 +26,12 @@ namespace ESchool.Admin.Controllers
             return await _logService.GetListAsync(fromData, toDate, level, page ?? DefaultPage, size ?? DefaultSize);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int? id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id.HasValue && id.Value > 0)
+            if (id > 0)
             {
-                var code = await _logService.DeleteAsync(id.Value);
+                var code = await _logService.DeleteAsync(id);
 
                 return DeleteResult(code);
             }

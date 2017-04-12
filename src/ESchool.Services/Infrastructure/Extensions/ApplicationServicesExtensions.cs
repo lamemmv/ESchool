@@ -38,7 +38,9 @@ namespace ESchool.Services.Infrastructure.Extensions
 
             // Examinations.
             services.AddScoped<IRepository<QTag>, Repository<QTag>>();
+            services.AddScoped<IRepository<QuestionTag>, Repository<QuestionTag>>();
             services.AddScoped<IRepository<Question>, Repository<Question>>();
+            services.AddScoped<IRepository<Answer>, Repository<Answer>>();
 
             services.AddScoped<IQTagService, QTagService>();
             services.AddScoped<IQuestionService, QuestionService>();
