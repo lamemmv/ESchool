@@ -1,0 +1,83 @@
+<div class="col-md-6">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">{{ view.title }}</h3>
+        </div>
+        <form role="form">
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="questionContent"> {{ 'CONTENT' | translate }} </label>
+                    <ckeditor 
+                        id="questionContent"
+                        name="questionContent"
+                        [(ngModel)]="question.content" 
+                        (change)="onChange($event)" 
+                        (ready)="onReady($event)"
+                        (focus)="onFocus($event)" 
+                        (blur)="onBlur($event)" debounce="500">
+                    </ckeditor>
+                </div>
+                <div class="form-group">
+                    <label for="questionTags"> {{ 'QUESTION_GROUP' | translate }} </label>
+                    <ng-select id="questionTags" 
+                        name="questionTags"
+                        [multiple]="true"
+                        [items]="questionTags"
+                        (data)="refreshValue($event)"
+                        (selected)="selected($event)"
+                        (removed)="removed($event)"
+                        placeholder="{{ 'PLACEHOLDER_SELECT_QUESTION_TAGS' | translate}}">
+                    </ng-select>
+                </div>
+                <div class="form-group">
+                    <label for="questionTypes"> {{ 'QUESTION_TAGS' | translate }} </label>
+                    <select id="questionTypes" 
+                        name="questionTypes" 
+                        class="form-control"
+                        [(ngModel)]="question.type"> 
+                        <option *ngFor="let type of questionTypes" [value]="type.id">{{type.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="answers"> {{ 'QUESTION_ANSWERS' | translate }} </label>
+                    <button type="submit" 
+                        class="btn btn-primary pull-right" 
+                        (click)="addAnswer()"><i class="fa fa-plus"></i> 
+                        {{ 'ADD_ANSWERS' | translate }}
+                    </button>
+                </div>
+                <div class="input-group mt5" *ngFor="let answer of question.answers; let ia = index;">
+                    <span class="input-group-addon">
+                          <input type="checkbox" 
+                            name="{{answer.dss}}-{{ia}}" 
+                            [(ngModel)]="answer.dss" />
+                    </span>
+                    <span class="input-group-addon">
+                          {{answer.answerName}}
+                    </span>
+                    <input name="{{answer.body}}{{ia}}"
+                        class="form-control" 
+                        type="text" 
+                        [(ngModel)]="answer.body" />
+                    <span class="input-group-addon remove-answer">
+                        <i class="fa fa-times" title="{{'REMOVE_ANSWER' | translate}}"
+                        (click)="removeAnswer(answer)"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="box-footer">
+                <button type="button" 
+                    class="btn btn-default pull-right cancel" 
+                    (click)="cancel()"><i class="fa fa-times"></i>
+                    {{ 'BUTTON_CANCEL' | translate }}
+                </button>
+                <button type="submit" 
+                    class="btn btn-primary pull-right" 
+                    [disabled]="!isValid()"
+                    (click)="save()"><i class="fa fa-pencil-square-o"></i> 
+                    {{ 'UPDATE' | translate }}
+                </button> 
+              </div>
+        </form>
+    </div>
+</div>

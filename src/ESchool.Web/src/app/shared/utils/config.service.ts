@@ -20,6 +20,6 @@ export class ConfigService {
      };
 
      getAdminApiURI(){
-        return this._adminApiURI    
+        return this._adminApiURI;   
      };
 }
