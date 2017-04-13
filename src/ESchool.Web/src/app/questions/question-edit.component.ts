@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewChecked, Renderer, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
@@ -21,7 +21,8 @@ import { QuestionTag } from './../questionTags/question-tags.model';
     './question-edit.style.css'
   ]
 })
-export class EditQuestionComponent implements OnInit {
+export class EditQuestionComponent implements OnInit, AfterViewChecked {
+  @ViewChildren('answers') answerInputs: QueryList<any>;
   private alert: AlertModel;
   private question = new Question();
   private questionTags: QuestionTag[];
@@ -34,7 +35,8 @@ export class EditQuestionComponent implements OnInit {
     private router: Router,
     private questionTagsService: QuestionTagsService,
     private questionService: QuestionsService,
-    private utilitiesService: UtilitiesService) { }
+    private utilitiesService: UtilitiesService,
+    private rd: Renderer) { }
 
   ngOnInit() {
     this.alert = {
@@ -45,6 +47,7 @@ export class EditQuestionComponent implements OnInit {
     let id = +this.route.snapshot.params['id'];
     if (id) {
       this.view.title = this._translate.instant('EDIT_QUESTION_TITLE');
+      this.getQuestion(id);
     } else {
       this.view.title = this._translate.instant('CREATE_QUESTION_TITLE');
     }
@@ -59,6 +62,22 @@ export class EditQuestionComponent implements OnInit {
         name: this._translate.instant('ENUM_QUESTION_TYPES_MULTIPLE_CHOICES')
       }
     );
+  };
+
+  ngAfterViewChecked() {
+    if (this.answerInputs && this.answerInputs.last) {
+      this.rd.invokeElementMethod(this.answerInputs.last.nativeElement, 'focus');
+    }
+  };
+
+  getQuestion(id: number) {
+    var self = this;
+    self.questionService.getById(id).subscribe((question) => {
+      self.question = question;
+    },
+      error => {
+        self.notificationService.printErrorMessage('Failed to load question. ' + error);
+      });
   };
 
   onReady(): void { };
@@ -114,6 +133,8 @@ export class EditQuestionComponent implements OnInit {
         self.question.id = id;
         self.alert.type = 'success';
         self.alert.message = self._translate.instant('SAVED');
+
+        this.router.navigate(['/questions']);
       },
       error => {
         self.notificationService.printErrorMessage('Failed to create question. ' + error);

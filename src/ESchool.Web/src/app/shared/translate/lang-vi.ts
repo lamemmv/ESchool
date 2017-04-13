@@ -28,6 +28,7 @@ export const LANG_VI_TRANS = {
     'QUESTION_TAGS': 'Loại câu hỏi',
     'QUESTION_TAG_LIST': 'Danh sách loại câu hỏi', 
     'REMOVE_ANSWER': 'Xóa đáp án',
+    'REMOVE_QUESTION': 'Xóa câu hỏi',
     'SAVED': 'Đã lưu',    
     'SEARCH': 'Tìm',    
     'UPDATE': 'Cập nhật'

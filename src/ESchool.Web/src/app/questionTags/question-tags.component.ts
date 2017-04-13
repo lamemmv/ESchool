@@ -97,6 +97,7 @@ export class QuestionTagsComponent implements OnInit {
         self.alert.type = 'success';
         self.alert.message = this._translate.instant('SAVED');
         self.getQuestionTags();
+        this.childModal.hide();
       },
       error => {
         self.notificationService.printErrorMessage('Failed to create question tag. ' + error);

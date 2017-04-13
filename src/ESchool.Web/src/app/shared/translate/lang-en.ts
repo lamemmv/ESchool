@@ -28,6 +28,7 @@ export const LANG_EN_TRANS = {
     'QUESTION_TAGS': 'Question tags',
     'QUESTION_TAG_LIST': 'Question tag list',
     'REMOVE_ANSWER': 'Remove answer',
+    'REMOVE_QUESTION': 'Delete question',
     'SAVED': 'Saved',    
     'SEARCH': 'Search',    
     'UPDATE': 'Update'

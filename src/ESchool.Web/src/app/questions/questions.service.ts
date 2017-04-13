@@ -8,30 +8,30 @@ import { AppService } from './../shared/app.service';
 
 @Injectable()
 export class QuestionsService {
-  private _baseUrl: string = '';
+    private _baseUrl: string = '';
 
-  constructor(private http: Http, 
-  private configService: ConfigService, 
-  private appService: AppService) {
+    constructor(private http: Http,
+        private configService: ConfigService,
+        private appService: AppService) {
         this._baseUrl = configService.getAdminApiURI();
-  }
+    }
 
-    get(){
+    get() {
         var self = this;
         return this.http.get(this._baseUrl + 'questions')
             .map((res: Response) => {
                 return res.json();
             })
-            .catch(self.appService.handleError); 
+            .catch(self.appService.handleError);
     };
 
-    getById(id: number){
+    getById(id: number) {
         var self = this;
         return this.http.get(this._baseUrl + 'questions/' + id)
             .map((res: Response) => {
                 return res.json();
             })
-            .catch(self.appService.handleError); 
+            .catch(self.appService.handleError);
     };
 
     create(request: any) {
@@ -40,6 +40,15 @@ export class QuestionsService {
             .map((res: Response) => {
                 return res.json();
             })
-            .catch(self.appService.handleError); 
+            .catch(self.appService.handleError);
+    };
+
+    delete(id: number) {
+        var self = this;
+        return this.http.delete(this._baseUrl + 'questions/' + id)
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(self.appService.handleError);
     };
 }

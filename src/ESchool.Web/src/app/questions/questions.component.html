@@ -47,8 +47,11 @@
                             <tr *ngFor='let qt of questions; let index=index; let odd=odd; let even=even;' 
                                 [ngClass]="{ odd: odd, even: even }"
                                 role="row">
-                                <td class="col-sm-4">{{qt.content}}</td> 
-                                <td class="col-sm-8">{{qt.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag($event, qtag)"></span></td>
+                                <td class="col-sm-4 qcontent" [innerHTML]="qt.content"></td> 
+                                <td class="col-sm-8" >{{qt.description}}
+                                    <span class="fa fa-times remove pull-right" (click)="removeQuestion(qt)" title="{{'REMOVE_QUESTION' | translate}}"></span>
+                                    <span class="fa fa-pencil-square-o edit pull-right" (click)="editQuestion(qt)" title="{{'EDIT_QUESTION_TITLE' | translate}}"></span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
