@@ -1,61 +1,43 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using ESchool.Data.Repositories;
+using ESchool.Data;
+using ESchool.Data.Paginations;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
 {
-    public class QuestionService : IQuestionService
+    public class QuestionService : BaseService<Question>, IQuestionService
     {
-        private readonly IRepository<QuestionTag> _questionTagRepository;
-        private readonly IRepository<Question> _questionRepository;
-        private readonly IRepository<Answer> _answerRepository;
-
-        public QuestionService(
-            IRepository<QuestionTag> questionTagRepository,
-            IRepository<Question> questionRepository,
-            IRepository<Answer> answerRepository)
+        public QuestionService(ObjectDbContext dbContext)
+            : base(dbContext)
         {
-            _questionTagRepository = questionTagRepository;
-            _questionRepository = questionRepository;
-            _answerRepository = answerRepository;
         }
 
-        public async Task<Question> FindAsync(int id)
+        public override async Task<Question> FindAsync(int id)
         {
-            return await _questionRepository.QueryNoTracking
+            return await DbSetNoTracking
                 .Include(q => q.QuestionTags)
+                    .ThenInclude(qt => qt.QTag)
                 .Include(q => q.Answers)
-                .Filter(q => q.Id == id)
-                .GetSingleAsync();
+                .SingleOrDefaultAsync(q => q.Id == id);
         }
 
-        public async Task<IEnumerable<Question>> GetListAsync(int page, int size)
+        public async Task<IPagedList<Question>> GetListAsync(int page, int size)
         {
-            return await _questionRepository.QueryNoTracking
+            var questions = DbSetNoTracking
                 .Include(q => q.QuestionTags)
+                    .ThenInclude(qt => qt.QTag)
                 .Include(q => q.Answers)
-                .Sort(o => o.OrderBy(t => t.Id))
-                .GetListAsync(page, size);
+                .OrderBy(q => q.Id);
+
+            return await GetListAsync(questions, page, size);
         }
 
-        public async Task<ErrorCode> CreateAsync(Question entity, int[] qtagIds)
+        public override async Task<ErrorCode> UpdateAsync(int id, Question entity)
         {
-            if (qtagIds != null && qtagIds.Length > 0)
-            {
-                entity.QuestionTags = qtagIds.Select(t => new QuestionTag { QTagId = t }).ToList();
-            }
-
-            await _questionRepository.CreateCommitAsync(entity);
-
-            return ErrorCode.Success;
-        }
-
-        public async Task<ErrorCode> UpdateAsync(int id, Question entity, int[] qtagIds)
-        {
-            var updatedEntity = await _questionRepository.FindAsync(id);
+            var updatedEntity = await base.FindAsync(id);
 
             if (updatedEntity == null)
             {
@@ -66,40 +48,51 @@ namespace ESchool.Services.Examinations
             updatedEntity.Description = entity.Description;
             updatedEntity.Type = entity.Type;
 
-            // Delete current QTags & Answers.
-            _questionTagRepository.Delete(qt => qt.QuestionId == id);
-            _answerRepository.Delete(a => a.QuestionId == id);
+            // Delete current QuestionTags & Answers.
+            DeleteQuestionTags(id);
+            DeleteAnswers(id);
 
-            if (qtagIds != null && qtagIds.Length > 0)
-            {
-                updatedEntity.QuestionTags = qtagIds.Select(t => new QuestionTag { QTagId = t }).ToList();
-            }
+            updatedEntity.QuestionTags = entity.QuestionTags;
+            updatedEntity.Answers = entity.Answers;
 
-            if (entity.Answers != null && entity.Answers.Count > 0)
-            {
-                updatedEntity.Answers = entity.Answers;
-            }
-
-            await _questionRepository.UpdateCommitAsync(updatedEntity);
-
-            return ErrorCode.Success;
+            return await CommitAsync();
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public override async Task<ErrorCode> DeleteAsync(int id)
         {
-            var entity = await _questionRepository.Query
+            var entity = await DbSet
+                .Include(q => q.QuestionTags)
                 .Include(q => q.Answers)
-                .Filter(q => q.Id == id)
-                .GetSingleAsync();
+                .SingleOrDefaultAsync(q => q.Id == id);
 
             if (entity == null)
             {
                 return ErrorCode.NotFound;
             }
 
-            await _questionRepository.DeleteCommitAsync(entity);
+            return await base.DeleteAsync(entity);
+        }
 
-            return ErrorCode.Success;
+        private void DeleteQuestionTags(int questionId)
+        {
+            var questionTagsDbSet = _dbContext.QuestionTags;
+            var questionTags = questionTagsDbSet.Where(qt => qt.QuestionId == questionId);
+
+            if (questionTags.Any())
+            {
+                questionTagsDbSet.RemoveRange(questionTags);
+            }
+        }
+
+        private void DeleteAnswers(int questionId)
+        {
+            var answersDbSet = _dbContext.Answers;
+            var answers = answersDbSet.Where(a => a.QuestionId == questionId);
+
+            if (answers.Any())
+            {
+                answersDbSet.RemoveRange(answers);
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
+using ESchool.Domain.Extensions;
 using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Examinations;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +11,10 @@ namespace ESchool.Admin.Controllers
 {
     public class QuestionsController : AdminController
     {
-        private readonly IMapper _mapper;
         private readonly IQuestionService _questionService;
 
-        public QuestionsController(IMapper mapper, IQuestionService questionService)
+        public QuestionsController(IQuestionService questionService)
         {
-            _mapper = mapper;
             _questionService = questionService;
         }
 
@@ -37,8 +35,8 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = _mapper.Map<Question>(viewModel);
-                var code = await _questionService.CreateAsync(entity, viewModel.QTagIds);
+                var entity = viewModel.ToQuestion();
+                var code = await _questionService.CreateAsync(entity);
 
                 return PostResult(code, entity.Id);
             }
@@ -51,8 +49,8 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = _mapper.Map<Question>(viewModel);
-                var code = await _questionService.UpdateAsync(id, entity, viewModel.QTagIds);
+                var entity = viewModel.ToQuestion();
+                var code = await _questionService.UpdateAsync(id, entity);
 
                 return PutResult(code);
             }

@@ -13,6 +13,42 @@ namespace ESchool.Data
         {
         }
 
+        #region DBSet
+
+        public DbSet<Log> Logs
+        {
+            get
+            {
+                return Set<Log>();
+            }
+        }
+
+        public DbSet<Setting> Settings
+        {
+            get
+            {
+                return Set<Setting>();
+            }
+        }
+
+        public DbSet<QuestionTag> QuestionTags
+        {
+            get
+            {
+                return Set<QuestionTag>();
+            }
+        }
+
+        public DbSet<Answer> Answers
+        {
+            get
+            {
+                return Set<Answer>();
+            }
+        }
+
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

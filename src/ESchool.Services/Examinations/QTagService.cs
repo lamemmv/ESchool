@@ -2,34 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ESchool.Data.Repositories;
+using ESchool.Data;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
 {
-    public class QTagService : IQTagService
+    public class QTagService : BaseService<QTag>, IQTagService
     {
-        private readonly IRepository<QTag> _qtagRepository;
-
-        public QTagService(IRepository<QTag> qtagRepository)
+        public QTagService(ObjectDbContext dbContext)
+            : base(dbContext)
         {
-            _qtagRepository = qtagRepository;
-        }
-
-        public async Task<QTag> FindAsync(int id)
-        {
-            return await _qtagRepository.FindAsync(id);
         }
 
         public async Task<IEnumerable<QTag>> GetListAsync()
         {
-            return await _qtagRepository.QueryNoTracking
-                .Sort(o => o.OrderBy(t => t.Name))
-                .GetListAsync();
+            return await DbSetNoTracking
+                .OrderBy(t => t.Name)
+                .ToListAsync();
         }
 
-        public async Task<ErrorCode> CreateAsync(QTag entity)
+        public override async Task<ErrorCode> CreateAsync(QTag entity)
         {
             var duplicateEntity = await FindAsync(entity.Name);
 
@@ -38,12 +32,10 @@ namespace ESchool.Services.Examinations
                 return ErrorCode.DuplicateEntity;
             }
 
-            await _qtagRepository.CreateCommitAsync(entity);
-
-            return ErrorCode.Success;
+            return await base.CreateAsync(entity);
         }
 
-        public async Task<ErrorCode> UpdateAsync(int id, QTag entity)
+        public override async Task<ErrorCode> UpdateAsync(int id, QTag entity)
         {
             var updatedEntity = await FindAsync(id);
 
@@ -61,30 +53,14 @@ namespace ESchool.Services.Examinations
 
             updatedEntity.Name = entity.Name;
             updatedEntity.Description = entity.Description;
-            await _qtagRepository.UpdateCommitAsync(updatedEntity);
 
-            return ErrorCode.Success;
-        }
-
-        public async Task<ErrorCode> DeleteAsync(int id)
-        {
-            var entity = await FindAsync(id);
-
-            if (entity == null)
-            {
-                return ErrorCode.NotFound;
-            }
-
-            await _qtagRepository.DeleteCommitAsync(entity);
-
-            return ErrorCode.Success;
+            return await CommitAsync();
         }
 
         private async Task<QTag> FindAsync(string name)
         {
-            return await _qtagRepository.QueryNoTracking
-                .Filter(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                .GetSingleAsync();
+            return await DbSetNoTracking
+                .SingleOrDefaultAsync(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

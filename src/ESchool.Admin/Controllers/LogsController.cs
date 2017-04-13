@@ -21,9 +21,13 @@ namespace ESchool.Admin.Controllers
         [HttpGet]
         public async Task<IEnumerable<Log>> Search(DateTime fromData, DateTime toDate, string level, int? page, int? size)
         {
-            PopularLogLevel();
-
             return await _logService.GetListAsync(fromData, toDate, level, page ?? DefaultPage, size ?? DefaultSize);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Log> Search(int id)
+        {
+            return await _logService.FindAsync(id);
         }
 
         [HttpDelete("{id}")]

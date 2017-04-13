@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
+using ESchool.Domain.Extensions;
 using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Examinations;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +11,10 @@ namespace ESchool.Admin.Controllers
 {
     public class QTagsController : AdminController
     {
-        private readonly IMapper _mapper;
         private readonly IQTagService _qtagService;
 
-        public QTagsController(IMapper mapper, IQTagService qtagService)
+        public QTagsController(IQTagService qtagService)
         {
-            _mapper = mapper;
             _qtagService = qtagService;
         }
 
@@ -33,11 +31,11 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]QTagCreateViewModel viewModel)
+        public async Task<IActionResult> Post([FromBody]QTagViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var entity = _mapper.Map<QTag>(viewModel);
+                var entity = viewModel.ToQTag();
                 var code = await _qtagService.CreateAsync(entity);
 
                 return PostResult(code, entity.Id);
@@ -47,11 +45,11 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]QTagCreateViewModel viewModel)
+        public async Task<IActionResult> Put(int id, [FromBody]QTagViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var entity = _mapper.Map<QTag>(viewModel);
+                var entity = viewModel.ToQTag();
                 var code = await _qtagService.UpdateAsync(id, entity);
 
                 return PutResult(code);

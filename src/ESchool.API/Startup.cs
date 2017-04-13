@@ -1,9 +1,7 @@
 ﻿using System.Reflection;
-using AutoMapper;
 using ESchool.Admin.Attributes;
 using ESchool.Data;
 using ESchool.Data.Configurations;
-using ESchool.Domain;
 using ESchool.Domain.Entities.Systems;
 using ESchool.Services.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -27,8 +25,6 @@ namespace ESchool.API
     {
         private IConfigurationRoot Configuration { get; }
 
-        private readonly MapperConfiguration AutoMapperConfiguration;
-
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -36,12 +32,6 @@ namespace ESchool.API
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-
-            // AutoMapper.
-            AutoMapperConfiguration = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new AutoMapperProfileConfiguration());
-            });
 
             var config = builder.Build();
 
@@ -100,7 +90,7 @@ namespace ESchool.API
             //	opts.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
             //});
 
-            services.AddApplicationService(Configuration, AutoMapperConfiguration);
+            services.AddApplicationService(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

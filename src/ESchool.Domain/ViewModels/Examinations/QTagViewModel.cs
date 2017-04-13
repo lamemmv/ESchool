@@ -2,7 +2,7 @@
 
 namespace ESchool.Domain.ViewModels.Examinations
 {
-    public class QTagCreateViewModel
+    public class QTagViewModel
     {
         [Required]
         public string Name { get; set; }

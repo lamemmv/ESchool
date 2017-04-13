@@ -1,20 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using ESchool.Data.Paginations;
 using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Examinations
 {
-    public interface IQuestionService
+    public interface IQuestionService : IService<Question>
     {
-        Task<Question> FindAsync(int id);
-
-        Task<IEnumerable<Question>> GetListAsync(int page, int size);
-
-        Task<ErrorCode> CreateAsync(Question entity, int[] qtagIds);
-
-        Task<ErrorCode> UpdateAsync(int id, Question entity, int[] qtagIds);
-
-        Task<ErrorCode> DeleteAsync(int id);
+        Task<IPagedList<Question>> GetListAsync(int page, int size);
     }
 }

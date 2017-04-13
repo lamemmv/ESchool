@@ -1,55 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ESchool.Data.Repositories;
+using ESchool.Data;
+using ESchool.Data.Paginations;
 using ESchool.Domain.Entities.Systems;
 using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Systems
 {
-    public class LogService : ILogService
+    public class LogService : BaseService<Log>, ILogService
     {
-        private readonly IRepository<Log> _logRepository;
-
-        public LogService(IRepository<Log> logRepository)
+        public LogService(ObjectDbContext dbContext)
+            : base(dbContext)
         {
-            _logRepository = logRepository;
         }
 
-        public async Task<Log> FindAsync(int id)
+        public async Task<IPagedList<Log>> GetListAsync(DateTime fromData, DateTime toDate, string level, int page, int size)
         {
-            return await _logRepository.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Log>> GetListAsync(DateTime fromData, DateTime toDate, string level, int page, int size)
-        {
-            return await _logRepository.QueryNoTracking
-                .Filter(l => (l.Logged.Date >= fromData.Date && l.Logged.Date <= toDate.Date) ||
+            var logs = DbSetNoTracking
+                .Where(l =>
+                    (l.Logged.Date >= fromData.Date && l.Logged.Date <= toDate.Date) ||
                     string.Equals(l.Level, level, StringComparison.OrdinalIgnoreCase))
-                .Sort(o => o.OrderByDescending(l => l.Id))
-                .GetListAsync(page, size);
+                .OrderBy(l => l.Id);
+
+            return await GetListAsync(logs, page, size);
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public override async Task<ErrorCode> UpdateAsync(int id, Log entity)
         {
-            var entity = await FindAsync(id);
-
-            if (entity == null)
-            {
-                return ErrorCode.NotFound;
-            }
-
-            await _logRepository.DeleteCommitAsync(entity);
-
-            return ErrorCode.Success;
+            return await Task.FromResult(ErrorCode.BadRequest);
         }
 
         public async Task<ErrorCode> DeleteAsync(int[] ids)
         {
-            await _logRepository.DeleteCommitAsync(l => ids.Contains(l.Id));
+            var logs = DbSet.Where(l => ids.Contains(l.Id));
 
-            return ErrorCode.Success;
+            if (!logs.Any())
+            {
+                return ErrorCode.NotFound;
+            }
+
+            DbSet.RemoveRange(logs);
+
+            return await CommitAsync();
         }
     }
 }

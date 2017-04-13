@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ESchool.Domain.Models.Paginations
+namespace ESchool.Data.Paginations
 {
     public interface IPagedList<T> : IEnumerable<T>
     {

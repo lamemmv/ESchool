@@ -1,20 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Examinations
 {
-    public interface IQTagService
+    public interface IQTagService : IService<QTag>
     {
-        Task<QTag> FindAsync(int id);
-
         Task<IEnumerable<QTag>> GetListAsync();
-
-        Task<ErrorCode> CreateAsync(QTag entity);
-
-        Task<ErrorCode> UpdateAsync(int id, QTag entity);
-
-        Task<ErrorCode> DeleteAsync(int id);
     }
 }
