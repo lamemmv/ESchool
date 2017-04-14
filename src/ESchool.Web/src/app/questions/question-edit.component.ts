@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, AfterViewChecked, Renderer, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewChecked, Renderer, QueryList, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
@@ -19,7 +19,8 @@ import { QuestionTag } from './../questionTags/question-tags.model';
   templateUrl: './question-edit.component.html',
   styleUrls: [
     './question-edit.style.css'
-  ]
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class EditQuestionComponent implements OnInit, AfterViewChecked {
   @ViewChildren('answers') answerInputs: QueryList<any>;
@@ -29,6 +30,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   private view = new QuestionView();
   private questionTypes: QuestionType[] = new Array();
   private answerName: string = 'A';
+  private hasJustAddedAnswer: boolean = false;
+  private selectedQtags: QuestionTag[] = new Array();
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -65,8 +68,9 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   };
 
   ngAfterViewChecked() {
-    if (this.answerInputs && this.answerInputs.last) {
+    if (this.answerInputs && this.answerInputs.last && this.hasJustAddedAnswer) {
       this.rd.invokeElementMethod(this.answerInputs.last.nativeElement, 'focus');
+      this.hasJustAddedAnswer = false;
     }
   };
 
@@ -100,15 +104,10 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     self.questionTagsService.get()
       .subscribe((questionTags) => {
         self.questionTags = questionTags;
-        self.decorateQuestionTags(self.questionTags);
       },
       error => {
         self.notificationService.printErrorMessage('Failed to load question tags. ' + error);
       });
-  };
-
-  decorateQuestionTags(questionTags: QuestionTag[]) {
-    questionTags.forEach(item => item.text = item.name);
   };
 
   public selected(qtag: QuestionTag): void {
@@ -146,10 +145,25 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
       this.answerName = this.utilitiesService.nextChar(this.answerName);
     }
     this.question.answers.push({ body: '', dss: false, answerName: this.answerName });
+    this.hasJustAddedAnswer = true;
   };
 
   removeAnswer(answer: Answer): void {
     let index = this.question.answers.indexOf(answer);
     this.question.answers.splice(index, 1);
   };
+
+  onItemAdded(item: QuestionTag) {
+    this.selectedQtags.push(item);
+  };
+
+  onItemSelected(item: QuestionTag) {
+    console.log('onItemSelected: ' + item.name);
+  }
+
+  onItemRemoved(item: QuestionTag) {
+    var self = this;
+    let index = self.selectedQtags.indexOf(self.selectedQtags.find(i => i.name == item.name));
+    self.selectedQtags.splice(index, 1);
+  }
 }

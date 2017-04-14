@@ -108,7 +108,7 @@ export class QuestionTagsComponent implements OnInit {
     event.stopPropagation();
     var self = this;
     this.dialogService.addDialog(ConfirmDialogComponent, {
-      title: this._translate.instant('CONFIRMATION'),
+      title: this._translate.instant('QUESTION_TAGS'),
       message: this._translate.instant('MSG_CONFIRM_DELETEING_QUESTION_TAGS'),
       confirmText: this._translate.instant('BUTTON_OK'),
       dismissText: this._translate.instant('BUTTON_CANCEL')

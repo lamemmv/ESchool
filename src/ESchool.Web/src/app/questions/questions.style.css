@@ -34,3 +34,7 @@ table tr:hover td span.remove, table tr:hover td span.edit {
   content:"*";
   color:red;
 }
+
+.answer.dss {
+  color: #00a65a;
+}

@@ -46,7 +46,8 @@
                         <tbody>
                             <tr *ngFor='let qt of questions; let index=index; let odd=odd; let even=even;' 
                                 [ngClass]="{ odd: odd, even: even }"
-                                role="row">
+                                role="row"
+                                (click)="showChildModal(qt)">
                                 <td class="col-sm-4 qcontent" [innerHTML]="qt.content"></td> 
                                 <td class="col-sm-8" >{{qt.description}}
                                     <span class="fa fa-times remove pull-right" (click)="removeQuestion(qt)" title="{{'REMOVE_QUESTION' | translate}}"></span>
@@ -66,6 +67,42 @@
                 <li><a href="#">3</a></li>
                 <li><a href="#">»</a></li>
             </ul>
+        </div>
+    </div>
+    <!--Modal-->
+    <div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title pull-left">{{ 'EDIT_QUESTION_TITLE' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <form #questionEditForm="ngForm">
+                        <div class="form-group">
+                            <label for="editQuestionContent" class="control-label">{{'CONTENT' | translate }}</label> 
+                            <div id="editQuestionContent" [innerHTML]="question.content"></div>
+                        </div>  
+                        <div class="form-group">
+                            <label for="editQuestionContent" class="control-label">{{'ANSWERS' | translate }}</label> 
+                            <div class="checkbox" *ngFor="let answer of question.answers; let ia = index;">
+                                <label class="answer" [ngClass]="{'dss': answer.dss}">
+                                    <input type="checkbox" 
+                                        name="{{answer.dss}}-{{ia}}"                                          
+                                        [(ngModel)]="answer.dss" /> <span>{{answer.answerName}}</span>. <span>{{answer.body}}</span>
+                                </label>
+                            </div>
+                        </div>                 
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" 
+                        class="btn btn-default pull-right cancel" 
+                        (click)="closeModal()"><i class="fa fa-times"></i>
+                        {{ 'BUTTON_CLOSE' | translate }}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

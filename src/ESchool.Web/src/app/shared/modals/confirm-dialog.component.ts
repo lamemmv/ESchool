@@ -16,7 +16,8 @@ export interface ConfirmModel {
                      <button type="button" class="close" (click)="close()" >&times;</button>
                      <h4 class="modal-title">{{title || 'Confirm'}}</h4>
                    </div>
-                   <div class="modal-body">
+                   <div class="modal-body alert alert-warning ">
+                     <h4><i class="icon fa fa-warning"></i>{{'CONFIRMATION' | translate}}</h4>
                      <p>{{message || 'Are you sure?'}}</p>
                    </div>
                    <div class="modal-footer">

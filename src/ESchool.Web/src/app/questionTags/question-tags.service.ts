@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -36,7 +36,11 @@ export class QuestionTagsService {
 
     update = (qtag: any) => {
         var self = this;
-        return this.http.put(this._baseUrl + 'qtags', qtag)
+        let bodyString = JSON.stringify(qtag); // Stringify payload
+        let headers = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+        let options = new RequestOptions({ headers: headers }); // Create a request option
+
+        return this.http.put(this._baseUrl + 'qtags/' + qtag.id, qtag, options)
             .map((res: Response) => {
                 return res.json();
             })
@@ -45,7 +49,7 @@ export class QuestionTagsService {
 
     delete = (id: number) => {
         var self = this;
-        return this.http.delete(this._baseUrl + 'qtags', { params: { id: id } })
+        return this.http.delete(this._baseUrl + 'qtags/' + id)
             .map((res: Response) => {
                 return res.json();
             })

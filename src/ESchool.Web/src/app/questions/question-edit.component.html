@@ -3,7 +3,7 @@
         <div class="box-header with-border">
             <h3 class="box-title">{{ view.title }}</h3>
         </div>
-        <form role="form">
+        <div>
             <div class="box-body">
                 <div class="form-group">
                     <label for="questionContent"> {{ 'CONTENT' | translate }} </label>
@@ -19,15 +19,21 @@
                 </div>
                 <div class="form-group">
                     <label for="questionTags"> {{ 'QUESTION_GROUP' | translate }} </label>
-                    <ng-select id="questionTags" 
+                    <tag-input id="questionTags" 
                         name="questionTags"
-                        [multiple]="true"
-                        [items]="questionTags"
-                        (data)="refreshValue($event)"
-                        (selected)="selected($event)"
-                        (removed)="removed($event)"
-                        placeholder="{{ 'PLACEHOLDER_SELECT_QUESTION_TAGS' | translate}}">
-                    </ng-select>
+                        [ngModel]="selectedQtags" [identifyBy]="'id'" [displayBy]="'name'"
+                        [addOnBlur]="true"
+                        [clearOnBlur]="true"
+                        (onAdd)="onItemAdded($event)"
+                        (onSelect)="onItemSelected($event)"
+                        (onRemove)="onItemRemoved($event)"
+                        theme='bootstrap'>
+                        <tag-input-dropdown 
+                            [displayBy]="'name'"
+                            [identifyBy]="'id'"
+                            [autocompleteItems]="questionTags">
+                        </tag-input-dropdown>
+                    </tag-input>
                 </div>
                 <div class="form-group">
                     <label for="questionTypes"> {{ 'QUESTION_TAGS' | translate }} </label>
@@ -46,7 +52,7 @@
                         {{ 'ADD_ANSWERS' | translate }}
                     </button>
                 </div>
-                <div class="input-group mt5" *ngFor="let answer of question.answers; let ia = index;">
+                <div class="input-group mt5" [ngClass]="{'has-success': answer.dss}" *ngFor="let answer of question.answers; let ia = index;">
                     <span class="input-group-addon">
                           <input type="checkbox" 
                             name="{{answer.dss}}-{{ia}}" 
@@ -79,6 +85,6 @@
                     {{ 'UPDATE' | translate }}
                 </button> 
               </div>
-        </form>
+        </div>
     </div>
 </div>

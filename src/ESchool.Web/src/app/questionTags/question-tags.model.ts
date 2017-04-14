@@ -1,6 +1,6 @@
 export class QuestionTag{
     id: number;
     name: string;
-    text: string; // this is extend property for displaying ng2-select
+    value: string; // this is extension field for input tags.
     description: string;
 }

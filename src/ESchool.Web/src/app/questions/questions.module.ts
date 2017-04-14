@@ -2,10 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AlertModule } from 'ng2-bootstrap';
+import { AlertModule, ModalModule } from 'ng2-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { SelectModule } from 'ng2-select';
+import { TagInputModule } from 'ng2-tag-input';
+import { Ng2DropdownModule } from 'ng2-material-dropdown';
 
 import { TRANSLATION_PROVIDERS, TranslateModule, TranslateService }   from './../shared/translate';
 import { QuestionsComponent } from './questions.component';
@@ -19,9 +22,13 @@ import { QuestionsRoutingModule } from './questions-routing.module';
     imports: [
         CommonModule,
         BrowserModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         AlertModule.forRoot(),
+        ModalModule.forRoot(),
+        Ng2DropdownModule,
+        TagInputModule,
         TranslateModule,
         CKEditorModule,
         SelectModule,
