@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using ESchool.Domain.Enums;
-using ESchool.Domain.Models;
+﻿using ESchool.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ESchool.Admin.Controllers
 {
@@ -26,7 +23,7 @@ namespace ESchool.Admin.Controllers
         {
             if (code == ErrorCode.Success)
             {
-                return Accepted();
+                return NoContent();
             }
             else if (code == ErrorCode.NotFound)
             {
@@ -40,7 +37,7 @@ namespace ESchool.Admin.Controllers
         {
             if (code == ErrorCode.Success)
             {
-                return Accepted();
+                return NoContent();
             }
 
             return NotFound();
