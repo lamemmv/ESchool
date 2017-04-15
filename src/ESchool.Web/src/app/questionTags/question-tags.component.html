@@ -12,7 +12,7 @@
                         <label>
                             <button type="submit" 
                                 class="btn btn-primary pull-right" 
-                                (click)="showChildModal()"><i class="fa fa-plus"></i> 
+                                (click)="openAddDialog()"><i class="fa fa-plus"></i> 
                                 {{ 'ADD' | translate }}
                             </button>
                         </label>
@@ -45,7 +45,7 @@
                         <tbody>
                             <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;' 
                                 [ngClass]="{ odd: odd, even: even }"
-                                role="row" (click)="showChildModal(qtag)">
+                                role="row" (click)="openEditDialog(qtag)">
                                 <td class="col-sm-4">{{qtag.name}}</td> 
                                 <td class="col-sm-8">{{qtag.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag($event, qtag)"></span></td>
                             </tr>
@@ -70,10 +70,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title pull-left">{{ 'EDIT_QUESTION_TAG_TITLE' | translate }}</h4>
-                    <!--<button type="button" class="close pull-right" aria-label="Close" (click)="childModal.hide()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>-->
+                    <h4 class="modal-title pull-left">{{ modal.title }}</h4>
                 </div>
                 <div class="modal-body">
                     <form #questionTagEditForm="ngForm">
@@ -107,13 +104,13 @@
                     <button type="button" 
                         class="btn btn-default pull-right cancel" 
                         (click)="cancelUpdate()"><i class="fa fa-times"></i>
-                        {{ 'BUTTON_CANCEL' | translate }}
+                        {{ modal.cancelText }}
                     </button>
                     <button type="submit" 
                         class="btn btn-primary pull-right" 
                         [disabled]="!questionTagEditForm.form.valid"
-                        (click)="submitForm()"><i class="fa fa-pencil-square-o"></i> 
-                        {{ 'UPDATE' | translate }}
+                        (click)="submitForm()"><i class="fa fa-check"></i> 
+                        {{ modal.okText }}
                     </button>                    
                 </div>
             </div>

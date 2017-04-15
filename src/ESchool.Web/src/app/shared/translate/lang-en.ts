@@ -3,10 +3,12 @@ export const LANG_EN_NAME = 'en';
 export const LANG_EN_TRANS = {
     'ADD': 'Add',
     'ADD_ANSWERS': 'Add answers',
+    'ADD_QUESTION_TAG_TITLE':'Add question tag',
     'ANSWERS': 'Answers',
     'BUTTON_CANCEL': 'Cancel',
     'BUTTON_OK': 'OK',    
-    'BUTTON_CLOSE':'Close',    
+    'BUTTON_CLOSE':'Close',
+    'BUTTON_SAVE':'Save',    
     'CONFIRMATION': 'Confirmation',
     'CONTENT': 'Content',
     'CREATE_QUESTION_TITLE': 'Create question',

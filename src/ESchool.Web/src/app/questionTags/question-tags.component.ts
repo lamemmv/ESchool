@@ -19,6 +19,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
 import { ConfirmDialogComponent } from './../shared/modals/confirm-dialog.component';
+import { Modal } from './../shared/modals/models';
 
 import { QuestionTag } from './question-tags.model';
 import { AlertModel } from './../shared/models/alerts';
@@ -42,6 +43,7 @@ export class QuestionTagsComponent implements OnInit {
   private DESCRIPTION: string;
   private searchTerms = new Subject<string>();
   filteredList = new Observable<QuestionTag[]>();
+  private modal = new Modal();
 
   constructor(private questionTagsService: QuestionTagsService,
     private notificationService: NotificationService,
@@ -57,6 +59,7 @@ export class QuestionTagsComponent implements OnInit {
       type: '',
       message: ''
     };
+    this.modal.cancelText = this._translate.instant('BUTTON_CANCEL');
     this.getQuestionTags();
     this.DESCRIPTION = this._translate.instant('DESCRIPTION');
 
@@ -74,7 +77,6 @@ export class QuestionTagsComponent implements OnInit {
         return Observable.of<QuestionTag[]>([]);
       });
 
-      
   };
 
   getQuestionTags = () => {
@@ -128,10 +130,6 @@ export class QuestionTagsComponent implements OnInit {
       });
   };
 
-  openEditDialog = (qtag: QuestionTag) => {
-    this.questionTag = qtag;
-  };
-
   updateQuestionTag = () => {
     var self = this;
     self.questionTagsService.update(self.questionTag)
@@ -139,8 +137,8 @@ export class QuestionTagsComponent implements OnInit {
         self.alert.type = 'success';
         self.alert.message = this._translate.instant('SAVED');
         self.getQuestionTags();
-        self.questionTag = new QuestionTag();
         self.childModal.hide();
+        self.questionTag = new QuestionTag();
       },
       error => {
         self.notificationService.printErrorMessage('Failed to update question tag. ' + error);
@@ -153,6 +151,18 @@ export class QuestionTagsComponent implements OnInit {
     } else {
       this.addQuestionTag();
     }
+  };
+
+  openAddDialog() {
+    this.modal.okText = this._translate.instant('BUTTON_SAVE');
+    this.modal.title = this._translate.instant('ADD_QUESTION_TAG_TITLE');
+    this.showChildModal(null);
+  };
+
+  openEditDialog(qtag: QuestionTag) {
+    this.modal.okText = this._translate.instant('UPDATE');
+    this.modal.title = this._translate.instant('EDIT_QUESTION_TAG_TITLE');
+    this.showChildModal(qtag);
   };
 
   showChildModal(qtag: QuestionTag): void {

@@ -32,6 +32,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   private answerName: string = 'A';
   private hasJustAddedAnswer: boolean = false;
   private selectedQtags: QuestionTag[] = new Array();
+  private questionId: number;
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -48,6 +49,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     };
 
     let id = +this.route.snapshot.params['id'];
+    this.questionId = id;
     if (id) {
       this.view.title = this._translate.instant('EDIT_QUESTION_TITLE');
       this.getQuestion(id);
@@ -109,19 +111,6 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
         self.notificationService.printErrorMessage('Failed to load question tags. ' + error);
       });
   };
-
-  public selected(qtag: QuestionTag): void {
-  }
-
-  public removed(qtag: QuestionTag): void {
-  }
-
-  public refreshValue(qtags: QuestionTag[]): void {
-    this.question.qTagIds = new Array();
-    qtags.forEach((qtag) => {
-      this.question.qTagIds.push(qtag.id);
-    });
-  }
 
   cancel(): void { this.router.navigate(['/questions']); };
 
