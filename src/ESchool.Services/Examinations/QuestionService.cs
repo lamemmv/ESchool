@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Paginations;
+using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
+using ESchool.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
@@ -24,15 +26,16 @@ namespace ESchool.Services.Examinations
                 .SingleOrDefaultAsync(q => q.Id == id);
         }
 
-        public async Task<IPagedList<Question>> GetListAsync(int page, int size)
+        public async Task<IPagedList<QuestionDto>> GetListAsync(int page, int size)
         {
             var questions = DbSetNoTracking
                 .Include(q => q.QuestionTags)
                     .ThenInclude(qt => qt.QTag)
                 .Include(q => q.Answers)
-                .OrderBy(q => q.Id);
+                .OrderBy(q => q.Id)
+                .Select(q => q.ToQuestionDto());
 
-            return await GetListAsync(questions, page, size);
+            return await questions.GetListAsync(page, size);
         }
 
         public async Task<ErrorCode> CreateAsync(Question entity, string[] qtags)

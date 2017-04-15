@@ -19,18 +19,18 @@ namespace ESchool.Admin.Controllers
             _questionService = questionService;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<Question>> Get(int? page, int? size)
-        {
-            return await _questionService.GetListAsync(page ?? DefaultPage, size ?? DefaultSize);
-        }
-
         [HttpGet("{id}")]
         public async Task<QuestionDto> Get(int id)
         {
             var entity = await _questionService.FindAsync(id);
 
             return entity.ToQuestionDto();
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<QuestionDto>> Get(int? page, int? size)
+        {
+            return await _questionService.GetListAsync(page ?? DefaultPage, size ?? DefaultSize);
         }
 
         [HttpPost]

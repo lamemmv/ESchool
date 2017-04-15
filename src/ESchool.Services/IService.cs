@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using ESchool.Data.Paginations;
 using ESchool.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +12,6 @@ namespace ESchool.Services
         IQueryable<T> DbSetNoTracking { get; }
 
         Task<T> FindAsync(int id);
-
-        Task<IPagedList<T>> GetListAsync(IQueryable<T> queryable, int page, int size);
 
         Task<ErrorCode> CreateAsync(T entity);
 

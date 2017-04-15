@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
-using ESchool.Data.Paginations;
 using ESchool.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,21 +35,7 @@ namespace ESchool.Services
         {
             return await DbSet.FindAsync(id);
         }
-
-        public async Task<IPagedList<T>> GetListAsync(IQueryable<T> queryable, int page, int size)
-        {
-            int totalItems = await queryable.CountAsync();
-
-            if (totalItems == 0)
-            {
-                return new PagedList<T>(page, size);
-            }
-
-            var pagedList = await queryable.Skip((page - 1) * size).Take(size).ToListAsync();
-
-            return new PagedList<T>(pagedList, totalItems, page, size);
-        }
-
+        
         #region Create, Update, Delete, Commit
 
         public virtual async Task<ErrorCode> CreateAsync(T entity)

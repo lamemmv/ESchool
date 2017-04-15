@@ -23,7 +23,7 @@ namespace ESchool.Services.Systems
                     string.Equals(l.Level, level, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(l => l.Id);
 
-            return await GetListAsync(logs, page, size);
+            return await logs.GetListAsync(page, size);
         }
 
         public override async Task<ErrorCode> UpdateAsync(int id, Log entity)
