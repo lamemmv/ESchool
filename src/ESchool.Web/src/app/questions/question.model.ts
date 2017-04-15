@@ -7,6 +7,15 @@ export class Question {
     answers: Answer[] = new Array();
 }
 
+export class CreateQuestionModel {
+    id: number;
+    content: string;
+    description: string;
+    type: number;
+    qTags: string[] = new Array();
+    answers: Answer[] = new Array();
+}
+
 export class CKEditorConfig {
     uiColor: string;
 }

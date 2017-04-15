@@ -16,18 +16,18 @@ namespace ESchool.Domain.Extensions
             };
         }
 
-        public static Question ToQuestion(this QuestionCreateViewModel viewModel)
+        public static Question ToQuestion(this QuestionViewModel viewModel)
         {
-            IList<QuestionTag> questionTags = null;
+            //IList<QuestionTag> questionTags = null;
             IList<Answer> answers = null;
 
-            if (viewModel.QTagIds != null && viewModel.QTagIds.Length > 0)
-            {
-                questionTags = viewModel.QTagIds.Select(t => new QuestionTag
-                {
-                    QTagId = t
-                }).ToList();
-            }
+            //if (viewModel.QTags != null && viewModel.QTags.Length > 0)
+            //{
+            //    questionTags = viewModel.QTags.Select(t => new QuestionTag
+            //    {
+            //        QTag = new QTag { Name = t }
+            //    }).ToList();
+            //}
 
             if (viewModel.Answers != null && viewModel.Answers.Length > 0)
             {
@@ -44,7 +44,7 @@ namespace ESchool.Domain.Extensions
                 Content = viewModel.Content.Trim(),
                 Description = viewModel.Description.TrimNull(),
                 Type = viewModel.Type,
-                QuestionTags = questionTags,
+                //QuestionTags = questionTags,
                 Answers = answers
             };
         }

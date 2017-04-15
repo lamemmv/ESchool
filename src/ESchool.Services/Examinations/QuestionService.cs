@@ -35,6 +35,18 @@ namespace ESchool.Services.Examinations
             return await GetListAsync(questions, page, size);
         }
 
+        public async Task<ErrorCode> CreateAsync(Question entity, string[] qtags)
+        {
+            if (qtags != null && qtags.Length > 0)
+            {
+                qtags = await AddQTags(qtags);
+
+                entity.QuestionTags = qtags.Select(t => new QuestionTag { QTag = new QTag { Name = t } }).ToList();
+            }
+
+            return await base.CreateAsync(entity);
+        }
+
         public override async Task<ErrorCode> UpdateAsync(int id, Question entity)
         {
             var updatedEntity = await base.FindAsync(id);
@@ -93,6 +105,26 @@ namespace ESchool.Services.Examinations
             {
                 answersDbSet.RemoveRange(answers);
             }
+        }
+
+        private async Task<string[]> AddQTags(string[] qtags)
+        {
+            qtags = qtags.Distinct().Select(t => t.Trim()).ToArray();
+
+            var qtagsDbSet = _dbContext.QTags;
+
+            var existingQTags = qtagsDbSet.Where(t => qtags.Contains(t.Name));
+
+            var newQTags = qtags.Except(existingQTags.Select(t => t.Name));
+
+            if (newQTags.Any())
+            {
+                await qtagsDbSet.AddRangeAsync(newQTags.Select(t => new QTag { Name = t }));
+
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return await Task.FromResult(qtags);
         }
     }
 }

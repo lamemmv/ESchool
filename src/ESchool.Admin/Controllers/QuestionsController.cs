@@ -31,12 +31,12 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]QuestionCreateViewModel viewModel)
+        public async Task<IActionResult> Post([FromBody]QuestionViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
                 var entity = viewModel.ToQuestion();
-                var code = await _questionService.CreateAsync(entity);
+                var code = await _questionService.CreateAsync(entity, viewModel.QTags);
 
                 return PostResult(code, entity.Id);
             }
@@ -45,7 +45,7 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]QuestionCreateViewModel viewModel)
+        public async Task<IActionResult> Put(int id, [FromBody]QuestionViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
