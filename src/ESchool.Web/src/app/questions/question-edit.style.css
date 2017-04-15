@@ -20,3 +20,8 @@
     height: 33px !important;
     vertical-align: top !important;
 }
+
+.modal-header {
+    background-color: #00a7d0 !important; 
+    color: white; 
+}

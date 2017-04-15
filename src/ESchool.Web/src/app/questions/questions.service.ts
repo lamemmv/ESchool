@@ -17,8 +17,8 @@ export class QuestionsService {
     }
 
     get() {
-        var self = this;
-        return this.http.get(this._baseUrl + 'questions')
+        let self = this;
+        return self.http.get(self._baseUrl + 'questions')
             .map((res: Response) => {
                 return res.json();
             })
@@ -26,8 +26,8 @@ export class QuestionsService {
     };
 
     getById(id: number) {
-        var self = this;
-        return this.http.get(this._baseUrl + 'questions/' + id)
+        let self = this;
+        return self.http.get(self._baseUrl + 'questions/' + id)
             .map((res: Response) => {
                 return res.json();
             })
@@ -35,8 +35,17 @@ export class QuestionsService {
     };
 
     create(request: any) {
-        var self = this;
-        return this.http.post(this._baseUrl + 'questions', request)
+        let self = this;
+        return self.http.post(self._baseUrl + 'questions', request)
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(self.appService.handleError);
+    };
+
+    update(request: any){
+        let self = this;
+        return self.http.put(self._baseUrl + 'questions/' + request.id, request)
             .map((res: Response) => {
                 return res.json();
             })
@@ -44,8 +53,8 @@ export class QuestionsService {
     };
 
     delete(id: number) {
-        var self = this;
-        return this.http.delete(this._baseUrl + 'questions/' + id)
+        let self = this;
+        return self.http.delete(self._baseUrl + 'questions/' + id)
             .map((res: Response) => {
                 return res.json();
             })

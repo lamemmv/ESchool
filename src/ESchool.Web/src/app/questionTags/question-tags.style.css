@@ -30,3 +30,8 @@ table tr:hover td span.remove {
 .btn.cancel{
     margin-left: 10px;
 }
+
+.modal-header {
+    background-color: #00a7d0 !important; 
+    color: white; 
+}

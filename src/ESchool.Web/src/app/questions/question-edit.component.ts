@@ -10,7 +10,7 @@ import { UtilitiesService } from './../shared/utils/utilities.service';
 import { QuestionsService } from './questions.service';
 import { QuestionTagsService } from './../questionTags/question-tags.service';
 import { AlertModel } from './../shared/models/alerts';
-import { Question, Answer, QuestionView, QuestionType, QuestionTypes } from './question.model';
+import { Question, QTag, CreateQuestionModel, Answer, QuestionView, QuestionType, QuestionTypes } from './question.model';
 import { QuestionTag } from './../questionTags/question-tags.model';
 
 
@@ -31,7 +31,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   private questionTypes: QuestionType[] = new Array();
   private answerName: string = 'A';
   private hasJustAddedAnswer: boolean = false;
-  private selectedQtags: QuestionTag[] = new Array();
+  private selectedQtags: QTag[] = new Array();
+  private questionId: number;
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -48,6 +49,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     };
 
     let id = +this.route.snapshot.params['id'];
+    this.questionId = id;
     if (id) {
       this.view.title = this._translate.instant('EDIT_QUESTION_TITLE');
       this.getQuestion(id);
@@ -78,10 +80,18 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     var self = this;
     self.questionService.getById(id).subscribe((question) => {
       self.question = question;
+      self.getSelectedQTags(self.question.qTags);
     },
       error => {
         self.notificationService.printErrorMessage('Failed to load question. ' + error);
       });
+  };
+
+  getSelectedQTags(qtags: QTag[]) {
+    let self = this;
+    qtags.forEach(qtag=>{
+      self.selectedQtags.push({id: qtag.id, name: qtag.name});
+    });
   };
 
   onReady(): void { };
@@ -110,31 +120,33 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
       });
   };
 
-  public selected(qtag: QuestionTag): void {
-  }
-
-  public removed(qtag: QuestionTag): void {
-  }
-
-  public refreshValue(qtags: QuestionTag[]): void {
-    this.question.qTagIds = new Array();
-    qtags.forEach((qtag) => {
-      this.question.qTagIds.push(qtag.id);
-    });
-  }
-
   cancel(): void { this.router.navigate(['/questions']); };
 
   save(): void {
-    var self = this;
-    self.questionService.create(self.question)
-      .subscribe((id: number) => {
-        self.question.id = id;
-        self.alert.type = 'success';
-        self.alert.message = self._translate.instant('SAVED');
+    let self = this, promise = null;
+    if (self.questionId) {
+      promise = self.questionService.update(self.question);
+    } else {
+      let model = new CreateQuestionModel();
+      model.content = self.question.content;
+      model.description = self.question.description;
+      model.type = self.question.type;
+      model.answers = self.question.answers;
+      self.question.qTags.forEach(qtag => {
+        model.qTags.push(qtag.name);
+      });
+      promise = self.questionService.create(model);
+    }
 
-        this.router.navigate(['/questions']);
-      },
+    promise.subscribe((id: any) => {
+      if (!self.questionId) {
+        self.question.id = id;
+      }
+
+      self.alert.type = 'success';
+      self.alert.message = self._translate.instant('SAVED');
+      this.router.navigate(['/questions']);
+    },
       error => {
         self.notificationService.printErrorMessage('Failed to create question. ' + error);
       });
@@ -155,6 +167,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
 
   onItemAdded(item: QuestionTag) {
     this.selectedQtags.push(item);
+    this.updateQTagsModel();
   };
 
   onItemSelected(item: QuestionTag) {
@@ -165,5 +178,13 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     var self = this;
     let index = self.selectedQtags.indexOf(self.selectedQtags.find(i => i.name == item.name));
     self.selectedQtags.splice(index, 1);
-  }
+    self.updateQTagsModel();
+  };
+
+  updateQTagsModel() {
+    var self = this;
+    this.selectedQtags.forEach((qtag: QuestionTag) => {
+      self.question.qTags.push({ id: qtag.id, name: qtag.name });
+    });
+  };
 }

@@ -3,7 +3,16 @@ export class Question {
     content: string;
     description: string;
     type: number;
-    qTagIds: number[] = new Array();
+    qTags: QTag[] = new Array();
+    answers: Answer[] = new Array();
+}
+
+export class CreateQuestionModel {
+    id: number;
+    content: string;
+    description: string;
+    type: number;
+    qTags: string[] = new Array();
     answers: Answer[] = new Array();
 }
 
@@ -21,7 +30,7 @@ export class Answer {
     dss: boolean;
 }
 
-export class QuestionType { 
+export class QuestionType {
     id: number;
     name: string;
 };
@@ -30,3 +39,8 @@ export enum QuestionTypes {
     SingleChoice = 1,
     MultipleChoice = 2
 };
+
+export class QTag {
+    id: number;
+    name: string;
+}
