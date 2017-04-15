@@ -18,16 +18,16 @@ namespace ESchool.Admin.Controllers
             _logService = logService;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<Log>> Search(DateTime fromData, DateTime toDate, string level, int? page, int? size)
-        {
-            return await _logService.GetListAsync(fromData, toDate, level, page ?? DefaultPage, size ?? DefaultSize);
-        }
-
         [HttpGet("{id}")]
-        public async Task<Log> Search(int id)
+        public async Task<Log> Get(int id)
         {
             return await _logService.FindAsync(id);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Log>> Get(DateTime fromData, DateTime toDate, string level, int? page, int? size)
+        {
+            return await _logService.GetListAsync(fromData, toDate, level, page ?? DefaultPage, size ?? DefaultSize);
         }
 
         [HttpDelete("{id}")]

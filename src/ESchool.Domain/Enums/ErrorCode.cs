@@ -10,6 +10,7 @@ namespace ESchool.Domain.Enums
         InvalidEntityId = 2,
 
         NotFound = HttpStatusCode.NotFound,
-        BadRequest = HttpStatusCode.BadRequest
+        BadRequest = HttpStatusCode.BadRequest,
+        InternalServerError = HttpStatusCode.InternalServerError
     }
 }

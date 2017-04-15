@@ -7,19 +7,20 @@ using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ESchool.Services.Examinations
 {
-    public class QuestionService : BaseService<Question>, IQuestionService
+    public class QuestionService : BaseService, IQuestionService
     {
-        public QuestionService(ObjectDbContext dbContext)
-            : base(dbContext)
+        public QuestionService(ObjectDbContext dbContext, ILogger<QuestionService> logger)
+            : base(dbContext, logger)
         {
         }
 
-        public override async Task<Question> FindAsync(int id)
+        public async Task<Question> FindAsync(int id)
         {
-            return await DbSetNoTracking
+            return await Questions.AsNoTracking()
                 .Include(q => q.QuestionTags)
                     .ThenInclude(qt => qt.QTag)
                 .Include(q => q.Answers)
@@ -28,7 +29,7 @@ namespace ESchool.Services.Examinations
 
         public async Task<IPagedList<QuestionDto>> GetListAsync(int page, int size)
         {
-            var questions = DbSetNoTracking
+            var questions = Questions.AsNoTracking()
                 .Include(q => q.QuestionTags)
                     .ThenInclude(qt => qt.QTag)
                 .Include(q => q.Answers)
@@ -47,35 +48,45 @@ namespace ESchool.Services.Examinations
                 entity.QuestionTags = qtags.Select(t => new QuestionTag { QTag = new QTag { Name = t } }).ToList();
             }
 
-            return await base.CreateAsync(entity);
+            await Questions.AddAsync(entity);
+
+            return await CommitAsync();
         }
 
-        public override async Task<ErrorCode> UpdateAsync(int id, Question entity)
+        public async Task<ErrorCode> UpdateAsync(Question entity, string[] qtags)
         {
-            var updatedEntity = await base.FindAsync(id);
+            var updatedEntity = await Questions.FindAsync(entity.Id);
 
             if (updatedEntity == null)
             {
                 return ErrorCode.NotFound;
             }
 
+            // Delete current QuestionTags & Answers.
+            DeleteQuestionTags(entity.Id);
+            DeleteAnswers(entity.Id);
+
+            // Update.
             updatedEntity.Content = entity.Content;
             updatedEntity.Description = entity.Description;
             updatedEntity.Type = entity.Type;
 
-            // Delete current QuestionTags & Answers.
-            DeleteQuestionTags(id);
-            DeleteAnswers(id);
+            if (qtags != null && qtags.Length > 0)
+            {
+                qtags = await AddQTags(qtags);
 
-            updatedEntity.QuestionTags = entity.QuestionTags;
+                entity.QuestionTags = qtags.Select(t => new QuestionTag { QTag = new QTag { Name = t } }).ToList();
+            }
+
             updatedEntity.Answers = entity.Answers;
 
             return await CommitAsync();
         }
 
-        public override async Task<ErrorCode> DeleteAsync(int id)
+        public async Task<ErrorCode> DeleteAsync(int id)
         {
-            var entity = await DbSet
+            var dbSet = Questions;
+            var entity = await dbSet
                 .Include(q => q.QuestionTags)
                 .Include(q => q.Answers)
                 .SingleOrDefaultAsync(q => q.Id == id);
@@ -85,28 +96,39 @@ namespace ESchool.Services.Examinations
                 return ErrorCode.NotFound;
             }
 
-            return await base.DeleteAsync(entity);
+            dbSet.Remove(entity);
+
+            return await CommitAsync();
         }
+
+        private DbSet<Question> Questions
+        {
+            get
+            {
+                return _dbContext.Set<Question>();
+            }
+        }
+
 
         private void DeleteQuestionTags(int questionId)
         {
-            var questionTagsDbSet = _dbContext.QuestionTags;
-            var questionTags = questionTagsDbSet.Where(qt => qt.QuestionId == questionId);
+            var dbSet = _dbContext.Set<QuestionTag>();
+            var questionTags = dbSet.Where(qt => qt.QuestionId == questionId);
 
             if (questionTags.Any())
             {
-                questionTagsDbSet.RemoveRange(questionTags);
+                dbSet.RemoveRange(questionTags);
             }
         }
 
         private void DeleteAnswers(int questionId)
         {
-            var answersDbSet = _dbContext.Answers;
-            var answers = answersDbSet.Where(a => a.QuestionId == questionId);
+            var dbSet = _dbContext.Set<Answer>();
+            var answers = dbSet.Where(a => a.QuestionId == questionId);
 
             if (answers.Any())
             {
-                answersDbSet.RemoveRange(answers);
+                dbSet.RemoveRange(answers);
             }
         }
 
@@ -114,20 +136,20 @@ namespace ESchool.Services.Examinations
         {
             qtags = qtags.Distinct().Select(t => t.Trim()).ToArray();
 
-            var qtagsDbSet = _dbContext.QTags;
+            var dbSet = _dbContext.Set<QTag>();
 
-            var existingQTags = qtagsDbSet.Where(t => qtags.Contains(t.Name));
+            var existingQTags = dbSet.Where(t => qtags.Contains(t.Name));
 
             var newQTags = qtags.Except(existingQTags.Select(t => t.Name));
 
             if (newQTags.Any())
             {
-                await qtagsDbSet.AddRangeAsync(newQTags.Select(t => new QTag { Name = t }));
+                await dbSet.AddRangeAsync(newQTags.Select(t => new QTag { Name = t }));
 
                 await _dbContext.SaveChangesAsync();
             }
 
-            return await Task.FromResult(qtags);
+            return qtags;
         }
     }
 }

@@ -1,78 +1,36 @@
-﻿using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Domain.Enums;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ESchool.Services
 {
-    public abstract class BaseService<T> : IService<T> where T : class, new()
+    public abstract class BaseService : IService
     {
         protected readonly ObjectDbContext _dbContext;
+        protected readonly ILogger<BaseService> _logger;
 
-        public BaseService(ObjectDbContext dbContext)
+        public BaseService(ObjectDbContext dbContext, ILogger<BaseService> logger)
         {
             _dbContext = dbContext;
-        }
-
-        public DbSet<T> DbSet
-        {
-            get
-            {
-                return _dbContext.Set<T>();
-            }
-        }
-
-        public IQueryable<T> DbSetNoTracking
-        {
-            get
-            {
-                return DbSet.AsNoTracking();
-            }
-        }
-
-        public virtual async Task<T> FindAsync(int id)
-        {
-            return await DbSet.FindAsync(id);
-        }
-        
-        #region Create, Update, Delete, Commit
-
-        public virtual async Task<ErrorCode> CreateAsync(T entity)
-        {
-            var dbEntityEntry = DbSet.Add(entity);
-
-            return await CommitAsync();
-        }
-
-        public abstract Task<ErrorCode> UpdateAsync(int id, T entity);
-
-        public virtual async Task<ErrorCode> DeleteAsync(T entity)
-        {
-            var dbEntity = DbSet.Remove(entity);
-
-            return await CommitAsync();
-        }
-
-        public virtual async Task<ErrorCode> DeleteAsync(int id)
-        {
-            T entity = await DbSet.FindAsync(id);
-
-            if (entity == null)
-            {
-                return ErrorCode.NotFound;
-            }
-
-            return await DeleteAsync(entity);
+            _logger = logger;
         }
 
         public async Task<ErrorCode> CommitAsync()
         {
-            int effectedRows = await _dbContext.SaveChangesAsync();
+            try
+            {
+                int effectedRows = await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(new EventId(0), ex, ex.Message);
+
+                return ErrorCode.InternalServerError;
+            }
 
             return ErrorCode.Success;
         }
-
-        #endregion
     }
 }

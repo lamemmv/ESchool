@@ -52,8 +52,8 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = viewModel.ToQuestion();
-                var code = await _questionService.UpdateAsync(id, entity);
+                var entity = viewModel.ToQuestion(id);
+                var code = await _questionService.UpdateAsync(entity, viewModel.QTags);
 
                 return PutResult(code);
             }

@@ -7,27 +7,19 @@ namespace ESchool.Domain.Extensions
 {
     public static class ViewModelsExtensions
     {
-        public static QTag ToQTag(this QTagViewModel viewModel)
+        public static QTag ToQTag(this QTagViewModel viewModel, int id = 0)
         {
             return new QTag
             {
+                Id = id,
                 Name = viewModel.Name.Trim(),
                 Description = viewModel.Description.TrimNull()
             };
         }
 
-        public static Question ToQuestion(this QuestionViewModel viewModel)
+        public static Question ToQuestion(this QuestionViewModel viewModel, int id = 0)
         {
-            //IList<QuestionTag> questionTags = null;
             IList<Answer> answers = null;
-
-            //if (viewModel.QTags != null && viewModel.QTags.Length > 0)
-            //{
-            //    questionTags = viewModel.QTags.Select(t => new QuestionTag
-            //    {
-            //        QTag = new QTag { Name = t }
-            //    }).ToList();
-            //}
 
             if (viewModel.Answers != null && viewModel.Answers.Length > 0)
             {
@@ -41,10 +33,10 @@ namespace ESchool.Domain.Extensions
 
             return new Question
             {
+                Id = id,
                 Content = viewModel.Content.Trim(),
                 Description = viewModel.Description.TrimNull(),
                 Type = viewModel.Type,
-                //QuestionTags = questionTags,
                 Answers = answers
             };
         }
