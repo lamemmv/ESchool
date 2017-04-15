@@ -18,16 +18,16 @@ namespace ESchool.Admin.Controllers
             _qtagService = qtagService;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<QTag>> Get()
-        {
-            return await _qtagService.GetListAsync();
-        }
-
         [HttpGet("{id}")]
         public async Task<QTag> Get(int id)
         {
             return await _qtagService.FindAsync(id);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<QTag>> Get()
+        {
+            return await _qtagService.GetListAsync();
         }
 
         [HttpPost]
