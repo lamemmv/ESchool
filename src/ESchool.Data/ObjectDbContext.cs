@@ -31,6 +31,14 @@ namespace ESchool.Data
             }
         }
 
+        public DbSet<QTag> QTags
+        {
+            get
+            {
+                return Set<QTag>();
+            }
+        }
+
         public DbSet<QuestionTag> QuestionTags
         {
             get

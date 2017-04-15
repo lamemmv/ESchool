@@ -2,7 +2,7 @@
 
 namespace ESchool.Domain.ViewModels.Examinations
 {
-    public class AnswerCreateViewModel
+    public class AnswerViewModel
     {
         [Required]
         public string AnswerName { get; set; }

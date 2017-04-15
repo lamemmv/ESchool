@@ -2,7 +2,7 @@
 
 namespace ESchool.Domain.ViewModels.Examinations
 {
-    public class QuestionCreateViewModel
+    public class QuestionViewModel
     {
         [Required]
         public string Content { get; set; }
@@ -11,8 +11,8 @@ namespace ESchool.Domain.ViewModels.Examinations
 
         public int Type { get; set; }
 
-        public int[] QTagIds { get; set; }
+        public string[] QTags { get; set; }
 
-        public AnswerCreateViewModel[] Answers { get; set; }
+        public AnswerViewModel[] Answers { get; set; }
     }
 }
