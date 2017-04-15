@@ -10,7 +10,7 @@ import { UtilitiesService } from './../shared/utils/utilities.service';
 import { QuestionsService } from './questions.service';
 import { QuestionTagsService } from './../questionTags/question-tags.service';
 import { AlertModel } from './../shared/models/alerts';
-import { Question, CreateQuestionModel, Answer, QuestionView, QuestionType, QuestionTypes } from './question.model';
+import { Question, QTag, CreateQuestionModel, Answer, QuestionView, QuestionType, QuestionTypes } from './question.model';
 import { QuestionTag } from './../questionTags/question-tags.model';
 
 
@@ -31,7 +31,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   private questionTypes: QuestionType[] = new Array();
   private answerName: string = 'A';
   private hasJustAddedAnswer: boolean = false;
-  private selectedQtags: QuestionTag[] = new Array();
+  private selectedQtags: QTag[] = new Array();
   private questionId: number;
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
@@ -80,10 +80,18 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     var self = this;
     self.questionService.getById(id).subscribe((question) => {
       self.question = question;
+      self.getSelectedQTags(self.question.qTags);
     },
       error => {
         self.notificationService.printErrorMessage('Failed to load question. ' + error);
       });
+  };
+
+  getSelectedQTags(qtags: QTag[]) {
+    let self = this;
+    qtags.forEach(qtag=>{
+      self.selectedQtags.push({id: qtag.id, name: qtag.name});
+    });
   };
 
   onReady(): void { };
@@ -139,9 +147,9 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
       self.alert.message = self._translate.instant('SAVED');
       this.router.navigate(['/questions']);
     },
-    error => {
-      self.notificationService.printErrorMessage('Failed to create question. ' + error);
-    });
+      error => {
+        self.notificationService.printErrorMessage('Failed to create question. ' + error);
+      });
   };
 
   addAnswer(): void {
