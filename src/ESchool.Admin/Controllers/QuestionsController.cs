@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
 using ESchool.Domain.ViewModels.Examinations;
@@ -22,9 +21,7 @@ namespace ESchool.Admin.Controllers
         [HttpGet("{id}")]
         public async Task<QuestionDto> Get(int id)
         {
-            var entity = await _questionService.FindAsync(id);
-
-            return entity.ToQuestionDto();
+            return await _questionService.GetAsync(id);
         }
 
         [HttpGet]

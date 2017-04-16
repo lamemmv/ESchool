@@ -9,34 +9,34 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
 {
-    public class QTagsController : AdminController
+    public class ExamPaperController : AdminController
     {
-        private readonly IQTagService _qtagService;
+        private readonly IExamPaperService _examPaperService;
 
-        public QTagsController(IQTagService qtagService)
+        public ExamPaperController(IExamPaperService examPaperService)
         {
-            _qtagService = qtagService;
+            _examPaperService = examPaperService;
         }
 
         [HttpGet("{id}")]
-        public async Task<QTagDto> Get(int id)
+        public async Task<ExamPaperDto> Get(int id)
         {
-            return await _qtagService.GetAsync(id);
+            return await _examPaperService.GetAsync(id);
         }
 
         [HttpGet]
-        public async Task<IEnumerable<QTagDto>> Get()
+        public async Task<IEnumerable<ExamPaperDto>> Get(int? page, int? size)
         {
-            return await _qtagService.GetListAsync();
+            return await _examPaperService.GetListAsync(page ?? DefaultPage, size ?? DefaultSize);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]QTagViewModel viewModel)
+        public async Task<IActionResult> Post([FromBody]ExamPaperViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var entity = viewModel.ToQTag();
-                var code = await _qtagService.CreateAsync(entity);
+                var entity = viewModel.ToExamPaper();
+                var code = await _examPaperService.CreateAsync(entity, viewModel.QuestionIds);
 
                 return PostResult(code, entity.Id);
             }
@@ -45,12 +45,12 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]QTagViewModel viewModel)
+        public async Task<IActionResult> Put(int id, [FromBody]ExamPaperViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var entity = viewModel.ToQTag(id);
-                var code = await _qtagService.UpdateAsync(entity);
+                var entity = viewModel.ToExamPaper(id);
+                var code = await _examPaperService.UpdateAsync(entity, viewModel.QuestionIds);
 
                 return PutResult(code);
             }
@@ -63,7 +63,7 @@ namespace ESchool.Admin.Controllers
         {
             if (id > 0)
             {
-                var code = await _qtagService.DeleteAsync(id);
+                var code = await _examPaperService.DeleteAsync(id);
 
                 return DeleteResult(code);
             }

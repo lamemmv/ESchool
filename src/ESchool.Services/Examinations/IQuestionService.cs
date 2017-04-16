@@ -8,7 +8,7 @@ namespace ESchool.Services.Examinations
 {
     public interface IQuestionService : IService
     {
-        Task<Question> FindAsync(int id);
+        Task<QuestionDto> GetAsync(int id);
 
         Task<IPagedList<QuestionDto>> GetListAsync(int page, int size);
 

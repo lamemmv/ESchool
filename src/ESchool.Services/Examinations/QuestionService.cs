@@ -18,13 +18,20 @@ namespace ESchool.Services.Examinations
         {
         }
 
-        public async Task<Question> FindAsync(int id)
+        public async Task<QuestionDto> GetAsync(int id)
         {
-            return await Questions.AsNoTracking()
+            var entity = await Questions.AsNoTracking()
                 .Include(q => q.QuestionTags)
                     .ThenInclude(qt => qt.QTag)
                 .Include(q => q.Answers)
                 .SingleOrDefaultAsync(q => q.Id == id);
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return entity.ToQuestionDto();
         }
 
         public async Task<IPagedList<QuestionDto>> GetListAsync(int page, int size)
@@ -108,7 +115,6 @@ namespace ESchool.Services.Examinations
                 return _dbContext.Set<Question>();
             }
         }
-
 
         private void DeleteQuestionTags(int questionId)
         {

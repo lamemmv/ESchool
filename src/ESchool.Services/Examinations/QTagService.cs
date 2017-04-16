@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
+using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
+using ESchool.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -22,10 +24,23 @@ namespace ESchool.Services.Examinations
             return await QTags.FindAsync(id);
         }
 
-        public async Task<IEnumerable<QTag>> GetListAsync()
+        public async Task<QTagDto> GetAsync(int id)
+        {
+            var entity = await QTags.FindAsync(id);
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return entity.ToQTagDto();
+        }
+
+        public async Task<IEnumerable<QTagDto>> GetListAsync()
         {
             return await QTags.AsNoTracking()
                 .OrderBy(t => t.Id)
+                .Select(t => t.ToQTagDto())
                 .ToListAsync();
         }
 
