@@ -75,7 +75,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title pull-left">{{ 'EDIT_QUESTION_TITLE' | translate }}</h4>
+                    <h4 class="modal-title pull-left">{{ 'QUESTIONS' | translate }}</h4>
                 </div>
                 <div class="modal-body">
                     <form #questionEditForm="ngForm">
@@ -89,7 +89,7 @@
                                 <label class="answer" [ngClass]="{'dss': answer.dss}">
                                     <input type="checkbox" 
                                         name="{{answer.dss}}-{{ia}}"                                          
-                                        [(ngModel)]="answer.dss" /> <span>{{answer.answerName}}</span>. <span>{{answer.body}}</span>
+                                        [(ngModel)]="answer.dss" disabled /> <span>{{answer.answerName}}</span>. <span>{{answer.body}}</span>
                                 </label>
                             </div>
                         </div>                 

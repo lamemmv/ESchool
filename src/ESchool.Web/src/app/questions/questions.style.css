@@ -38,3 +38,8 @@ table tr:hover td span.remove, table tr:hover td span.edit {
 .answer.dss {
   color: #00a65a;
 }
+
+.modal-header {
+    background-color: #00a7d0 !important; 
+    color: white; 
+}

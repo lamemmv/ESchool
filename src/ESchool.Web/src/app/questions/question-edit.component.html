@@ -5,8 +5,8 @@
         </div>
         <div>
             <div class="box-body">
-                <div class="form-group">
-                    <label for="questionContent"> {{ 'CONTENT' | translate }} </label>
+                <div class="form-group required">
+                    <label for="questionContent" class="control-label"> {{ 'CONTENT' | translate }} </label>
                     <ckeditor 
                         id="questionContent"
                         name="questionContent"
@@ -82,7 +82,7 @@
                     class="btn btn-primary pull-right" 
                     [disabled]="!isValid()"
                     (click)="save()"><i class="fa fa-pencil-square-o"></i> 
-                    {{ 'UPDATE' | translate }}
+                    {{ view.okText }}
                 </button> 
               </div>
         </div>

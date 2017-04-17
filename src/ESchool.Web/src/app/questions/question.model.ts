@@ -22,6 +22,8 @@ export class CKEditorConfig {
 
 export class QuestionView {
     title: string;
+    okText: string;
+    cancelText: string;
 }
 
 export class Answer {

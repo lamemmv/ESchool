@@ -10,7 +10,11 @@ import { UtilitiesService } from './../shared/utils/utilities.service';
 import { QuestionsService } from './questions.service';
 import { QuestionTagsService } from './../questionTags/question-tags.service';
 import { AlertModel } from './../shared/models/alerts';
-import { Question, QTag, CreateQuestionModel, Answer, QuestionView, QuestionType, QuestionTypes } from './question.model';
+import {
+  Question, QTag, CreateQuestionModel,
+  Answer, QuestionView, QuestionType,
+  QuestionTypes
+} from './question.model';
 import { QuestionTag } from './../questionTags/question-tags.model';
 
 
@@ -52,9 +56,11 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     this.questionId = id;
     if (id) {
       this.view.title = this._translate.instant('EDIT_QUESTION_TITLE');
+      this.view.okText = this._translate.instant('UPDATE');
       this.getQuestion(id);
     } else {
       this.view.title = this._translate.instant('CREATE_QUESTION_TITLE');
+      this.view.okText = this._translate.instant('BUTTON_SAVE');
     }
 
     this.getQuestionTags();
@@ -89,8 +95,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
 
   getSelectedQTags(qtags: QTag[]) {
     let self = this;
-    qtags.forEach(qtag=>{
-      self.selectedQtags.push({id: qtag.id, name: qtag.name});
+    qtags.forEach(qtag => {
+      self.selectedQtags.push({ id: qtag.id, name: qtag.name });
     });
   };
 
@@ -124,17 +130,19 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
 
   save(): void {
     let self = this, promise = null;
+    let model = new CreateQuestionModel();
+    model.content = self.question.content;
+    model.description = self.question.description;
+    model.type = self.question.type;
+    model.answers = self.question.answers;
+    model.id = self.questionId;
+    self.question.qTags.forEach(qtag => {
+      model.qTags.push(qtag.name);
+    });
+
     if (self.questionId) {
-      promise = self.questionService.update(self.question);
+      promise = self.questionService.update(model);
     } else {
-      let model = new CreateQuestionModel();
-      model.content = self.question.content;
-      model.description = self.question.description;
-      model.type = self.question.type;
-      model.answers = self.question.answers;
-      self.question.qTags.forEach(qtag => {
-        model.qTags.push(qtag.name);
-      });
       promise = self.questionService.create(model);
     }
 
@@ -184,7 +192,11 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   updateQTagsModel() {
     var self = this;
     this.selectedQtags.forEach((qtag: QuestionTag) => {
-      self.question.qTags.push({ id: qtag.id, name: qtag.name });
+      if (!self.question.qTags.find(q => q.name == qtag.name)) {
+        self.question.qTags.push({ id: qtag.id, name: qtag.name });
+      }
     });
   };
+
+
 }
