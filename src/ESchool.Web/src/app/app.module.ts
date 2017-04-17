@@ -20,6 +20,8 @@ import { PageNotFoundComponent } from './errors/page-not-found.component';
 import { AppComponent }  from './app.component';
 import { HomeComponent }  from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
+import { LoginRoutingModule } from './login/login-routing.module';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   imports: [ 
@@ -33,10 +35,12 @@ import { AppRoutingModule } from './app-routing.module';
     QuestionsModule,
     QuestionPapersModule,
     TranslateModule,
+    LoginRoutingModule,
     AppRoutingModule
   ], declarations: [ 
     AppComponent,
     HomeComponent,
+    LoginComponent,
     PageNotFoundComponent
   ], providers: [
     ConfigService,
