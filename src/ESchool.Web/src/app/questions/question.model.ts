@@ -3,6 +3,7 @@ export class Question {
     content: string;
     description: string;
     type: number;
+    difficultLevel: number;
     qTags: QTag[] = new Array();
     answers: Answer[] = new Array();
 }
@@ -12,6 +13,7 @@ export class CreateQuestionModel {
     content: string;
     description: string;
     type: number;
+    difficultLevel: number;
     qTags: string[] = new Array();
     answers: Answer[] = new Array();
 }

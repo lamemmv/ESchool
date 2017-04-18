@@ -44,7 +44,7 @@
                         <option *ngFor="let type of questionTypes" [value]="type.id">{{type.name}}</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group required">
                     <label for="answers"> {{ 'QUESTION_ANSWERS' | translate }} </label>
                     <button type="submit" 
                         class="btn btn-primary pull-right" 
@@ -70,6 +70,10 @@
                         <i class="fa fa-times" title="{{'REMOVE_ANSWER' | translate}}"
                         (click)="removeAnswer(answer)"></i>
                     </span>
+                </div>
+                <div class="form-group">
+                    <rating [(ngModel)]="question.difficultLevel">
+                    </rating>
                 </div>
             </div>
             <div class="box-footer">

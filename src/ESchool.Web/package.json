@@ -45,7 +45,8 @@
     "ng2-ckeditor":"1.1.6",
     "bootstrap":"3.3.7",
     "ng2-select":"1.2.0",
-    "ng2-tag-input":"1.0.5"
+    "ng2-tag-input":"1.0.5",
+    "ngx-rating":"0.0.9"
   },
   "devDependencies": {
     "concurrently": "^3.2.0",

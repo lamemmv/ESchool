@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { AlertModule } from 'ng2-bootstrap';
+import { RatingModule } from "ngx-rating";
 
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
@@ -112,6 +113,15 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     if (!this.question.content) {
       return false;
     }
+
+    if (this.question.answers.length == 0) {
+      return false;
+    }
+
+    if (!this.question.answers.find(x=>x.dss == true)){
+      return false;
+    }
+    
     return true;
   };
 
@@ -135,6 +145,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     model.description = self.question.description;
     model.type = self.question.type;
     model.answers = self.question.answers;
+    model.difficultLevel = self.question.difficultLevel;
     model.id = self.questionId;
     self.question.qTags.forEach(qtag => {
       model.qTags.push(qtag.name);
@@ -198,5 +209,11 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     });
   };
 
+  onClickRating(event: any){
+    console.log('onClickRating: '+ event);
+  };
 
+  onRatingChange(event: any){
+    console.log('onRatingChange: '+ event);
+  };
 }

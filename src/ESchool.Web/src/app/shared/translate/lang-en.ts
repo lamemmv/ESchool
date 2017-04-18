@@ -1,6 +1,7 @@
 export const LANG_EN_NAME = 'en';
 
 export const LANG_EN_TRANS = {
+    '1001':'The question tag is existed in system',
     'ADD': 'Add',
     'ADD_ANSWERS': 'Add answers',
     'ADD_QUESTION_TAG_TITLE':'Add question tag',
@@ -25,7 +26,7 @@ export const LANG_EN_TRANS = {
     'PLACEHOLDER_SEARCH_QUESTION_TAGS': 'Search question tags',
     'PLACEHOLDER_SELECT_QUESTION_TAGS': 'No question tag selected',
     'QUESTIONS': 'Questions',
-    'QUESTION_ANSWERS': 'Answers (Select a DSS)',
+    'QUESTION_ANSWERS': 'Answers (Select a DSS, must have at least on DSS)',
     'QUESTION_GROUP': 'Question groups',
     'QUESTION_LIST': 'Question list',   
     'QUESTION_PAPERS': 'Question papers',      

@@ -9,6 +9,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
 import { SelectModule } from 'ng2-select';
 import { TagInputModule } from 'ng2-tag-input';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
+import { RatingModule } from 'ngx-rating';
 
 import { TRANSLATION_PROVIDERS, TranslateModule, TranslateService }   from './../shared/translate';
 import { QuestionsComponent } from './questions.component';
@@ -29,6 +30,7 @@ import { QuestionsRoutingModule } from './questions-routing.module';
         ModalModule.forRoot(),
         Ng2DropdownModule,
         TagInputModule,
+        RatingModule,
         TranslateModule,
         CKEditorModule,
         SelectModule,

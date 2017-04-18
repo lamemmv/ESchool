@@ -95,14 +95,16 @@ export class QuestionTagsComponent implements OnInit {
     var self = this;
     self.questionTagsService.create(self.questionTag)
       .subscribe((id: number) => {
-        self.questionTag.id = id;
+        self.questionTag.id = id;        
         self.alert.type = 'success';
         self.alert.message = this._translate.instant('SAVED');
         self.getQuestionTags();
         this.childModal.hide();
       },
-      error => {
-        self.notificationService.printErrorMessage('Failed to create question tag. ' + error);
+      (error)=> {
+        self.alert.type = 'danger';
+        self.alert.message = self._translate.instant(JSON.parse(error._body).code);
+        this.childModal.hide();
       });
   };
 

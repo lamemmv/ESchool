@@ -34,6 +34,7 @@
       'ng2-select': 'npm:ng2-select',
       'ng2-tag-input': 'npm:ng2-tag-input',
       'ng2-material-dropdown': 'npm:ng2-material-dropdown',
+      'ngx-rating': 'npm:ngx-rating',
       // other libraries
       'rxjs': 'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
@@ -80,6 +81,10 @@
       },
       'ng2-tag-input/modules/components/tag-input.template.html': {
         defaultJSExtension: false
+      },
+      'ngx-rating': {
+        defaultExtension: 'js',
+        main: 'index.js'
       }
     }
   });

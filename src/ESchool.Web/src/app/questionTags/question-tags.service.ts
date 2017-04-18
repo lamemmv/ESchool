@@ -29,6 +29,9 @@ export class QuestionTagsService {
         var self = this;
         return this.http.post(this._baseUrl + 'qtags', qtag)
             .map((res: Response) => {
+                if (res.status != 201 && res.status != 200){
+                    self.appService.handleError(res);
+                }
                 return res.json();
             })
             .catch(self.appService.handleError);

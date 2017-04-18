@@ -1,6 +1,7 @@
 export const LANG_VI_NAME = 'vi';
 
 export const LANG_VI_TRANS = {
+    '1001':'Nhóm câu hỏi đã tồn tại trong hệ thống',
     'ADD': 'Thêm',
     'ADD_ANSWERS': 'Thêm đáp án',
     'ADD_QUESTION_TAG_TITLE':'Thêm nhóm câu hỏi',
@@ -25,7 +26,7 @@ export const LANG_VI_TRANS = {
     'PLACEHOLDER_SEARCH_QUESTION_TAGS': 'Tìm loại câu hỏi',
     'PLACEHOLDER_SELECT_QUESTION_TAGS': 'Chưa chọn loại câu hỏi',
     'QUESTIONS': 'Câu hỏi',
-    'QUESTION_ANSWERS': 'Các câu trả lời (Check vào đáp án)',
+    'QUESTION_ANSWERS': 'Các câu trả lời (Check vào đáp án, phải có ít nhất một đáp án)',
     'QUESTION_GROUP': 'Nhóm câu hỏi',
     'QUESTION_LIST': 'Danh sách câu hỏi',
     'QUESTION_PAPERS': 'Đề thi',

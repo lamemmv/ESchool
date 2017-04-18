@@ -5,6 +5,8 @@ import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
+import { TranslateService } from './translate';
+
 @Injectable()
 export class AppService {
     constructor(private http: Http) {
@@ -12,7 +14,7 @@ export class AppService {
     }
 
     handleError(error: Response | any) {
-        let errMsg: string;
+        /*let errMsg: string;
         if (error instanceof Response) {
             const body = error.json() || '';
             const err = body.error || JSON.stringify(body);
@@ -39,6 +41,7 @@ export class AppService {
             return Observable.throw(errMsg || applicationError || modelStateErrors || 'Server error');
         } else {
             return Observable.throw(errMsg);
-        }
+        }*/
+        return Observable.throw(error);
     };
 }
