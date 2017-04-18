@@ -6,11 +6,11 @@ namespace ESchool.Domain.Enums
     {
         Success = 0,
 
-        DuplicateEntity = 1,
-        InvalidEntityId = 2,
-
         NotFound = HttpStatusCode.NotFound,
         BadRequest = HttpStatusCode.BadRequest,
-        InternalServerError = HttpStatusCode.InternalServerError
+        InternalServerError = HttpStatusCode.InternalServerError,
+
+        DuplicateEntity = 1001,
+        InvalidEntityId = 1002
     }
 }

@@ -53,6 +53,7 @@ namespace ESchool.Data
 				}
             }
 
+            string userName = "sa";
             string email = "ankn85@yahoo.com";
             string password = "1qazXSW@";
 
@@ -60,8 +61,9 @@ namespace ESchool.Data
 
             if (user == null)
             {
-                user = new ApplicationUser("sa")
+                user = new ApplicationUser
                 {
+                    UserName = userName,
                     Email = email,
                     EmailConfirmed = true,
                     LockoutEnabled = true

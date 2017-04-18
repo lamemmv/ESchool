@@ -24,6 +24,7 @@ namespace ESchool.Domain.Extensions
                 Content = entity.Content,
                 Description = entity.Description,
                 Type = entity.Type,
+                DifficultLevel = entity.DifficultLevel,
                 QTags = entity.QuestionTags.Select(qt => new QTagDto { Id = qt.QTag.Id, Name = qt.QTag.Name }),
                 Answers = entity.Answers.Select(a => a.ToAnswerDto())
             };

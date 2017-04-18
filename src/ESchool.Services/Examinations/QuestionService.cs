@@ -82,7 +82,7 @@ namespace ESchool.Services.Examinations
             {
                 qtags = await AddQTags(qtags);
 
-                entity.QuestionTags = qtags.Select(t => new QuestionTag { QTag = new QTag { Name = t } }).ToList();
+                updatedEntity.QuestionTags = qtags.Select(t => new QuestionTag { QTag = new QTag { Name = t } }).ToList();
             }
 
             updatedEntity.Answers = entity.Answers;

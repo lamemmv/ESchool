@@ -12,6 +12,8 @@ namespace ESchool.Domain.DTOs.Examinations
 
         public int Type { get; set; }
 
+        public int DifficultLevel { get; set; }
+
         public IEnumerable<QTagDto> QTags { get; set; }
 
         public IEnumerable<AnswerDto> Answers { get; set; }

@@ -37,6 +37,7 @@ namespace ESchool.Domain.Extensions
                 Content = viewModel.Content.Trim(),
                 Description = viewModel.Description.TrimNull(),
                 Type = viewModel.Type,
+                DifficultLevel = viewModel.DifficultLevel,
                 Answers = answers
             };
         }

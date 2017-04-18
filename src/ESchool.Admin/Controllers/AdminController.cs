@@ -1,4 +1,5 @@
-﻿using ESchool.Domain.Enums;
+﻿using ESchool.Domain.DTOs;
+using ESchool.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -16,7 +17,12 @@ namespace ESchool.Admin.Controllers
                 return Created("Post", entityId);
             }
 
-            return Ok(code);
+            if (code == ErrorCode.DuplicateEntity)
+            {
+                return BadRequestErrorDto(code, "Entity is duplicated.");
+            }
+
+            return Ok();
         }
 
         protected IActionResult PutResult(ErrorCode code)
@@ -25,12 +31,18 @@ namespace ESchool.Admin.Controllers
             {
                 return NoContent();
             }
-            else if (code == ErrorCode.NotFound)
+
+            if (code == ErrorCode.NotFound)
             {
                 return NotFound();
             }
 
-            return Ok(code);
+            if (code == ErrorCode.DuplicateEntity)
+            {
+                return BadRequestErrorDto(code, "Entity is duplicated.");
+            }
+
+            return Ok();
         }
 
         protected IActionResult DeleteResult(ErrorCode code)
@@ -43,14 +55,9 @@ namespace ESchool.Admin.Controllers
             return NotFound();
         }
 
-        //protected IActionResult BadRequestErrorCode(ModelStateDictionary modelState)
-        //{
-        //    var errors = modelState.Values
-        //        .SelectMany(m => m.Errors)
-        //        .Select(m => m.ErrorMessage)
-        //        .ToList();
-
-        //    return BadRequest(new ServerResult(ErrorCode.BadRequest, errors));
-        //}
+        protected IActionResult BadRequestErrorDto(ErrorCode code, string message, object data = null)
+        {
+            return BadRequest(new ErrorDto(code, message, data));
+        }
     }
 }

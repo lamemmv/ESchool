@@ -11,6 +11,8 @@ namespace ESchool.Domain.ViewModels.Examinations
 
         public int Type { get; set; }
 
+        public int DifficultLevel { get; set; }
+
         public string[] QTags { get; set; }
 
         public AnswerViewModel[] Answers { get; set; }

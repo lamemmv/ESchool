@@ -68,7 +68,7 @@ namespace ESchool.Admin.Controllers
                 return DeleteResult(code);
             }
 
-            return BadRequest(ErrorCode.InvalidEntityId);
+            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid QTag Id.");
         }
     }
 }

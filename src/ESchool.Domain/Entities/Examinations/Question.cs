@@ -10,6 +10,8 @@ namespace ESchool.Domain.Entities.Examinations
 
         public int Type { get; set; }
 
+        public int DifficultLevel { get; set; }
+
         public virtual ICollection<QuestionTag> QuestionTags { get; set; }
 
         public virtual ICollection<Answer> Answers { get; set; }

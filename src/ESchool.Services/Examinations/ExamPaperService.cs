@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Paginations;
@@ -6,6 +8,7 @@ using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
+using ESchool.Domain.ViewModels.Examinations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -103,6 +106,14 @@ namespace ESchool.Services.Examinations
             }
         }
 
+        private DbSet<Question> Questions
+        {
+            get
+            {
+                return _dbContext.Set<Question>();
+            }
+        }
+
         private void DeleteQuestionExamPapers(int examPaperId)
         {
             var dbSet = _dbContext.Set<QuestionExamPaper>();
@@ -112,6 +123,48 @@ namespace ESchool.Services.Examinations
             {
                 dbSet.RemoveRange(questionExamPapers);
             }
+        }
+
+        //private async Task RandomQuestions___(ExamPaperCreateQTagViewModel[] qtags, int totalQuestion)
+        //{
+            
+        //    foreach (var tag in qtags)
+        //    {
+        //        int maxRandomQuestion = (totalQuestion * tag.Percent) / 100;
+
+        //        await RandomQuestions(tag.Id, maxRandomQuestion, )
+        //    }
+        //}
+
+        private async Task<IList<int>> RandomQuestions(int qtagId, int maxRandomQuestion, int difficultLevel)
+        {
+            var dbQuery = Questions.AsNoTracking()
+                .Include(q => q.QuestionTags)
+                .Where(q => q.DifficultLevel >= difficultLevel)
+                .Select(question => new
+                {
+                    question,
+                    QuestionTags = question.QuestionTags.Where(qt => qt.QTagId == qtagId)
+                });
+
+            var questions = await dbQuery.Select(q => q.question).ToListAsync();
+            IList<int> randomQuestions = new List<int>();
+
+            if (questions.Count >= maxRandomQuestion)
+            {
+                int randomIndex;
+                Random random = new Random();
+
+                while (randomQuestions.Count <= maxRandomQuestion)
+                {
+                    randomIndex = random.Next(questions.Count);
+                    randomQuestions.Add(questions[randomIndex].Id);
+
+                    questions.RemoveAt(randomIndex);
+                }
+            }
+
+            return randomQuestions;
         }
     }
 }
