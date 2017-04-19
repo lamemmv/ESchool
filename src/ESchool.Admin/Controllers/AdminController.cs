@@ -57,7 +57,7 @@ namespace ESchool.Admin.Controllers
 
         protected IActionResult BadRequestErrorDto(ErrorCode code, string message, object data = null)
         {
-            return BadRequest(new ErrorDto(code, message, data));
+            return BadRequest(Json(new ErrorDto(code, message, data)));
         }
     }
 }

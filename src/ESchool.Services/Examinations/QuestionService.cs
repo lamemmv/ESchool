@@ -77,6 +77,7 @@ namespace ESchool.Services.Examinations
             updatedEntity.Content = entity.Content;
             updatedEntity.Description = entity.Description;
             updatedEntity.Type = entity.Type;
+            updatedEntity.DifficultLevel = entity.DifficultLevel;
 
             if (qtags != null && qtags.Length > 0)
             {

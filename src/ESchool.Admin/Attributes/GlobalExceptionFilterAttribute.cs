@@ -71,7 +71,7 @@ namespace ESchool.Admin.Attributes
 
             var response = context.HttpContext.Response;
             response.StatusCode = (int)status;
-            //response.ContentType = "application/json";
+            response.ContentType = "application/json";
             //response.Headers.Add("Access-Control-Allow-Origin", "*");
 
             context.ExceptionHandled = true;
