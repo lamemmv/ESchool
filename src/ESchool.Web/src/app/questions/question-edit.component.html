@@ -36,7 +36,7 @@
                     </tag-input>
                 </div>
                 <div class="form-group">
-                    <label for="questionTypes"> {{ 'QUESTION_TAGS' | translate }} </label>
+                    <label for="questionTypes"> {{ 'QUESTION_TYPE' | translate }} </label>
                     <select id="questionTypes" 
                         name="questionTypes" 
                         class="form-control"
@@ -45,7 +45,7 @@
                     </select>
                 </div>
                 <div class="form-group required">
-                    <label for="answers"> {{ 'QUESTION_ANSWERS' | translate }} </label>
+                    <label for="answers" class="control-label"> {{ 'QUESTION_ANSWERS' | translate }} </label>
                     <button type="submit" 
                         class="btn btn-primary pull-right" 
                         (click)="addAnswer()"><i class="fa fa-plus"></i> 
@@ -71,8 +71,9 @@
                         (click)="removeAnswer(answer)"></i>
                     </span>
                 </div>
-                <div class="form-group">
-                    <rating [(ngModel)]="question.difficultLevel">
+                <div class="form-group mt5">
+                    <label>{{ 'DIFFICULT_LEVEL' | translate }}</label>
+                    <rating class="row" [(ngModel)]="question.difficultLevel">
                     </rating>
                 </div>
             </div>
