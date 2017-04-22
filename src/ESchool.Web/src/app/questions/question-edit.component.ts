@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { AlertModule } from 'ng2-bootstrap';
 import { RatingModule } from "ngx-rating";
+import { CKButtonDirective, CKEditorComponent } from 'ng2-ckeditor';
 
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
@@ -38,6 +39,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   private hasJustAddedAnswer: boolean = false;
   private selectedQtags: QTag[] = new Array();
   private questionId: number;
+  //private editor = CKEDITOR.replace('');
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -48,6 +50,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     private rd: Renderer) { }
 
   ngOnInit() {
+    let self = this;
     this.alert = {
       type: '',
       message: ''
@@ -88,6 +91,15 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     self.questionService.getById(id).subscribe((question) => {
       self.question = question;
       self.getSelectedQTags(self.question.qTags);
+
+      for (var instanceName in CKEDITOR.instances) {
+        CKEDITOR.instances[instanceName].on("instanceReady", function (ev: any) {
+          let _editor = ev.editor;
+          _editor.addCommand("image", {
+            exec: self.onUploadImage
+          });
+        });
+      }
     },
       error => {
         self.notificationService.printErrorMessage('Failed to load question. ' + error);
@@ -118,10 +130,10 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
       return false;
     }
 
-    if (!this.question.answers.find(x=>x.dss == true)){
+    if (!this.question.answers.find(x => x.dss == true)) {
       return false;
     }
-    
+
     return true;
   };
 
@@ -209,11 +221,15 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     });
   };
 
-  onClickRating(event: any){
-    console.log('onClickRating: '+ event);
+  onClickRating(event: any) {
+    console.log('onClickRating: ' + event);
   };
 
-  onRatingChange(event: any){
-    console.log('onRatingChange: '+ event);
+  onRatingChange(event: any) {
+    console.log('onRatingChange: ' + event);
+  };
+
+  onUploadImage(editor: any) {
+    console.log('onUploadImage');
   };
 }

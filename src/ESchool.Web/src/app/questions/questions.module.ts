@@ -6,7 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AlertModule, ModalModule } from 'ng2-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
-import { SelectModule } from 'ng2-select';
 import { TagInputModule } from 'ng2-tag-input';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
 import { RatingModule } from 'ngx-rating';
@@ -33,7 +32,6 @@ import { QuestionsRoutingModule } from './questions-routing.module';
         RatingModule,
         TranslateModule,
         CKEditorModule,
-        SelectModule,
         QuestionsRoutingModule 
     ],
     declarations: [

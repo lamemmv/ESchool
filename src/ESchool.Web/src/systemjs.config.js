@@ -31,7 +31,6 @@
       'moment': 'npm:moment/moment.js',
       'ng2-bootstrap-modal': 'npm:ng2-bootstrap-modal',
       'ng2-ckeditor': 'npm:ng2-ckeditor',
-      'ng2-select': 'npm:ng2-select',
       'ng2-tag-input': 'npm:ng2-tag-input',
       'ng2-material-dropdown': 'npm:ng2-material-dropdown',
       'ngx-rating': 'npm:ngx-rating',
@@ -64,10 +63,6 @@
       },
       'ng2-ckeditor': {
         main: 'lib/index.js',
-        defaultExtension: 'js'
-      },
-      'ng2-select': {
-        main: 'index.js',
         defaultExtension: 'js'
       },
       'ng2-tag-input': {
