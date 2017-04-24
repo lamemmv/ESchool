@@ -1,8 +1,12 @@
-import { Component, OnInit, ViewChild, ViewChildren, AfterViewChecked, Renderer, QueryList, ViewEncapsulation } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, ViewChildren, AfterViewChecked,
+  AfterViewInit, Renderer, QueryList, ViewEncapsulation
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { AlertModule, ModalDirective } from 'ng2-bootstrap';
+import { AlertModule } from 'ng2-bootstrap';
+import { Modal } from 'ngx-modal';
 import { RatingModule } from "ngx-rating";
 import { CKButtonDirective, CKEditorComponent } from 'ng2-ckeditor';
 
@@ -28,10 +32,9 @@ declare var CKEDITOR: any;
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class EditQuestionComponent implements OnInit, AfterViewChecked {
+export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterViewInit {
   @ViewChildren('answers') answerInputs: QueryList<any>;
-  @ViewChild('childModal')
-  public childModal: ModalDirective;
+  @ViewChild(Modal) public uploadModal: Modal;
   private alert: AlertModel;
   private question = new Question();
   private questionTags: QuestionTag[];
@@ -79,7 +82,18 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
         name: this._translate.instant('ENUM_QUESTION_TYPES_MULTIPLE_CHOICES')
       }
     );
+  };
 
+  registerCKEditorCommands(editor: any) {
+    let self = this;
+    editor.addCommand("image", {
+      exec: self.onUploadImage
+    });
+  };
+
+  ngAfterViewInit() {
+    let self = this;
+    //self.uploadModal = ViewChild('uploadModal');
     setTimeout(function () {
       for (var instanceName in CKEDITOR.instances) {
         self.editor = CKEDITOR.instances[instanceName];
@@ -89,14 +103,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
         });
       }
     });
-  };
-
-  registerCKEditorCommands(editor: any) {
-    let self = this;
-    editor.addCommand("image", {
-      exec: self.onUploadImage
-    });
-  };
+  }
 
   ngAfterViewChecked() {
     if (this.answerInputs && this.answerInputs.last && this.hasJustAddedAnswer) {
@@ -240,6 +247,6 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   };
 
   onUploadImage(editor: any) {
-    this.childModal.show();
+    this.uploadModal.open();
   };
 }

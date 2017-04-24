@@ -96,15 +96,17 @@
 
 
     <!--Modal-->
-    <modal #childModal>
+    <modal #uploadModal [closeOnEscape]="false" [closeOnOutsideClick]="false">
         <modal-header>
-            <h1>Modal header</h1>
+            <h4 class="modal-title pull-left">{{ 'QUESTIONS' | translate }}</h4>
         </modal-header>
         <modal-content>
             Hello Modal!
         </modal-content>
         <modal-footer>
-            <button class="btn btn-primary" (click)="childModal.close()">close</button>
+            <button class="btn btn-default pull-right cancel" (click)="childModal.close()">
+                <i class="fa fa-times"></i>
+                {{ 'BUTTON_CLOSE' | translate }}</button>
         </modal-footer>
     </modal>
 
