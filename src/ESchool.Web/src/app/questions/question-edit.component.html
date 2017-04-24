@@ -1,4 +1,5 @@
 <div class="col-md-6">
+    <router-outlet></router-outlet>
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">{{ view.title }}</h3>
@@ -92,4 +93,58 @@
               </div>
         </div>
     </div>
+
+
+    <!--Modal-->
+    <modal #childModal>
+        <modal-header>
+            <h1>Modal header</h1>
+        </modal-header>
+        <modal-content>
+            Hello Modal!
+        </modal-content>
+        <modal-footer>
+            <button class="btn btn-primary" (click)="childModal.close()">close</button>
+        </modal-footer>
+    </modal>
+
+    <!--<div class="modal fade" bsModal #childModal="bs-modal" 
+        [config]="{backdrop: 'static'}" 
+        tabindex="-1" 
+        role="dialog" 
+        aria-labelledby="mySmallModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title pull-left">{{ 'QUESTIONS' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="drag-n-drop-container"
+                        ngFileDrop
+                        [options]="options"
+                        (onUpload)="handleUpload($event)"
+                        [ngClass]="{'file-over': hasBaseDropZoneOver}"
+                        (onFileOver)="fileOverBase($event)">
+                    <h1>Drag & Drop</h1>
+                    <label class="upload-button">
+                        <input type="file"
+                            class="hidden"
+                            ngFileSelect
+                            [options]="options"
+                            (onUpload)="handleUpload($event)">
+                        Browse
+                    </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" 
+                        class="btn btn-default pull-right cancel" 
+                        (click)="closeModal()"><i class="fa fa-times"></i>
+                        {{ 'BUTTON_CLOSE' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>-->
 </div>

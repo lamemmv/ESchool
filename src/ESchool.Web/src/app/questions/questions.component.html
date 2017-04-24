@@ -70,7 +70,18 @@
         </div>
     </div>
     <!--Modal-->
-    <div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+    <modal #childModal>
+        <modal-header>
+            <h1>Modal header</h1>
+        </modal-header>
+        <modal-content>
+            Hello Modal!
+        </modal-content>
+        <modal-footer>
+            <button class="btn btn-primary" (click)="childModal.close()">close</button>
+        </modal-footer>
+    </modal>
+    <!--<div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -104,5 +115,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 </div>

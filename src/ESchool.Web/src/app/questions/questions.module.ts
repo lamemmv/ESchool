@@ -4,11 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AlertModule, ModalModule } from 'ng2-bootstrap';
+import { AlertModule } from 'ng2-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { TagInputModule } from 'ng2-tag-input';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
 import { RatingModule } from 'ngx-rating';
+import { NgUploaderModule } from 'ngx-uploader';
+import { ModalModule } from "ngx-modal";
 
 import { TRANSLATION_PROVIDERS, TranslateModule, TranslateService }   from './../shared/translate';
 import { QuestionsComponent } from './questions.component';
@@ -26,10 +28,11 @@ import { QuestionsRoutingModule } from './questions-routing.module';
         FormsModule,
         ReactiveFormsModule,
         AlertModule.forRoot(),
-        ModalModule.forRoot(),
+        ModalModule,
         Ng2DropdownModule,
         TagInputModule,
         RatingModule,
+        NgUploaderModule,
         TranslateModule,
         CKEditorModule,
         QuestionsRoutingModule 
