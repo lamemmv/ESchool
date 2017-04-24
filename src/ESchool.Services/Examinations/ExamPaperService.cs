@@ -8,7 +8,6 @@ using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
-using ESchool.Domain.ViewModels.Examinations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -136,11 +135,11 @@ namespace ESchool.Services.Examinations
         //    }
         //}
 
-        private async Task<IList<int>> RandomQuestions(int qtagId, int maxRandomQuestion, int difficultLevel)
+        private async Task<IList<int>> RandomQuestions(int qtagId, int numberOfRandomQuestion, int difficultLevel)
         {
             var dbQuery = Questions.AsNoTracking()
                 .Include(q => q.QuestionTags)
-                .Where(q => q.DifficultLevel >= difficultLevel)
+                .Where(q => q.DifficultLevel == difficultLevel)
                 .Select(question => new
                 {
                     question,
@@ -150,12 +149,12 @@ namespace ESchool.Services.Examinations
             var questions = await dbQuery.Select(q => q.question).ToListAsync();
             IList<int> randomQuestions = new List<int>();
 
-            if (questions.Count >= maxRandomQuestion)
+            if (questions.Count >= numberOfRandomQuestion)
             {
                 int randomIndex;
                 Random random = new Random();
 
-                while (randomQuestions.Count <= maxRandomQuestion)
+                while (randomQuestions.Count <= numberOfRandomQuestion)
                 {
                     randomIndex = random.Next(questions.Count);
                     randomQuestions.Add(questions[randomIndex].Id);
