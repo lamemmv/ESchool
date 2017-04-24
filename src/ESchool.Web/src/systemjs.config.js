@@ -34,6 +34,8 @@
       'ng2-tag-input': 'npm:ng2-tag-input',
       'ng2-material-dropdown': 'npm:ng2-material-dropdown',
       'ngx-rating': 'npm:ngx-rating',
+      'ngx-uploader': 'npm:ngx-uploader/bundle/ngx-uploader.umd.js',
+      'ngx-modal': 'npm:ngx-modal',
       // other libraries
       'rxjs': 'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
@@ -78,6 +80,10 @@
         defaultJSExtension: false
       },
       'ngx-rating': {
+        defaultExtension: 'js',
+        main: 'index.js'
+      },
+      'ngx-modal': {
         defaultExtension: 'js',
         main: 'index.js'
       }
