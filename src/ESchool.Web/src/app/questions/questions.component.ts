@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AlertModule } from 'ng2-bootstrap';
-import { ModalDirective } from 'ng2-bootstrap';
+import { Modal } from 'ngx-modal';
 import { DialogService } from "ng2-bootstrap-modal";
 
 import { NotificationService } from './../shared/utils/notification.service';
@@ -24,7 +24,7 @@ import { QuestionsService } from './questions.service';
 })
 export class QuestionsComponent implements OnInit {
   @ViewChild('childModal')
-  public childModal: ModalDirective;
+  public childModal: Modal;
   private alert: AlertModel;
   private questions: Question[];
   private question: Question = new Question();
@@ -89,10 +89,10 @@ export class QuestionsComponent implements OnInit {
 
   showChildModal(qt: Question): void {
     this.question = Object.assign({}, qt);
-    this.childModal.show();
+    this.childModal.open();
   };
 
   closeModal(): void {
-    this.childModal.hide();
+    this.childModal.close();
   };
 }

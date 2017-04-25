@@ -46,7 +46,9 @@
     "bootstrap":"3.3.7",
     "ng2-select":"1.2.0",
     "ng2-tag-input":"1.0.5",
-    "ngx-rating":"0.0.9"
+    "ngx-rating":"0.0.9",
+    "ngx-uploader":"2.2.8",
+    "ngx-modal": "0.0.29"
   },
   "devDependencies": {
     "concurrently": "^3.2.0",

@@ -1,8 +1,12 @@
-import { Component, OnInit, ViewChildren, AfterViewChecked, Renderer, QueryList, ViewEncapsulation } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, ViewChildren, AfterViewChecked,
+  AfterViewInit, Renderer, QueryList, ViewEncapsulation
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { AlertModule } from 'ng2-bootstrap';
+import { Modal } from 'ngx-modal';
 import { RatingModule } from "ngx-rating";
 import { CKButtonDirective, CKEditorComponent } from 'ng2-ckeditor';
 
@@ -19,7 +23,7 @@ import {
 } from './question.model';
 import { QuestionTag } from './../questionTags/question-tags.model';
 
-
+declare var CKEDITOR: any;
 @Component({
   selector: 'question-edit',
   templateUrl: './question-edit.component.html',
@@ -28,8 +32,9 @@ import { QuestionTag } from './../questionTags/question-tags.model';
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class EditQuestionComponent implements OnInit, AfterViewChecked {
+export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterViewInit {
   @ViewChildren('answers') answerInputs: QueryList<any>;
+  @ViewChild(Modal) public uploadModal: Modal;
   private alert: AlertModel;
   private question = new Question();
   private questionTags: QuestionTag[];
@@ -39,7 +44,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   private hasJustAddedAnswer: boolean = false;
   private selectedQtags: QTag[] = new Array();
   private questionId: number;
-  //private editor = CKEDITOR.replace('');
+  private editor: any;
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -79,6 +84,27 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     );
   };
 
+  registerCKEditorCommands(editor: any) {
+    let self = this;
+    editor.addCommand("image", {
+      exec: self.onUploadImage
+    });
+  };
+
+  ngAfterViewInit() {
+    let self = this;
+    //self.uploadModal = ViewChild('uploadModal');
+    setTimeout(function () {
+      for (var instanceName in CKEDITOR.instances) {
+        self.editor = CKEDITOR.instances[instanceName];
+        self.editor.on("instanceReady", function (ev: any) {
+          let _editor = ev.editor;
+          self.registerCKEditorCommands(_editor);
+        });
+      }
+    });
+  }
+
   ngAfterViewChecked() {
     if (this.answerInputs && this.answerInputs.last && this.hasJustAddedAnswer) {
       this.rd.invokeElementMethod(this.answerInputs.last.nativeElement, 'focus');
@@ -91,15 +117,6 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
     self.questionService.getById(id).subscribe((question) => {
       self.question = question;
       self.getSelectedQTags(self.question.qTags);
-
-      for (var instanceName in CKEDITOR.instances) {
-        CKEDITOR.instances[instanceName].on("instanceReady", function (ev: any) {
-          let _editor = ev.editor;
-          _editor.addCommand("image", {
-            exec: self.onUploadImage
-          });
-        });
-      }
     },
       error => {
         self.notificationService.printErrorMessage('Failed to load question. ' + error);
@@ -230,6 +247,6 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked {
   };
 
   onUploadImage(editor: any) {
-    console.log('onUploadImage');
+    this.uploadModal.open();
   };
 }
