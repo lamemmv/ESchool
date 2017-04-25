@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AlertModule } from 'ng2-bootstrap';
+import { AlertModule, ModalModule as BootstrapModalModule } from 'ng2-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { TagInputModule } from 'ng2-tag-input';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
@@ -29,6 +29,7 @@ import { QuestionsRoutingModule } from './questions-routing.module';
         FormsModule,
         ReactiveFormsModule,
         AlertModule.forRoot(),
+        BootstrapModalModule.forRoot(),
         ModalModule,
         Ng2DropdownModule,
         TagInputModule,

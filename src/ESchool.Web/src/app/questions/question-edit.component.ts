@@ -5,11 +5,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { AlertModule } from 'ng2-bootstrap';
+import { AlertModule, ModalDirective } from 'ng2-bootstrap';
 import { Modal } from 'ngx-modal';
 import { RatingModule } from "ngx-rating";
 import { CKButtonDirective, CKEditorComponent } from 'ng2-ckeditor';
-import { UploadFileComponent } from './../shared/upload/upload-file.component';
+import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
 
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
@@ -35,7 +35,7 @@ declare var CKEDITOR: any;
 })
 export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterViewInit {
   @ViewChildren('answers') answerInputs: QueryList<any>;
-  @ViewChild(Modal) public uploadModal: Modal;
+  @ViewChild('uploadModal') public uploadModal: ModalDirective;
   private alert: AlertModel;
   private question = new Question();
   private questionTags: QuestionTag[];
@@ -46,6 +46,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   private selectedQtags: QTag[] = new Array();
   private questionId: number;
   private editor: any;
+  public uploader: FileUploader = new FileUploader({ url: 'http://localhost:27629/admin/files' });
+  private options: FileUploaderOptions;
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -56,6 +58,14 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     private rd: Renderer,
     private zone: NgZone) {
     this.registerCKEditorCommands = this.registerCKEditorCommands.bind(this);
+    let self = this;
+    self.options = {};
+    self.options.method = 'POST';
+    self.options.autoUpload = false;
+    self.options.isHTML5 = true;
+    self.options.disableMultipart = true;
+    self.options.headers = [{name: "dummy", value: "dummy"}];
+    this.uploader.setOptions(self.options);
   }
 
   ngOnInit() {
@@ -77,7 +87,18 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     }
 
     this.getQuestionTags();
+    this.buildQuestionTypes();
 
+    this.uploader.onBeforeUploadItem = (item) => {
+      item.withCredentials = false;
+    }
+
+    this.uploader.onAfterAddingFile = (item) => {
+      item.withCredentials = false;
+    };
+  };
+
+  buildQuestionTypes() {
     this.questionTypes.push({
       id: QuestionTypes.SingleChoice,
       name: this._translate.instant('ENUM_QUESTION_TYPES_SINGLE_CHOICE')
@@ -248,6 +269,6 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   };
 
   onUploadImage(editor: any) {
-    this.uploadModal.open();
+    this.uploadModal.show();
   };
 }
