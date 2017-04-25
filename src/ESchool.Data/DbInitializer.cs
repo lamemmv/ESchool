@@ -16,10 +16,12 @@ namespace ESchool.Data
         {
             dbContext.Database.EnsureCreated();
 
-            var seedIdentityTask = SeedIdentity(roleManager, userManager);
-            seedIdentityTask.Wait();
+            // This protects from deadlocks by starting the async method on the ThreadPool.
+            var resultIdentity = Task.Run(() => SeedIdentity(roleManager, userManager)).Result;
 
             //SeedScheduleTasks(dbContext);
+
+            var resultDataTest = Task.Run(() => new DbTestDataInitializer(dbContext).SeedAsync()).Result;
         }
 
         public IDictionary<string, string> SeedSettings(ObjectDbContext dbContext)
@@ -45,11 +47,11 @@ namespace ESchool.Data
 
             foreach (var roleName in roles)
             {
-				var identityRole = await roleManager.FindByNameAsync(roleName).ConfigureAwait(false);
+                var identityRole = await roleManager.FindByNameAsync(roleName);
 
 				if (identityRole == null)
 				{
-					await roleManager.CreateAsync(new IdentityRole(roleName)).ConfigureAwait(false);
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
 				}
             }
 
@@ -57,7 +59,7 @@ namespace ESchool.Data
             string email = "ankn85@yahoo.com";
             string password = "1qazXSW@";
 
-            var user = await userManager.FindByNameAsync(email).ConfigureAwait(false);
+            var user = await userManager.FindByNameAsync(email);
 
             if (user == null)
             {
@@ -69,13 +71,13 @@ namespace ESchool.Data
                     LockoutEnabled = true
                 };
 
-                var result = await userManager.CreateAsync(user, password).ConfigureAwait(false);
+                var result = await userManager.CreateAsync(user, password);
 
                 if (result.Succeeded)
                 {
-                    user = await userManager.FindByNameAsync(email).ConfigureAwait(false);
+                    user = await userManager.FindByNameAsync(email);
 
-                    await userManager.AddToRolesAsync(user, roles).ConfigureAwait(false);
+                    await userManager.AddToRolesAsync(user, roles);
                 }
             }
 

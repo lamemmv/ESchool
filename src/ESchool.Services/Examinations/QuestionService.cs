@@ -145,7 +145,7 @@ namespace ESchool.Services.Examinations
 
             var dbSet = _dbContext.Set<QTag>();
 
-            var existingQTags = dbSet.Where(t => qtags.Contains(t.Name));
+            var existingQTags = await dbSet.Where(t => qtags.Contains(t.Name)).ToListAsync();
 
             var newQTags = qtags.Except(existingQTags.Select(t => t.Name));
 
