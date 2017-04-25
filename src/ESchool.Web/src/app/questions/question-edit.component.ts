@@ -1,6 +1,6 @@
 import {
   Component, OnInit, ViewChild, ViewChildren, AfterViewChecked,
-  AfterViewInit, Renderer, QueryList, ViewEncapsulation
+  AfterViewInit, Renderer, QueryList, ViewEncapsulation, NgZone
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -9,6 +9,7 @@ import { AlertModule } from 'ng2-bootstrap';
 import { Modal } from 'ngx-modal';
 import { RatingModule } from "ngx-rating";
 import { CKButtonDirective, CKEditorComponent } from 'ng2-ckeditor';
+import { UploadFileComponent } from './../shared/upload/upload-file.component';
 
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
@@ -52,7 +53,10 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     private questionTagsService: QuestionTagsService,
     private questionService: QuestionsService,
     private utilitiesService: UtilitiesService,
-    private rd: Renderer) { }
+    private rd: Renderer,
+    private zone: NgZone) {
+    this.registerCKEditorCommands = this.registerCKEditorCommands.bind(this);
+  }
 
   ngOnInit() {
     let self = this;
@@ -87,22 +91,19 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   registerCKEditorCommands(editor: any) {
     let self = this;
     editor.addCommand("image", {
-      exec: self.onUploadImage
+      exec: self.onUploadImage.bind(this)
     });
   };
 
   ngAfterViewInit() {
     let self = this;
-    //self.uploadModal = ViewChild('uploadModal');
-    setTimeout(function () {
-      for (var instanceName in CKEDITOR.instances) {
-        self.editor = CKEDITOR.instances[instanceName];
-        self.editor.on("instanceReady", function (ev: any) {
-          let _editor = ev.editor;
-          self.registerCKEditorCommands(_editor);
-        });
-      }
-    });
+    for (var instanceName in CKEDITOR.instances) {
+      self.editor = CKEDITOR.instances[instanceName];
+      self.editor.on("instanceReady", function (ev: any) {
+        let _editor = ev.editor;
+        self.registerCKEditorCommands(_editor);
+      });
+    }
   }
 
   ngAfterViewChecked() {
