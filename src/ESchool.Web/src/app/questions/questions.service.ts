@@ -67,4 +67,16 @@ export class QuestionsService {
             })
             .catch(self.appService.handleError);
     };
+
+    upload(fileToUpload: any) {
+        let input = new FormData(), self =this;
+        input.append("file", fileToUpload);
+
+        return self.http
+            .post(self._baseUrl + "files", input)
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(self.appService.handleError);
+    }
 }
