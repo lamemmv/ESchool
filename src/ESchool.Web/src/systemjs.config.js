@@ -34,7 +34,7 @@
       'ng2-tag-input': 'npm:ng2-tag-input',
       'ng2-material-dropdown': 'npm:ng2-material-dropdown',
       'ngx-rating': 'npm:ngx-rating',
-      'ngx-uploader': 'npm:ngx-uploader/bundle/ngx-uploader.umd.js',
+      'ng2-file-upload': 'npm:ng2-file-upload',
       'ngx-modal': 'npm:ngx-modal',
       // other libraries
       'rxjs': 'npm:rxjs',
@@ -84,6 +84,10 @@
         main: 'index.js'
       },
       'ngx-modal': {
+        defaultExtension: 'js',
+        main: 'index.js'
+      },
+      'ng2-file-upload': {
         defaultExtension: 'js',
         main: 'index.js'
       }
