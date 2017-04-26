@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using ESchool.Domain.Entities.Files;
 using ESchool.Domain.Enums;
 using ESchool.Services.Files;
 using ESchool.Services.Infrastructure;
@@ -14,16 +15,22 @@ namespace ESchool.Admin.Controllers
 {
     public class FilesController : AdminController
     {
-        private readonly IBlobService _blobService;
+        private readonly IFileService _fileService;
         private readonly string _serverUploadPath;
 
         public FilesController(
-            IBlobService blobService,
+            IFileService fileService,
             IOptionsSnapshot<AppSettings> options,
             IHostingEnvironment hostingEnvironment)
         {
-            _blobService = blobService;
+            _fileService = fileService;
             _serverUploadPath = Path.Combine(hostingEnvironment.WebRootPath, options.Value.ServerUploadFolder);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Blob> Get(int id)
+        {
+            return await _fileService.FindAsync(id);
         }
 
         [HttpPost]
@@ -36,8 +43,8 @@ namespace ESchool.Admin.Controllers
 
             if (file != null && file.Length > 0)
             {
-                var entity = await _blobService.UploadFileAsync(file, _serverUploadPath);
-                var code = await _blobService.CreateAsync(entity);
+                var entity = await _fileService.UploadFileAsync(file, _serverUploadPath);
+                var code = await _fileService.CreateAsync(entity);
 
                 return PostResult(code, entity.Id);
             }
@@ -50,9 +57,19 @@ namespace ESchool.Admin.Controllers
         {
             if (id > 0)
             {
-                var code = await _blobService.DeleteAsync(id);
+                var entity = await _fileService.FindAsync(id);
 
-                return DeleteResult(code);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+
+                var deleteFileTask = _fileService.DeleteFileAsync(entity.FileName, _serverUploadPath);
+                var deleteBlobTask = _fileService.DeleteAsync(entity);
+
+                await Task.WhenAll(deleteFileTask, deleteBlobTask);
+
+                return NoContent();
             }
 
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Blob Id.");

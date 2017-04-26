@@ -13,9 +13,9 @@ using Microsoft.Net.Http.Headers;
 
 namespace ESchool.Services.Files
 {
-    public class BlobService : BaseService, IBlobService
+    public class FileService : BaseService, IFileService
     {
-        public BlobService(ObjectDbContext dbContext, ILogger<BaseService> logger)
+        public FileService(ObjectDbContext dbContext, ILogger<BaseService> logger)
             : base(dbContext, logger)
         {
         }
@@ -32,15 +32,8 @@ namespace ESchool.Services.Files
             return await CommitAsync();
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public async Task<ErrorCode> DeleteAsync(Blob entity)
         {
-            var entity = await FindAsync(id);
-
-            if (entity == null)
-            {
-                return ErrorCode.NotFound;
-            }
-
             Blobs.Remove(entity);
 
             return await CommitAsync();
@@ -50,7 +43,7 @@ namespace ESchool.Services.Files
         {
             const int DefaultBufferSize = 80 * 1024;
 
-            string fileName = $"{RandomUtils.Numberic(7)}-{ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"')}";
+            string fileName = $"{RandomUtils.Numberic(7)}_{ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"')}";
             string fullPath = Path.Combine(serverUploadPath, fileName);
 
             using (var fileStream = new FileStream(fullPath, FileMode.Create))
@@ -67,6 +60,11 @@ namespace ESchool.Services.Files
                 Path = fullPath,
                 CreatedDate = DateTime.UtcNow
             };
+        }
+
+        public Task<Blob> DeleteFileAsync(string fileName, string serverUploadPath)
+        {
+            throw new NotImplementedException();
         }
 
         private DbSet<Blob> Blobs

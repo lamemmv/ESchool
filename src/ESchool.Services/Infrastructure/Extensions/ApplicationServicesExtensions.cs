@@ -1,4 +1,5 @@
 ﻿using ESchool.Services.Examinations;
+using ESchool.Services.Files;
 using ESchool.Services.Infrastructure.Cache;
 using ESchool.Services.Systems;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,9 @@ namespace ESchool.Services.Infrastructure.Extensions
 
             // Systems.
             services.AddScoped<ILogService, LogService>();
+
+            // Files.
+            services.AddScoped<IFileService, FileService>();
 
             // Examinations.
             services.AddScoped<IQTagService, QTagService>();

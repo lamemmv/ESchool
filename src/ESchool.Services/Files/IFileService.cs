@@ -5,14 +5,16 @@ using Microsoft.AspNetCore.Http;
 
 namespace ESchool.Services.Files
 {
-    public interface IBlobService : IService
+    public interface IFileService : IService
     {
         Task<Blob> FindAsync(int id);
 
         Task<ErrorCode> CreateAsync(Blob entity);
 
-        Task<ErrorCode> DeleteAsync(int id);
+        Task<ErrorCode> DeleteAsync(Blob entity);
 
         Task<Blob> UploadFileAsync(IFormFile file, string serverUploadPath);
+
+        Task<Blob> DeleteFileAsync(string fileName, string serverUploadPath);
     }
 }
