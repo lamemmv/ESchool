@@ -9,12 +9,16 @@ import { AppService } from './../shared/app.service';
 @Injectable()
 export class QuestionsService {
     private _baseUrl: string = '';
-
+    private _uploadFileUrl: string = '';
     constructor(private http: Http,
         private configService: ConfigService,
         private appService: AppService) {
         this._baseUrl = configService.getAdminApiURI();
     }
+
+    getUploadFileUrl():string{
+        return this._baseUrl + 'files';
+    };
 
     get() {
         let self = this;

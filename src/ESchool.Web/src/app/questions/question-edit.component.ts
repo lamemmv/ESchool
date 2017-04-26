@@ -46,7 +46,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   private selectedQtags: QTag[] = new Array();
   private questionId: number;
   private editor: any;
-  public uploader: FileUploader = new FileUploader({ url: 'http://localhost:27629/admin/files' });
+  public uploader: FileUploader = new FileUploader({ url: '' });
   private options: FileUploaderOptions;
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
@@ -60,11 +60,12 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     this.registerCKEditorCommands = this.registerCKEditorCommands.bind(this);
     let self = this;
     self.options = {};
+    self.options.url = questionService.getUploadFileUrl();
     self.options.method = 'POST';
     self.options.autoUpload = false;
     self.options.isHTML5 = true;
     self.options.disableMultipart = true;
-    self.options.headers = [{name: "dummy", value: "dummy"}];
+    self.options.headers = [{name: '', value: ''}];
     this.uploader.setOptions(self.options);
   }
 
