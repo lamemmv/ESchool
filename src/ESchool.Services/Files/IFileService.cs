@@ -14,7 +14,5 @@ namespace ESchool.Services.Files
         Task<ErrorCode> DeleteAsync(Blob entity);
 
         Task<Blob> UploadFileAsync(IFormFile file, string serverUploadPath);
-
-        Task<Blob> DeleteFileAsync(string fileName, string serverUploadPath);
     }
 }

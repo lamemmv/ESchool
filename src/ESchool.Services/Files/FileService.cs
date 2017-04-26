@@ -43,8 +43,9 @@ namespace ESchool.Services.Files
         {
             const int DefaultBufferSize = 80 * 1024;
 
-            string fileName = $"{RandomUtils.Numberic(7)}_{ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"')}";
-            string fullPath = Path.Combine(serverUploadPath, fileName);
+            string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            string newFileName = GetRandomFileName(fileName);
+            string fullPath = Path.Combine(serverUploadPath, newFileName);
 
             using (var fileStream = new FileStream(fullPath, FileMode.Create))
             {
@@ -55,16 +56,11 @@ namespace ESchool.Services.Files
 
             return new Blob
             {
-                FileName = fileName,
+                FileName = newFileName,
                 ContentType = file.ContentType,
                 Path = fullPath,
                 CreatedDate = DateTime.UtcNow
             };
-        }
-
-        public Task<Blob> DeleteFileAsync(string fileName, string serverUploadPath)
-        {
-            throw new NotImplementedException();
         }
 
         private DbSet<Blob> Blobs
@@ -73,6 +69,14 @@ namespace ESchool.Services.Files
             {
                 return _dbContext.Set<Blob>();
             }
+        }
+
+        private string GetRandomFileName(string fileName)
+        {
+            string name = Path.GetFileNameWithoutExtension(fileName);
+            string extension = Path.GetExtension(fileName);
+
+            return $"{name}_{RandomUtils.Numberic(7)}.{extension}";
         }
     }
 }

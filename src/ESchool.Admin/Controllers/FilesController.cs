@@ -64,12 +64,10 @@ namespace ESchool.Admin.Controllers
                     return NotFound();
                 }
 
-                var deleteFileTask = _fileService.DeleteFileAsync(entity.FileName, _serverUploadPath);
-                var deleteBlobTask = _fileService.DeleteAsync(entity);
+                System.IO.File.Delete(entity.Path);
+                var code = await _fileService.DeleteAsync(entity);
 
-                await Task.WhenAll(deleteFileTask, deleteBlobTask);
-
-                return NoContent();
+                return DeleteResult(code);
             }
 
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Blob Id.");
