@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
-using ESchool.Admin.Attributes;
+using ESchool.Domain.Enums;
 using ESchool.Services.Files;
 using ESchool.Services.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
@@ -25,9 +27,13 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ValidateMimeMultipartContentFilter))]
-        public async Task<IActionResult> UploadFiles(IFormFile file)
+        public async Task<IActionResult> Post(IFormFile file)
         {
+            if (!IsMultipartContentType())
+            {
+                return new StatusCodeResult((int)HttpStatusCode.UnsupportedMediaType);
+            }
+
             if (file != null && file.Length > 0)
             {
                 var entity = await _blobService.UploadFileAsync(file, _serverUploadPath);
@@ -37,6 +43,27 @@ namespace ESchool.Admin.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id > 0)
+            {
+                var code = await _blobService.DeleteAsync(id);
+
+                return DeleteResult(code);
+            }
+
+            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Blob Id.");
+        }
+
+        private bool IsMultipartContentType()
+        {
+            string contentType = HttpContext.Request.ContentType;
+
+            return !string.IsNullOrEmpty(contentType) &&
+                contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
         }
     }
 }
