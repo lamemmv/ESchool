@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
 {
-    public class ExamPaperController : AdminController
+    public class ExamPapersController : AdminController
     {
         private readonly IExamPaperService _examPaperService;
 
-        public ExamPaperController(IExamPaperService examPaperService)
+        public ExamPapersController(IExamPaperService examPaperService)
         {
             _examPaperService = examPaperService;
         }
