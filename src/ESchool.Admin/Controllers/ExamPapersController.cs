@@ -39,10 +39,16 @@ namespace ESchool.Admin.Controllers
             {
                 var entity = viewModel.ToExamPaper();
 
+<<<<<<< Updated upstream
                 var questionIds = await GetQuestionIds(viewModel.QTags);
                 await _examPaperService.CreateAsync(entity, questionIds);
 
                 return Created("Post", entity.Id);
+=======
+                //var code = await _examPaperService.CreateAsync(viewModel.Name);
+
+                //return PostResult(code, entity.Id);
+>>>>>>> Stashed changes
             }
 
             return BadRequest(ModelState);

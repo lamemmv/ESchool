@@ -47,11 +47,15 @@ namespace ESchool.Services.Examinations
         {
             if (questionIds != null && questionIds.Count > 0)
             {
-                entity.QuestionExamPapers = questionIds.Select(q => new QuestionExamPaper { QuestionId = q }).ToList();
+                //entity.QuestionExamPapers = questionIds.Select(q => new QuestionExamPaper { QuestionId = q }).ToList();
             }
 
+<<<<<<< Updated upstream
             await ExamPapers.AddAsync(entity);
             await CommitAsync();
+=======
+            //await ExamPapers.AddAsync(entity);
+>>>>>>> Stashed changes
 
             return entity;
         }
