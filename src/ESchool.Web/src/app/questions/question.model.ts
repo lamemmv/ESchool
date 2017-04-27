@@ -54,4 +54,5 @@ export class FormFile {
     type: string;
     size: number;
     name: string;
+    content: any[];
 };

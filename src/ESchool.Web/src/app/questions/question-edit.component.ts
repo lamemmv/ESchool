@@ -272,7 +272,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
       this.questionService
         .upload(fileToUpload)
         .subscribe((response) => {
-          self.file.id = response;
+          self.file.id = response.id;
+          self.file.content = response.content;
         },
         error => {
           self.notificationService.printErrorMessage('Failed to upload file. ' + error);
