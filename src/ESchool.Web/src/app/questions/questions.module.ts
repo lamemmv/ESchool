@@ -10,12 +10,10 @@ import { TagInputModule } from 'ng2-tag-input';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
 import { RatingModule } from 'ngx-rating';
 import { ModalModule } from "ngx-modal";
-import { FileUploadModule } from 'ng2-file-upload';
 
 import { TRANSLATION_PROVIDERS, TranslateModule, TranslateService }   from './../shared/translate';
 import { QuestionsComponent } from './questions.component';
 import { EditQuestionComponent } from './question-edit.component';
-import { UploadFileComponent } from './../shared/upload/upload-file.component';
 import { QuestionsService } from './questions.service';
 import { UtilitiesService } from './../shared/utils/utilities.service';
 
@@ -34,15 +32,13 @@ import { QuestionsRoutingModule } from './questions-routing.module';
         Ng2DropdownModule,
         TagInputModule,
         RatingModule,
-        FileUploadModule,
         TranslateModule,
         CKEditorModule,
         QuestionsRoutingModule 
     ],
     declarations: [
         QuestionsComponent,
-        EditQuestionComponent,
-        UploadFileComponent
+        EditQuestionComponent
     ],
     providers: [
         QuestionsService,

@@ -100,12 +100,15 @@
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title pull-left">{{ 'QUESTIONS' | translate }}</h4>
+                    <h4 class="modal-title pull-left">{{ 'SELECT_A_IMAGE' | translate }}</h4>
                 </div>
                 <div class="modal-body">
                     <label for="uploadFile" class="btn btn-primary input-file">{{ 'SELECT_A_IMAGE' | translate }}</label>
-                    <input #fileInput type="file" id="uploadFile"/>
-                    <button type="button" class="btn btn-primary" (click)="uploadFile()">{{ 'UPLOAD' | translate }}</button>
+                    <input #fileInput type="file" id="uploadFile" (change)="onFileChange($event)"/>
+                    <button type="button" 
+                        class="btn btn-primary" 
+                        [disabled] = "!file.name"
+                        (click)="uploadFile()"><i class="fa fa-upload"></i> {{ 'UPLOAD' | translate }}</button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" 
@@ -115,7 +118,8 @@
                     </button>
                     <button type="submit" 
                         class="btn btn-primary pull-right"
-                        (click)="submitForm()"><i class="fa fa-check"></i> 
+                        [disabled] = "!file.id"
+                        (click)="onUploaded()"><i class="fa fa-check"></i> 
                         {{ 'BUTTON_SAVE' | translate }}
                     </button>                    
                 </div>
