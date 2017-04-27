@@ -17,7 +17,7 @@ import { EditQuestionComponent } from './question-edit.component';
 import { QuestionsService } from './questions.service';
 import { UtilitiesService } from './../shared/utils/utilities.service';
 
-import { QuestionsRoutingModule } from './questions-routing.module';
+//import { QuestionsRoutingModule } from './questions-routing.module';
 
 @NgModule({
     imports: [
@@ -34,7 +34,7 @@ import { QuestionsRoutingModule } from './questions-routing.module';
         RatingModule,
         TranslateModule,
         CKEditorModule,
-        QuestionsRoutingModule 
+        //QuestionsRoutingModule 
     ],
     declarations: [
         QuestionsComponent,

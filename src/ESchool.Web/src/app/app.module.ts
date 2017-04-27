@@ -13,8 +13,9 @@ import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService, TranslateModule
 import { ConfigService } from './shared/utils/config.service';
 import { NotificationService } from './shared/utils/notification.service';
 import { AppService } from './shared/app.service';
-import { QuestionTagsModule } from './questionTags/question-tags.module';
-import { QuestionsModule } from './questions/questions.module';
+//import { QuestionTagsModule } from './questionTags/question-tags.module';
+//import { QuestionsModule } from './questions/questions.module';
+import { AdminModule } from './admin/admin.module';
 import { QuestionPapersModule } from './questionPapers/question-papers.module';
 import { PageNotFoundComponent } from './errors/page-not-found.component';
 import { AppComponent }  from './app.component';
@@ -31,8 +32,9 @@ import { LoginComponent } from './login/login.component';
     Ng2BootstrapModule.forRoot(),
     Ng2BreadcrumbModule.forRoot(),
     BootstrapModalModule,
-    QuestionTagsModule,
-    QuestionsModule,
+    AdminModule,
+    //QuestionTagsModule,
+    //QuestionsModule,
     QuestionPapersModule,
     TranslateModule,
     LoginRoutingModule,
