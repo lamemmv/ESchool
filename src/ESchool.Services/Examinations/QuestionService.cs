@@ -1,21 +1,53 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Paginations;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
+using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace ESchool.Services.Examinations
 {
     public class QuestionService : BaseService, IQuestionService
     {
-        public QuestionService(ObjectDbContext dbContext, ILogger<QuestionService> logger)
-            : base(dbContext, logger)
+        public QuestionService(ObjectDbContext dbContext)
+            : base(dbContext)
         {
+        }
+
+        public async Task<IList<int>> GetRandomQuestionsAsync(int qtagId, int numberOfRandomQuestion, int difficultLevel)
+        {
+            var dbQuery = Questions.AsNoTracking()
+                .Include(q => q.QuestionTags)
+                .Where(q => q.DifficultLevel == difficultLevel)
+                .Select(question => new
+                {
+                    question,
+                    QuestionTags = question.QuestionTags.Where(qt => qt.QTagId == qtagId)
+                });
+
+            var questions = await dbQuery.Select(q => q.question).ToListAsync();
+            IList<int> randomQuestions = new List<int>();
+
+            if (questions.Count >= numberOfRandomQuestion)
+            {
+                int randomIndex;
+                Random random = new Random();
+
+                while (randomQuestions.Count <= numberOfRandomQuestion)
+                {
+                    randomIndex = random.Next(questions.Count);
+                    randomQuestions.Add(questions[randomIndex].Id);
+
+                    questions.RemoveAt(randomIndex);
+                }
+            }
+
+            return randomQuestions;
         }
 
         public async Task<QuestionDto> GetAsync(int id)
@@ -46,7 +78,7 @@ namespace ESchool.Services.Examinations
             return await questions.GetListAsync(page, size);
         }
 
-        public async Task<ErrorCode> CreateAsync(Question entity, string[] qtags)
+        public async Task<Question> CreateAsync(Question entity, string[] qtags)
         {
             if (qtags != null && qtags.Length > 0)
             {
@@ -56,17 +88,18 @@ namespace ESchool.Services.Examinations
             }
 
             await Questions.AddAsync(entity);
+            await CommitAsync();
 
-            return await CommitAsync();
+            return entity;
         }
 
-        public async Task<ErrorCode> UpdateAsync(Question entity, string[] qtags)
+        public async Task<int> UpdateAsync(Question entity, string[] qtags)
         {
             var updatedEntity = await Questions.FindAsync(entity.Id);
 
             if (updatedEntity == null)
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("Question not found.");
             }
 
             // Delete current QuestionTags & Answers.
@@ -91,7 +124,7 @@ namespace ESchool.Services.Examinations
             return await CommitAsync();
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(int id)
         {
             var dbSet = Questions;
             var entity = await dbSet
@@ -101,7 +134,7 @@ namespace ESchool.Services.Examinations
 
             if (entity == null)
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("Question not found.");
             }
 
             dbSet.Remove(entity);

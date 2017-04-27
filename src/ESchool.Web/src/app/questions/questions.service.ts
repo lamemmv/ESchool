@@ -9,12 +9,16 @@ import { AppService } from './../shared/app.service';
 @Injectable()
 export class QuestionsService {
     private _baseUrl: string = '';
-
+    private _uploadFileUrl: string = '';
     constructor(private http: Http,
         private configService: ConfigService,
         private appService: AppService) {
         this._baseUrl = configService.getAdminApiURI();
     }
+
+    getUploadFileUrl():string{
+        return this._baseUrl + 'files';
+    };
 
     get() {
         let self = this;
@@ -63,4 +67,16 @@ export class QuestionsService {
             })
             .catch(self.appService.handleError);
     };
+
+    upload(fileToUpload: any) {
+        let input = new FormData(), self =this;
+        input.append("file", fileToUpload);
+
+        return self.http
+            .post(self._baseUrl + "files", input)
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(self.appService.handleError);
+    }
 }

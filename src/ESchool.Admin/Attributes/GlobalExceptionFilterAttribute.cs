@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Net;
 using System.Text;
+using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ESchool.Admin.Attributes
@@ -19,38 +19,28 @@ namespace ESchool.Admin.Attributes
 
         public override void OnException(ExceptionContext context)
         {
-            HttpStatusCode status;
-            string message = string.Empty;
+            Exception exception = context.Exception;
 
-            var exception = context.Exception;
-            var exceptionType = exception.GetType();
+            ApiError apiError = HandleApiException(exception);
 
-            if (exceptionType == typeof(UnauthorizedAccessException))
+            if (apiError == null)
             {
-                message = "Unauthorized Access";
-                status = HttpStatusCode.Unauthorized;
-            }
-            else if (exceptionType == typeof(NotImplementedException))
-            {
-                message = "A server error occurred.";
-                status = HttpStatusCode.NotImplemented;
-            }
-            else if (exceptionType == typeof(DbUpdateException))
-            {
-                exception = exception.InnerException;
+                if (exception is UnauthorizedAccessException)
+                {
+                    apiError = new ApiError(ErrorCode.Unauthorized, "Unauthorized Access.");
+                }
+                else
+                {
+#if !DEBUG
+                    string message = "An unhandled error occurred.";                
+                    string stackTrace = null;
+#else
+                    string message = exception.Message;
+                    string stackTrace = exception.StackTrace;
+#endif
 
-                message = exception.ToString();
-                status = HttpStatusCode.InternalServerError;
-            }
-            else if (exceptionType == typeof(Exception))
-            {
-                message = exception.ToString();
-                status = HttpStatusCode.InternalServerError;
-            }
-            else
-            {
-                message = exception.Message;
-                status = HttpStatusCode.NotFound;
+                    apiError = new ApiError(ErrorCode.InternalServerError, message, stackTrace);
+                }
             }
 
             // Write log.
@@ -63,20 +53,38 @@ namespace ESchool.Admin.Attributes
             }
             catch (Exception)
             {
-                sb.Append(message);
+                //sb.Append(message);
             }
 
             _logger.LogError(new EventId(0), sb.ToString(), exception);
             // End write log.
 
             var response = context.HttpContext.Response;
-            response.StatusCode = (int)status;
-            //response.ContentType = "application/json";
-            //response.Headers.Add("Access-Control-Allow-Origin", "*");
+            response.StatusCode = apiError.StatusCode;
+            response.ContentType = "application/json";
 
             context.ExceptionHandled = true;
 
-            response.WriteAsync($"{message} {exception.StackTrace}");
+            //response.WriteAsync($"{message} {exception.StackTrace}");
+            context.Result = new JsonResult(apiError);
+
+            base.OnException(context);
+        }
+
+        private ApiError HandleApiException(Exception exception)
+        {
+            ApiError apiError = null;
+
+            if (exception is EntityDuplicateException)
+            {
+                apiError = new ApiError(ErrorCode.DuplicateEntity, ((EntityDuplicateException)exception).Message);
+            }
+            else if (exception is EntityNotFoundException)
+            {
+                apiError = new ApiError(ErrorCode.DuplicateEntity, ((EntityNotFoundException)exception).Message);
+            }
+
+            return apiError;
         }
 
         private StringBuilder LogHttpContext(HttpContext httpContext)

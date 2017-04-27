@@ -4,16 +4,15 @@ using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Paginations;
 using ESchool.Domain.Entities.Systems;
-using ESchool.Domain.Enums;
+using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace ESchool.Services.Systems
 {
     public class LogService : BaseService, ILogService
     {
-        public LogService(ObjectDbContext dbContext, ILogger<LogService> logger)
-            : base(dbContext, logger)
+        public LogService(ObjectDbContext dbContext)
+            : base(dbContext)
         {
         }
 
@@ -33,13 +32,13 @@ namespace ESchool.Services.Systems
             return await entities.GetListAsync(page, size);
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(int id)
         {
             var entity = await FindAsync(id);
 
             if (entity == null)
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("Log not found.");
             }
 
             Logs.Remove(entity);
@@ -47,14 +46,14 @@ namespace ESchool.Services.Systems
             return await CommitAsync();
         }
 
-        public async Task<ErrorCode> DeleteAsync(int[] ids)
+        public async Task<int> DeleteAsync(int[] ids)
         {
             var dbSet = Logs;
             var logs = dbSet.Where(l => ids.Contains(l.Id));
 
             if (!logs.Any())
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("Logs not found.");
             }
 
             dbSet.RemoveRange(logs);

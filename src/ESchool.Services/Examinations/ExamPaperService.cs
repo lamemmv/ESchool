@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Paginations;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
+using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace ESchool.Services.Examinations
 {
     public class ExamPaperService : BaseService, IExamPaperService
     {
-        public ExamPaperService(ObjectDbContext dbContext, ILogger<ExamPaperService> logger) 
-            : base(dbContext, logger)
+        public ExamPaperService(ObjectDbContext dbContext) 
+            : base(dbContext)
         {
         }
 
@@ -45,25 +43,26 @@ namespace ESchool.Services.Examinations
                 .GetListAsync(page, size);
         }
 
-        public async Task<ErrorCode> CreateAsync(ExamPaper entity, int[] questionIds)
+        public async Task<ExamPaper> CreateAsync(ExamPaper entity, IList<int> questionIds)
         {
-            if (questionIds != null && questionIds.Length > 0)
+            if (questionIds != null && questionIds.Count > 0)
             {
                 entity.QuestionExamPapers = questionIds.Select(q => new QuestionExamPaper { QuestionId = q }).ToList();
             }
 
             await ExamPapers.AddAsync(entity);
+            await CommitAsync();
 
-            return await CommitAsync();
+            return entity;
         }
 
-        public async Task<ErrorCode> UpdateAsync(ExamPaper entity, int[] questionIds)
+        public async Task<int> UpdateAsync(ExamPaper entity, IList<int> questionIds)
         {
             var updatedEntity = await ExamPapers.FindAsync(entity.Id);
 
             if (updatedEntity == null)
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("ExamPaper not found.");
             }
 
             // Delete current QuestionExamPapers.
@@ -72,7 +71,7 @@ namespace ESchool.Services.Examinations
             // Update.
             updatedEntity.Name = entity.Name;
 
-            if (questionIds != null && questionIds.Length > 0)
+            if (questionIds != null && questionIds.Count > 0)
             {
                 entity.QuestionExamPapers = questionIds.Select(q => new QuestionExamPaper { QuestionId = q }).ToList();
             }
@@ -80,7 +79,7 @@ namespace ESchool.Services.Examinations
             return await CommitAsync();
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(int id)
         {
             var dbSet = ExamPapers;
             var entity = await dbSet
@@ -89,7 +88,7 @@ namespace ESchool.Services.Examinations
 
             if (entity == null)
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("ExamPaper not found.");
             }
 
             dbSet.Remove(entity);
@@ -113,57 +112,23 @@ namespace ESchool.Services.Examinations
             }
         }
 
+        private DbSet<QuestionExamPaper> QuestionExamPapers
+        {
+            get
+            {
+                return _dbContext.Set<QuestionExamPaper>();
+            }
+        }
+
         private void DeleteQuestionExamPapers(int examPaperId)
         {
-            var dbSet = _dbContext.Set<QuestionExamPaper>();
+            var dbSet = QuestionExamPapers;
             var questionExamPapers = dbSet.Where(qep => qep.ExamPaperId == examPaperId);
 
             if (questionExamPapers.Any())
             {
                 dbSet.RemoveRange(questionExamPapers);
             }
-        }
-
-        //private async Task RandomQuestions___(ExamPaperCreateQTagViewModel[] qtags, int totalQuestion)
-        //{
-            
-        //    foreach (var tag in qtags)
-        //    {
-        //        int maxRandomQuestion = (totalQuestion * tag.Percent) / 100;
-
-        //        await RandomQuestions(tag.Id, maxRandomQuestion, )
-        //    }
-        //}
-
-        private async Task<IList<int>> RandomQuestions(int qtagId, int numberOfRandomQuestion, int difficultLevel)
-        {
-            var dbQuery = Questions.AsNoTracking()
-                .Include(q => q.QuestionTags)
-                .Where(q => q.DifficultLevel == difficultLevel)
-                .Select(question => new
-                {
-                    question,
-                    QuestionTags = question.QuestionTags.Where(qt => qt.QTagId == qtagId)
-                });
-
-            var questions = await dbQuery.Select(q => q.question).ToListAsync();
-            IList<int> randomQuestions = new List<int>();
-
-            if (questions.Count >= numberOfRandomQuestion)
-            {
-                int randomIndex;
-                Random random = new Random();
-
-                while (randomQuestions.Count <= numberOfRandomQuestion)
-                {
-                    randomIndex = random.Next(questions.Count);
-                    randomQuestions.Add(questions[randomIndex].Id);
-
-                    questions.RemoveAt(randomIndex);
-                }
-            }
-
-            return randomQuestions;
         }
     }
 }

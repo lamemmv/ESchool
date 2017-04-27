@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESchool.Data.Mapping.Examinations;
+using ESchool.Data.Mapping.Files;
 using ESchool.Data.Mapping.Systems;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ namespace ESchool.Data.Mapping
                 {
                     new LogMap(),
                     new SettingMap(),
+                    new BlobMap(),
+
                     new QuestionTagMap(),
                     new QTagMap(),
                     new QuestionMap(),

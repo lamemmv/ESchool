@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Domain.Entities.Systems;
-using ESchool.Domain.Enums;
+using ESchool.Services.Exceptions;
 using ESchool.Services.Systems;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -35,9 +35,9 @@ namespace ESchool.Admin.Controllers
         {
             if (id > 0)
             {
-                var code = await _logService.DeleteAsync(id);
+                await _logService.DeleteAsync(id);
 
-                return DeleteResult(code);
+                return NoContent();
             }
 
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Log Id.");
@@ -48,9 +48,9 @@ namespace ESchool.Admin.Controllers
         {
             if (ids != null && ids.Length > 0)
             {
-                var code = await _logService.DeleteAsync(ids);
+                await _logService.DeleteAsync(ids);
 
-                return DeleteResult(code);
+                return NoContent();
             }
 
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Log Ids.");

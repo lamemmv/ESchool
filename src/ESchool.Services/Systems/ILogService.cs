@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using ESchool.Data.Paginations;
 using ESchool.Domain.Entities.Systems;
-using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Systems
 {
@@ -12,8 +11,8 @@ namespace ESchool.Services.Systems
 
         Task<IPagedList<Log>> GetListAsync(DateTime fromData, DateTime toDate, string level, int page, int size);
 
-        Task<ErrorCode> DeleteAsync(int id);
+        Task<int> DeleteAsync(int id);
 
-        Task<ErrorCode> DeleteAsync(int[] ids);
+        Task<int> DeleteAsync(int[] ids);
 	}
 }

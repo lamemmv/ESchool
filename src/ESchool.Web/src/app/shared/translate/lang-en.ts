@@ -37,6 +37,8 @@ export const LANG_EN_TRANS = {
     'REMOVE_ANSWER': 'Remove answer',
     'REMOVE_QUESTION': 'Delete question',
     'SAVED': 'Saved',    
-    'SEARCH': 'Search',    
-    'UPDATE': 'Update'
+    'SEARCH': 'Search',   
+    'SELECT_A_IMAGE':'Browse image', 
+    'UPDATE': 'Update',
+    'UPLOAD': 'Upload'
 };

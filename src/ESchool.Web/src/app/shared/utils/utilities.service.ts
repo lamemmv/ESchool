@@ -9,5 +9,5 @@ export class UtilitiesService {
 
     nextChar(ch: string): string {
         return String.fromCharCode(ch.charCodeAt(0) + 1);
-    }
+    };  
 }

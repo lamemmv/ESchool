@@ -1,4 +1,5 @@
 ﻿using ESchool.Services.Examinations;
+using ESchool.Services.Files;
 using ESchool.Services.Infrastructure.Cache;
 using ESchool.Services.Systems;
 using Microsoft.Extensions.Configuration;
@@ -16,16 +17,20 @@ namespace ESchool.Services.Infrastructure.Extensions
             // Add functionality to inject IOptions<T>.
             services.AddOptions();
 
-            //services.Configure<AppSettings>(appSettings =>
-            //{
-            //    appSettings.MemoryCacheInMinutes = int.Parse(configuration["AppSettings:MemoryCacheInMinutes"]);
-            //});
+            services.Configure<AppSettings>(appSettings =>
+            {
+                appSettings.MemoryCacheInMinutes = int.Parse(configuration["AppSettings:MemoryCacheInMinutes"]);
+                appSettings.ServerUploadFolder = configuration["AppSettings:ServerUploadFolder"];
+            });
 
             // Infrastructure.
             services.AddScoped<IMemoryCacheService, MemoryCacheService>();
 
             // Systems.
             services.AddScoped<ILogService, LogService>();
+
+            // Files.
+            services.AddScoped<IFileService, FileService>();
 
             // Examinations.
             services.AddScoped<IQTagService, QTagService>();

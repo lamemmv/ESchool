@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
 using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Examinations;
+using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -36,9 +36,9 @@ namespace ESchool.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var entity = viewModel.ToQTag();
-                var code = await _qtagService.CreateAsync(entity);
+                await _qtagService.CreateAsync(entity);
 
-                return PostResult(code, entity.Id);
+                return Created("Post", entity.Id);
             }
 
             return BadRequest(ModelState);
@@ -50,9 +50,9 @@ namespace ESchool.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var entity = viewModel.ToQTag(id);
-                var code = await _qtagService.UpdateAsync(entity);
+                await _qtagService.UpdateAsync(entity);
 
-                return PutResult(code);
+                return NoContent();
             }
 
             return BadRequest(ModelState);
@@ -63,9 +63,9 @@ namespace ESchool.Admin.Controllers
         {
             if (id > 0)
             {
-                var code = await _qtagService.DeleteAsync(id);
+                await _qtagService.DeleteAsync(id);
 
-                return DeleteResult(code);
+                return NoContent();
             }
 
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid QTag Id.");
