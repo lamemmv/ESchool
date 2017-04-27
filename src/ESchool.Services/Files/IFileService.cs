@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using ESchool.Domain.DTOs.Files;
 using ESchool.Domain.Entities.Files;
-using ESchool.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace ESchool.Services.Files
@@ -9,10 +9,12 @@ namespace ESchool.Services.Files
     {
         Task<Blob> FindAsync(int id);
 
-        Task<ErrorCode> CreateAsync(Blob entity);
+        Task<Blob> CreateAsync(Blob entity);
 
-        Task<ErrorCode> DeleteAsync(Blob entity);
+        Task<int> DeleteAsync(int id);
 
-        Task<Blob> UploadFileAsync(IFormFile file, string serverUploadPath);
+        Task<FileDto> UploadFileAsync(IFormFile file, Blob entity);
+
+        string GetRandomFileName(string fileName);
     }
 }

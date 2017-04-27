@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using ESchool.Data;
-using ESchool.Domain.Enums;
 
 namespace ESchool.Services
 {
@@ -13,11 +12,9 @@ namespace ESchool.Services
             _dbContext = dbContext;
         }
 
-        public async Task<ErrorCode> CommitAsync()
+        public async Task<int> CommitAsync()
         {
-            int effectedRows = await _dbContext.SaveChangesAsync();
-
-            return ErrorCode.Success;
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

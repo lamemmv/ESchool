@@ -6,8 +6,8 @@ using ESchool.Data;
 using ESchool.Data.Paginations;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
+using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
@@ -78,7 +78,7 @@ namespace ESchool.Services.Examinations
             return await questions.GetListAsync(page, size);
         }
 
-        public async Task<ErrorCode> CreateAsync(Question entity, string[] qtags)
+        public async Task<Question> CreateAsync(Question entity, string[] qtags)
         {
             if (qtags != null && qtags.Length > 0)
             {
@@ -88,17 +88,18 @@ namespace ESchool.Services.Examinations
             }
 
             await Questions.AddAsync(entity);
+            await CommitAsync();
 
-            return await CommitAsync();
+            return entity;
         }
 
-        public async Task<ErrorCode> UpdateAsync(Question entity, string[] qtags)
+        public async Task<int> UpdateAsync(Question entity, string[] qtags)
         {
             var updatedEntity = await Questions.FindAsync(entity.Id);
 
             if (updatedEntity == null)
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("Question not found.");
             }
 
             // Delete current QuestionTags & Answers.
@@ -123,7 +124,7 @@ namespace ESchool.Services.Examinations
             return await CommitAsync();
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(int id)
         {
             var dbSet = Questions;
             var entity = await dbSet
@@ -133,7 +134,7 @@ namespace ESchool.Services.Examinations
 
             if (entity == null)
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("Question not found.");
             }
 
             dbSet.Remove(entity);

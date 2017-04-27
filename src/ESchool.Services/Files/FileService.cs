@@ -1,14 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Data;
+using ESchool.Domain.DTOs.Files;
 using ESchool.Domain.Entities.Files;
-using ESchool.Domain.Enums;
+using ESchool.Services.Exceptions;
 using ESchool.Services.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
 
 namespace ESchool.Services.Files
 {
@@ -24,47 +23,60 @@ namespace ESchool.Services.Files
             return await Blobs.FindAsync(id);
         }
 
-        public async Task<ErrorCode> CreateAsync(Blob entity)
+        public async Task<Blob> CreateAsync(Blob entity)
         {
             await Blobs.AddAsync(entity);
+            await CommitAsync();
 
-            return await CommitAsync();
+            return entity;
         }
 
-        public async Task<ErrorCode> DeleteAsync(Blob entity)
+        public async Task<int> DeleteAsync(int id)
         {
+            var entity = await FindAsync(id);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException("Blob not found.");
+            }
+
+            if (File.Exists(entity.Path))
+            {
+                File.Delete(entity.Path);
+            }
+
             Blobs.Remove(entity);
 
             return await CommitAsync();
         }
 
-        public async Task<Blob> UploadFileAsync(IFormFile file, string serverUploadPath)
+        public async Task<FileDto> UploadFileAsync(IFormFile file, Blob entity)
         {
-            if (!Directory.Exists(serverUploadPath))
-            {
-                Directory.CreateDirectory(serverUploadPath);
-            }
-
             const int DefaultBufferSize = 80 * 1024;
+            byte[] content = null;
 
-            string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-            string newFileName = GetRandomFileName(fileName);
-            string fullPath = Path.Combine(serverUploadPath, newFileName);
-
-            using (var fileStream = new FileStream(fullPath, FileMode.Create))
+            using (var fileStream = new FileStream(entity.Path, FileMode.Create))
             {
                 Stream inputStream = file.OpenReadStream();
-
                 await inputStream.CopyToAsync(fileStream, DefaultBufferSize, default(CancellationToken));
+
+                BinaryReader binaryReader = new BinaryReader(inputStream);
+                content = binaryReader.ReadBytes((int)file.Length);
             }
 
-            return new Blob
+            return new FileDto
             {
-                FileName = newFileName,
-                ContentType = file.ContentType,
-                Path = fullPath,
-                CreatedDate = DateTime.UtcNow
+                Id = entity.Id,
+                Content = content
             };
+        }
+
+        public string GetRandomFileName(string fileName)
+        {
+            string name = Path.GetFileNameWithoutExtension(fileName);
+            string extension = Path.GetExtension(fileName);
+
+            return $"{name}_{RandomUtils.Numberic(7)}{extension}";
         }
 
         private DbSet<Blob> Blobs
@@ -73,14 +85,6 @@ namespace ESchool.Services.Files
             {
                 return _dbContext.Set<Blob>();
             }
-        }
-
-        private string GetRandomFileName(string fileName)
-        {
-            string name = Path.GetFileNameWithoutExtension(fileName);
-            string extension = Path.GetExtension(fileName);
-
-            return $"{name}_{RandomUtils.Numberic(7)}{extension}";
         }
     }
 }

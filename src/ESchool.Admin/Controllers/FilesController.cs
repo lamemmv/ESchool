@@ -2,13 +2,15 @@
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using ESchool.Domain.Enums;
+using ESchool.Domain.Entities.Files;
+using ESchool.Services.Exceptions;
 using ESchool.Services.Files;
 using ESchool.Services.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 
 namespace ESchool.Admin.Controllers
 {
@@ -24,6 +26,7 @@ namespace ESchool.Admin.Controllers
         {
             _fileService = fileService;
             _serverUploadPath = Path.Combine(hostingEnvironment.WebRootPath, options.Value.ServerUploadFolder);
+            CreateServerUploadPathDirectory();
         }
 
         [HttpGet("{id}")]
@@ -52,10 +55,12 @@ namespace ESchool.Admin.Controllers
 
             if (file != null && file.Length > 0)
             {
-                var entity = await _fileService.UploadFileAsync(file, _serverUploadPath);
-                var code = await _fileService.CreateAsync(entity);
+                var entity = ToBlob(file);
 
-                return PostResult(code, entity.Id);
+                await _fileService.CreateAsync(entity);
+                var fileDto = await _fileService.UploadFileAsync(file, entity);
+
+                return Created("Post", fileDto);
             }
 
             return BadRequest();
@@ -66,24 +71,20 @@ namespace ESchool.Admin.Controllers
         {
             if (id > 0)
             {
-                var entity = await _fileService.FindAsync(id);
+                await _fileService.DeleteAsync(id);
 
-                if (entity == null)
-                {
-                    return NotFound();
-                }
-
-                if (System.IO.File.Exists(entity.Path))
-                {
-                    System.IO.File.Delete(entity.Path);
-                }
-
-                var code = await _fileService.DeleteAsync(entity);
-
-                return DeleteResult(code);
+                return NoContent();
             }
 
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Blob Id.");
+        }
+
+        private void CreateServerUploadPathDirectory()
+        {
+            if (!Directory.Exists(_serverUploadPath))
+            {
+                Directory.CreateDirectory(_serverUploadPath);
+            }
         }
 
         private bool IsMultipartContentType()
@@ -92,6 +93,20 @@ namespace ESchool.Admin.Controllers
 
             return !string.IsNullOrEmpty(contentType) &&
                 contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private Blob ToBlob(IFormFile file)
+        {
+            string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+            string newFileName = _fileService.GetRandomFileName(fileName);
+
+            return new Blob
+            {
+                FileName = newFileName,
+                ContentType = file.ContentType,
+                Path = Path.Combine(_serverUploadPath, newFileName),
+                CreatedDate = DateTime.UtcNow
+            };
         }
     }
 }

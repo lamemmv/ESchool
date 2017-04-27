@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
 using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Examinations;
+using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -38,47 +37,73 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (viewModel.QTags != null)
-                {
-                    foreach (var qtag in viewModel.QTags)
-                    {
+                var entity = viewModel.ToExamPaper();
 
-                    }
-                }
+                var questionIds = await GetQuestionIds(viewModel.QTags);
+                await _examPaperService.CreateAsync(entity, questionIds);
 
-                var code = await _examPaperService.CreateAsync(viewModel.Name);
-
-                return PostResult(code, entity.Id);
+                return Created("Post", entity.Id);
             }
 
             return BadRequest(ModelState);
         }
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Put(int id, [FromBody]ExamPaperViewModel viewModel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var entity = viewModel.ToExamPaper(id);
-        //        var code = await _examPaperService.UpdateAsync(entity, viewModel.QuestionIds);
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody]ExamPaperViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var entity = viewModel.ToExamPaper(id);
 
-        //        return PutResult(code);
-        //    }
+                var questionIds = await GetQuestionIds(viewModel.QTags);
+                await _examPaperService.UpdateAsync(entity, questionIds);
 
-        //    return BadRequest(ModelState);
-        //}
+                return NoContent();
+            }
+
+            return BadRequest(ModelState);
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             if (id > 0)
             {
-                var code = await _examPaperService.DeleteAsync(id);
+                await _examPaperService.DeleteAsync(id);
 
-                return DeleteResult(code);
+                return NoContent();
             }
 
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid ExamPaper Id.");
+        }
+
+        private async Task<IList<int>> GetQuestionIds(ExamPaperQTagViewModel[] qtags)
+        {
+            List<int> questionIds = new List<int>();
+
+            int qtagsLength = qtags != null ? qtags.Length : 0;
+
+            if (qtagsLength > 0)
+            {
+                ExamPaperQTagViewModel qtag;
+                var randomQuestionTasks = new Task<IList<int>>[qtagsLength];
+
+                for (int i = 0; i < qtagsLength; i++)
+                {
+                    qtag = qtags[i];
+
+                    randomQuestionTasks[i] = _questionService.GetRandomQuestionsAsync(qtag.Id, qtag.NumberOfQuestion, qtag.DifficultLevel);
+                }
+
+                var randomQuestionResults = await Task.WhenAll(randomQuestionTasks);
+
+                foreach (var item in randomQuestionResults)
+                {
+                    questionIds.AddRange(item);
+                }
+            }
+
+            return questionIds;
         }
     }
 }

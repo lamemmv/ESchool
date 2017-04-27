@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Examinations
 {
@@ -14,10 +13,10 @@ namespace ESchool.Services.Examinations
 
         Task<IEnumerable<QTagDto>> GetListAsync();
 
-        Task<ErrorCode> CreateAsync(QTag entity);
+        Task<QTag> CreateAsync(QTag entity);
 
-        Task<ErrorCode> UpdateAsync(QTag entity);
+        Task<int> UpdateAsync(QTag entity);
 
-        Task<ErrorCode> DeleteAsync(int id);
+        Task<int> DeleteAsync(int id);
     }
 }

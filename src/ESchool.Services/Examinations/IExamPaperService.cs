@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ESchool.Data.Paginations;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Enums;
 
 namespace ESchool.Services.Examinations
 {
@@ -12,10 +12,10 @@ namespace ESchool.Services.Examinations
 
         Task<IPagedList<ExamPaperDto>> GetListAsync(int page, int size);
 
-        Task<ErrorCode> CreateAsync(string examPaperName, int[] questionIds);
+        Task<ExamPaper> CreateAsync(ExamPaper entity, IList<int> questionIds);
 
-        Task<ErrorCode> UpdateAsync(ExamPaper entity, int[] questionIds);
+        Task<int> UpdateAsync(ExamPaper entity, IList<int> questionIds);
 
-        Task<ErrorCode> DeleteAsync(int id);
+        Task<int> DeleteAsync(int id);
     }
 }

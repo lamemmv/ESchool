@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
+using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace ESchool.Services.Examinations
 {
@@ -44,34 +43,35 @@ namespace ESchool.Services.Examinations
                 .ToListAsync();
         }
 
-        public async Task<ErrorCode> CreateAsync(QTag entity)
+        public async Task<QTag> CreateAsync(QTag entity)
         {
             var duplicateEntity = await FindAsync(entity.Name);
 
             if (duplicateEntity != null)
             {
-                return ErrorCode.DuplicateEntity;
+                throw new EntityDuplicateException("QTag Name is duplicated.");
             }
 
             await QTags.AddAsync(entity);
+            await CommitAsync();
 
-            return await CommitAsync();
+            return entity;
         }
 
-        public async Task<ErrorCode> UpdateAsync(QTag entity)
+        public async Task<int> UpdateAsync(QTag entity)
         {
             var updatedEntity = await FindAsync(entity.Id);
 
             if (updatedEntity == null)
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("QTag not found.");
             }
 
             var duplicateEntity = await FindAsync(entity.Name);
 
             if (duplicateEntity != null && duplicateEntity.Id != entity.Id)
             {
-                return ErrorCode.DuplicateEntity;
+                throw new EntityDuplicateException("QTag Name is duplicated.");
             }
 
             updatedEntity.Name = entity.Name;
@@ -80,13 +80,13 @@ namespace ESchool.Services.Examinations
             return await CommitAsync();
         }
 
-        public async Task<ErrorCode> DeleteAsync(int id)
+        public async Task<int> DeleteAsync(int id)
         {
             var entity = await FindAsync(id);
 
             if (entity == null)
             {
-                return ErrorCode.NotFound;
+                throw new EntityNotFoundException("QTag not found.");
             }
 
             QTags.Remove(entity);

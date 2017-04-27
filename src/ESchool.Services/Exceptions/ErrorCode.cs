@@ -1,13 +1,11 @@
 ﻿using System.Net;
 
-namespace ESchool.Domain.Enums
+namespace ESchool.Services.Exceptions
 {
     public enum ErrorCode
     {
-        Success = 0,
-
+        Unauthorized = HttpStatusCode.Unauthorized,
         NotFound = HttpStatusCode.NotFound,
-        BadRequest = HttpStatusCode.BadRequest,
         InternalServerError = HttpStatusCode.InternalServerError,
 
         DuplicateEntity = 1001,
