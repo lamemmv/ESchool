@@ -47,4 +47,11 @@ export enum QuestionTypes {
 export class QTag {
     id: number;
     name: string;
-}
+};
+
+export class FormFile {
+    id: number;
+    type: string;
+    size: number;
+    name: string;
+};
