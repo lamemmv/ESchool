@@ -47,7 +47,6 @@
     "ng2-select":"1.2.0",
     "ng2-tag-input":"1.0.5",
     "ngx-rating":"0.0.9",
-    "ng2-file-upload":"1.2.1",
     "ngx-modal": "0.0.29"
   },
   "devDependencies": {
