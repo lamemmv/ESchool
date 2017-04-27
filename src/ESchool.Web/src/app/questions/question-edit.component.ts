@@ -9,7 +9,7 @@ import { AlertModule, ModalDirective } from 'ng2-bootstrap';
 import { Modal } from 'ngx-modal';
 import { RatingModule } from "ngx-rating";
 import { CKButtonDirective, CKEditorComponent } from 'ng2-ckeditor';
-import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
+import { FileUploader, FileUploaderOptions, Headers } from 'ng2-file-upload';
 
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
@@ -36,6 +36,7 @@ declare var CKEDITOR: any;
 export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterViewInit {
   @ViewChildren('answers') answerInputs: QueryList<any>;
   @ViewChild('uploadModal') public uploadModal: ModalDirective;
+  @ViewChild("fileInput") fileInput: any;
   private alert: AlertModel;
   private question = new Question();
   private questionTags: QuestionTag[];
@@ -46,8 +47,9 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   private selectedQtags: QTag[] = new Array();
   private questionId: number;
   private editor: any;
-  public uploader: FileUploader = new FileUploader({ url: 'http://localhost:27629/admin/files' });
+  public uploader: FileUploader = new FileUploader({ url: '', headers: <Headers[]>[{ name: 'Content-Type', value: 'multipart/form-data' }] });
   private options: FileUploaderOptions;
+  public hasBaseDropZoneOver: boolean = false;
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -60,11 +62,11 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     this.registerCKEditorCommands = this.registerCKEditorCommands.bind(this);
     let self = this;
     self.options = {};
-    self.options.method = 'POST';
-    self.options.autoUpload = false;
-    self.options.isHTML5 = true;
-    self.options.disableMultipart = true;
-    self.options.headers = [{name: "dummy", value: "dummy"}];
+    self.options.url = questionService.getUploadFileUrl();
+    //self.options.method = 'POST';
+    //self.options.autoUpload = false;
+    //self.options.isHTML5 = true;
+    //self.options.headers = [{ name: 'Content-Type', value: 'multipart/form-data' }];
     this.uploader.setOptions(self.options);
   }
 
@@ -91,10 +93,20 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
     this.uploader.onBeforeUploadItem = (item) => {
       item.withCredentials = false;
+      item.formData = [{
+        name: item._file.name,
+        fileName: item._file.name,
+        contentType: item._file.type,
+        length: item._file.size
+      }];
     }
 
     this.uploader.onAfterAddingFile = (item) => {
       item.withCredentials = false;
+    };
+
+    this.uploader.onCompleteItem = (response) => {
+      console.log(response);
     };
   };
 
@@ -270,5 +282,24 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
   onUploadImage(editor: any) {
     this.uploadModal.show();
+  };
+
+  public fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
+  };
+
+  uploadFile() {
+    let fi = this.fileInput.nativeElement, self = this;
+    if (fi.files && fi.files[0]) {
+      let fileToUpload = fi.files[0];
+      this.questionService
+        .upload(fileToUpload)
+        .subscribe((response) => {
+          console.log(response);
+        },
+        error => {
+          self.notificationService.printErrorMessage('Failed to upload file. ' + error);
+        });
+    }
   };
 }
