@@ -283,11 +283,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
   onUploaded(): void {
     let self = this;
-    let args = [];
-    args.push('<img alt="{0}" title="{0}" src="{1}" />');
-    args.push(self.file.name);
-    args.push(self.questionService.getUploadFileUrl() + '/' + self.file.id);
-    let imageElement = this.utilitiesService.formatString(args);
+    let imageElement = String.format('<img alt="{0}" title="{0}" src="{1}" />', self.file.name, self.questionService.getUploadFileUrl() + '/' + self.file.id);
     this.editor.insertHtml(imageElement);
     this.uploadModal.hide();
   };
