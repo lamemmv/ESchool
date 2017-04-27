@@ -12,7 +12,7 @@ namespace ESchool.Services.Examinations
 
         Task<IPagedList<ExamPaperDto>> GetListAsync(int page, int size);
 
-        Task<ErrorCode> CreateAsync(ExamPaper entity, int[] questionIds);
+        Task<ErrorCode> CreateAsync(string examPaperName, int[] questionIds);
 
         Task<ErrorCode> UpdateAsync(ExamPaper entity, int[] questionIds);
 

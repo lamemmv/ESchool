@@ -14,8 +14,8 @@ namespace ESchool.Services.Examinations
 {
     public class QTagService : BaseService, IQTagService
     {
-        public QTagService(ObjectDbContext dbContext, ILogger<QTagService> logger)
-            : base(dbContext, logger)
+        public QTagService(ObjectDbContext dbContext)
+            : base(dbContext)
         {
         }
 

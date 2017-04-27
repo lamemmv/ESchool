@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Domain.DTOs.Examinations;
+using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Enums;
 using ESchool.Domain.Extensions;
 using ESchool.Domain.ViewModels.Examinations;
@@ -12,10 +13,12 @@ namespace ESchool.Admin.Controllers
     public class ExamPapersController : AdminController
     {
         private readonly IExamPaperService _examPaperService;
+        private readonly IQuestionService _questionService;
 
-        public ExamPapersController(IExamPaperService examPaperService)
+        public ExamPapersController(IExamPaperService examPaperService, IQuestionService questionService)
         {
             _examPaperService = examPaperService;
+            _questionService = questionService;
         }
 
         [HttpGet("{id}")]
@@ -35,8 +38,15 @@ namespace ESchool.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = viewModel.ToExamPaper();
-                var code = await _examPaperService.CreateAsync(entity, viewModel.QuestionIds);
+                if (viewModel.QTags != null)
+                {
+                    foreach (var qtag in viewModel.QTags)
+                    {
+
+                    }
+                }
+
+                var code = await _examPaperService.CreateAsync(viewModel.Name);
 
                 return PostResult(code, entity.Id);
             }
@@ -44,19 +54,19 @@ namespace ESchool.Admin.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]ExamPaperViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var entity = viewModel.ToExamPaper(id);
-                var code = await _examPaperService.UpdateAsync(entity, viewModel.QuestionIds);
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Put(int id, [FromBody]ExamPaperViewModel viewModel)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var entity = viewModel.ToExamPaper(id);
+        //        var code = await _examPaperService.UpdateAsync(entity, viewModel.QuestionIds);
 
-                return PutResult(code);
-            }
+        //        return PutResult(code);
+        //    }
 
-            return BadRequest(ModelState);
-        }
+        //    return BadRequest(ModelState);
+        //}
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

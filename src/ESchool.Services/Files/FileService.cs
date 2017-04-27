@@ -8,15 +8,14 @@ using ESchool.Domain.Enums;
 using ESchool.Services.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 
 namespace ESchool.Services.Files
 {
     public class FileService : BaseService, IFileService
     {
-        public FileService(ObjectDbContext dbContext, ILogger<BaseService> logger)
-            : base(dbContext, logger)
+        public FileService(ObjectDbContext dbContext)
+            : base(dbContext)
         {
         }
 
@@ -41,6 +40,11 @@ namespace ESchool.Services.Files
 
         public async Task<Blob> UploadFileAsync(IFormFile file, string serverUploadPath)
         {
+            if (!Directory.Exists(serverUploadPath))
+            {
+                Directory.CreateDirectory(serverUploadPath);
+            }
+
             const int DefaultBufferSize = 80 * 1024;
 
             string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
@@ -76,7 +80,7 @@ namespace ESchool.Services.Files
             string name = Path.GetFileNameWithoutExtension(fileName);
             string extension = Path.GetExtension(fileName);
 
-            return $"{name}_{RandomUtils.Numberic(7)}.{extension}";
+            return $"{name}_{RandomUtils.Numberic(7)}{extension}";
         }
     }
 }

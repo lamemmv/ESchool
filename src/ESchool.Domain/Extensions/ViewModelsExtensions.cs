@@ -41,14 +41,5 @@ namespace ESchool.Domain.Extensions
                 Answers = answers
             };
         }
-
-        public static ExamPaper ToExamPaper(this ExamPaperViewModel viewModel, int id = 0)
-        {
-            return new ExamPaper
-            {
-                Id = id,
-                Name = viewModel.Name.Trim()
-            };
-        }
     }
 }

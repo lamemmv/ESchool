@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using ESchool.Domain.Entities.Files;
 using ESchool.Domain.Enums;
 using ESchool.Services.Files;
 using ESchool.Services.Infrastructure;
@@ -28,9 +27,19 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Blob> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return await _fileService.FindAsync(id);
+            var entity = await _fileService.FindAsync(id);
+
+            if (entity != null)
+            {
+                string path = Path.Combine(_serverUploadPath, entity.FileName);
+                Stream fileStream = new FileStream(path, FileMode.Open);
+
+                return File(fileStream, entity.ContentType);
+            }
+
+            return NotFound();
         }
 
         [HttpPost]
@@ -64,7 +73,11 @@ namespace ESchool.Admin.Controllers
                     return NotFound();
                 }
 
-                System.IO.File.Delete(entity.Path);
+                if (System.IO.File.Exists(entity.Path))
+                {
+                    System.IO.File.Delete(entity.Path);
+                }
+
                 var code = await _fileService.DeleteAsync(entity);
 
                 return DeleteResult(code);

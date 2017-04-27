@@ -12,8 +12,8 @@ namespace ESchool.Services.Systems
 {
     public class LogService : BaseService, ILogService
     {
-        public LogService(ObjectDbContext dbContext, ILogger<LogService> logger)
-            : base(dbContext, logger)
+        public LogService(ObjectDbContext dbContext)
+            : base(dbContext)
         {
         }
 
