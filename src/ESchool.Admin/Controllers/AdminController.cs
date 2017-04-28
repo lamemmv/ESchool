@@ -1,8 +1,10 @@
 ﻿using ESchool.Services.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
 {
+    [Authorize]
     [Route("admin/[controller]")]
     public abstract class AdminController : Controller
     {

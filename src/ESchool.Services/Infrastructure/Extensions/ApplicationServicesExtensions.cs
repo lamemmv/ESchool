@@ -2,6 +2,7 @@
 using ESchool.Services.Files;
 using ESchool.Services.Infrastructure.Cache;
 using ESchool.Services.Systems;
+using IdentityServer4.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,8 +12,10 @@ namespace ESchool.Services.Infrastructure.Extensions
     {
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfigurationRoot configuration)
         {
-			// If you need access to generic IConfiguration this is required.
-			services.AddSingleton<IConfiguration>(x => configuration);
+            services.AddScoped<IProfileService, IdentityWithAdditionalClaimsProfileService>();
+
+            // If you need access to generic IConfiguration this is required.
+            services.AddSingleton<IConfiguration>(x => configuration);
 
             // Add functionality to inject IOptions<T>.
             services.AddOptions();

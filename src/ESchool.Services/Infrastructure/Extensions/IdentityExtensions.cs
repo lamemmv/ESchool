@@ -1,7 +1,6 @@
 ﻿using System;
 using ESchool.Data;
 using ESchool.Domain.Entities.Systems;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -34,10 +33,10 @@ namespace ESchool.Services.Infrastructure.Extensions
                 //cookie.CookieName = ".osIdentity";
                 //cookie.CookiePath = "/";
                 //cookie.DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo("C:\\Github\\Identity\\artifacts"));
-                cookieOpts.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-                cookieOpts.LoginPath = new PathString("/admin/Authentication/SignIn");
-                cookieOpts.LogoutPath = new PathString("/admin/Authentication/SignOut");
-                cookieOpts.AccessDeniedPath = new PathString("/admin/Error/Forbidden");
+                //cookieOpts.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                //cookieOpts.LoginPath = new PathString("/admin/Authentication/SignIn");
+                //cookieOpts.LogoutPath = new PathString("/admin/Authentication/SignOut");
+                //cookieOpts.AccessDeniedPath = new PathString("/admin/Error/Forbidden");
 
                 // User settings.
                 //options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@";

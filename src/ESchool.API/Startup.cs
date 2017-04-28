@@ -1,9 +1,11 @@
-﻿using System.Reflection;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using ESchool.Admin.Attributes;
 using ESchool.Data;
 using ESchool.Data.Configurations;
 using ESchool.Domain.Entities.Systems;
 using ESchool.Services.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
@@ -64,6 +66,27 @@ namespace ESchool.API
             services.AddCustomIdentity();
             services.AddCustomIdentityServer();
 
+            var guestPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireClaim("scope", "dataEventRecords")
+                .Build();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("dataEventRecordsAdmin", policyAdmin =>
+                {
+                    policyAdmin.RequireClaim("role", "dataEventRecords.admin");
+                });
+                options.AddPolicy("admin", policyAdmin =>
+                {
+                    policyAdmin.RequireClaim("role", "admin");
+                });
+                options.AddPolicy("dataEventRecordsUser", policyUser =>
+                {
+                    policyUser.RequireClaim("role", "dataEventRecords.user");
+                });
+            });
+
             // Adds a default in-memory implementation of IDistributedCache.
             services.AddMemoryCache();
             //services.AddDistributedMemoryCache();
@@ -85,11 +108,6 @@ namespace ESchool.API
                     serializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
 
-            //services.AddAuthorization(opts =>
-            //{
-            //	opts.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
-            //});
-
             services.AddApplicationService(Configuration);
         }
 
@@ -109,13 +127,8 @@ namespace ESchool.API
 
             app.UseIdentity();
             app.UseIdentityServer();
-            //app.UseIdentityServerAuthentication(
-            //	new IdentityServerAuthenticationOptions
-            //	{
-            //		Authority = "http://localhost:39789/",
-            //		RequireHttpsMetadata = false,
-            //		ApiName = "api1"
-            //	});
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            app.UseIdentityServerAuthentication(IdentityServerExtensions.GetIdentityServerAuthenticationOptions());
 
             //app.UseSession();
 

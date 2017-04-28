@@ -1,148 +1,43 @@
 ﻿using System.Collections.Generic;
-using System.Security.Claims;
-using IdentityModel;
-using IdentityServer4;
+using ESchool.Domain.Entities.Systems;
+using ESchool.Services.Systems;
+using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Models;
-using IdentityServer4.Test;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ESchool.Services.Infrastructure.Extensions
 {
     public static class IdentityServerExtensions
     {
+        private const string HostUrl = "http://localhost:52923";
+
         public static IServiceCollection AddCustomIdentityServer(this IServiceCollection services)
         {
-            //// Configure identity server with in-memory stores, keys, clients and scopes.
-            //services.AddIdentityServer()
-            //    .AddTemporarySigningCredential()
-            //    //.AddInMemoryPersistedGrants()
-            //    //.AddInMemoryIdentityResources(GetIdentityResources())
-            //    .AddInMemoryApiResources(GetApiResources())
-            //    .AddInMemoryClients(GetClients());
-            ////.AddAspNetIdentity<ApplicationUser>()
-            ////.AddInMemoryUsers(new List<InMemoryUser>());
-
             services.AddIdentityServer()
-                .AddInMemoryClients(GetClients())
+                .AddTemporarySigningCredential()
                 .AddInMemoryIdentityResources(GetIdentityResources())
                 .AddInMemoryApiResources(GetApiResources())
-                .AddTestUsers(GetTestUsers())
-                .AddTemporarySigningCredential();
+                .AddInMemoryClients(GetClients())
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
 
             return services;
         }
 
-        //private static IEnumerable<IdentityResource> GetIdentityResources()
-        //{
-        //    return new List<IdentityResource>
-        //    {
-        //        new IdentityResources.OpenId(),
-        //        new IdentityResources.Profile(),
-        //        new IdentityResources.Email(),
-        //        new IdentityResource
-        //        {
-        //            Name = "role",
-        //            UserClaims = new List<string> { "role" }
-        //        }
-        //    };
-        //}
-
-        //private static IEnumerable<ApiResource> GetApiResources()
-        //{
-        //    /*return new List<ApiResource> {
-        //        new ApiResource
-        //        {
-        //            Name = "customAPI",
-        //            DisplayName = "Custom API",
-        //            Description = "Custom API Access",
-        //            UserClaims = new List<string> { "role" },
-        //            ApiSecrets = new List<Secret> { new Secret("scopeSecret".Sha256()) },
-        //            Scopes = new List<Scope>
-        //            {
-        //                new Scope("customAPI.read"),
-        //                new Scope("customAPI.write")
-        //            }
-        //        }
-        //    };*/
-
-        //    return new List<ApiResource>
-        //    {
-        //        new ApiResource("api1", "My API")
-        //    };
-        //}
-
-        //private static IEnumerable<Client> GetClients()
-        //{
-        //    //return new List<Client>
-        //    //{
-        //    //    new Client
-        //    //    {
-        //    //        ClientId = "oauthClient",
-        //    //        ClientName = "Example Client Credentials Client Application",
-        //    //        AllowedGrantTypes = GrantTypes.ClientCredentials,
-        //    //        ClientSecrets = new List<Secret>
-        //    //        {
-        //    //            new Secret("superSecretPassword".Sha256())
-        //    //        },
-        //    //        AllowedScopes = new List<string> {"customAPI.read"}
-        //    //    }
-        //    //};
-
-        //    return new List<Client>
-        //    {
-        //        new Client
-        //        {
-        //            ClientId = "client",
-        //            AllowedGrantTypes = GrantTypes.ClientCredentials,
-        //            ClientSecrets =
-        //            {
-        //                new Secret("secret".Sha256())
-        //            },
-        //            AllowedScopes = { "api1" }
-        //        }
-        //    };
-        //}
-
-        private static IEnumerable<Client> GetClients()
+        public static IdentityServerAuthenticationOptions GetIdentityServerAuthenticationOptions()
         {
-            return new List<Client>
+            return new IdentityServerAuthenticationOptions
             {
-                new Client
-                {
-                    ClientId = "oauthClient",
-                    ClientName = "Example Client Credentials Client Application",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = new List<Secret>
-                    {
-                        new Secret("superSecretPassword".Sha256())
-                    },
-                    AllowedScopes = new List<string>
-                    {
-                        "customAPI.read"
-                    }
-                },
-                new Client
-                {
-                    ClientId = "openIdConnectClient",
-                    ClientName = "Example Implicit Client Application",
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        IdentityServerConstants.StandardScopes.Email,
-                        "role",
-                        "customAPI"
-                    },
-                    RedirectUris = new List<string>
-                    {
-                        "http://localhost:27629/signin-oidc"
-                    },
-                    PostLogoutRedirectUris = new List<string>
-                    {
-                        "http://localhost:27629"
-                    }
-                }
+                Authority = HostUrl + "/",
+                AllowedScopes = new List<string> { "dataEventRecords" },
+                ApiSecret = "dataEventRecordsSecret",
+                ApiName = "dataEventRecords",
+                AutomaticAuthenticate = true,
+                SupportedTokens = SupportedTokens.Both,
+                // TokenRetriever = _tokenRetriever,
+                // Required if you want to return a 403 and not a 401 for forbidden responses.
+                AutomaticChallenge = true,
             };
         }
 
@@ -153,14 +48,15 @@ namespace ESchool.Services.Infrastructure.Extensions
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
-                new IdentityResource
+                new IdentityResource("dataeventrecordsscope", new []
                 {
-                    Name = "role",
-                    UserClaims = new List<string>
-                    {
-                        "role"
-                    }
-                }
+                    "role",
+                    "admin",
+                    "user",
+                    "dataEventRecords",
+                    "dataEventRecords.admin" ,
+                    "dataEventRecords.user"
+                })
             };
         }
 
@@ -168,41 +64,58 @@ namespace ESchool.Services.Infrastructure.Extensions
         {
             return new List<ApiResource>
             {
-                new ApiResource
+                new ApiResource("dataEventRecords")
                 {
-                    Name = "customAPI",
-                    DisplayName = "Custom API",
-                    Description = "Custom API Access",
-                    UserClaims = new List<string>
+                    ApiSecrets =
                     {
-                        "role"
+                        new Secret("dataEventRecordsSecret".Sha256())
                     },
-                    ApiSecrets = new List<Secret>
+                    Scopes =
                     {
-                        new Secret("scopeSecret".Sha256())
+                        new Scope
+                        {
+                            Name = "dataeventrecordsscope",
+                            DisplayName = "Scope for the dataEventRecords ApiResource"
+                        }
                     },
-                    Scopes = new List<Scope>
-                    {
-                        new Scope("customAPI.read"),
-                        new Scope("customAPI.write")
-                    }
+                    UserClaims = { "role", "admin", "user", "dataEventRecords", "dataEventRecords.admin", "dataEventRecords.user" }
                 }
             };
         }
 
-        private static List<TestUser> GetTestUsers()
+        private static IEnumerable<Client> GetClients()
         {
-            return new List<TestUser>
+            return new List<Client>
             {
-                new TestUser
+                new Client
                 {
-                    SubjectId = "5BE86359-073C-434B-AD2D-A3932222DABE",
-                    Username = "scott",
-                    Password = "password",
-                    Claims = new List<Claim>
+                    ClientId = "singleapp",
+                    ClientName = "singleapp",
+                    AccessTokenType = AccessTokenType.Reference,
+                    //AccessTokenLifetime = 600, // 10 minutes, default 60 minutes
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    RequireConsent = false,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris = new List<string>
                     {
-                        new Claim(JwtClaimTypes.Email, "scott@scottbrady91.com"),
-                        new Claim(JwtClaimTypes.Role, "admin")
+                         HostUrl
+                    },
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                         HostUrl
+                    },
+                    AllowedCorsOrigins = new List<string>
+                    {
+                         HostUrl
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        "openid",
+                        "dataEventRecords",
+                        "dataeventrecordsscope",
+                        "securedFiles",
+                        "securedfilesscope",
+                        "role"
                     }
                 }
             };
