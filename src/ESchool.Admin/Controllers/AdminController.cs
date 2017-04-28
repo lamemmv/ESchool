@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("admin/[controller]")]
     public abstract class AdminController : Controller
     {
