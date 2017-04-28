@@ -25,19 +25,8 @@ namespace ESchool.Admin.Controllers
             IHostingEnvironment hostingEnvironment)
         {
             _fileService = fileService;
-<<<<<<< Updated upstream
             _serverUploadPath = Path.Combine(hostingEnvironment.WebRootPath, options.Value.ServerUploadFolder);
             CreateServerUploadPathDirectory();
-=======
-            if (string.IsNullOrWhiteSpace(hostingEnvironment.WebRootPath))
-            {
-                _serverUploadPath = Path.Combine(Directory.GetCurrentDirectory(), options.Value.ServerUploadFolder);
-            }
-            else
-            {
-                _serverUploadPath = Path.Combine(hostingEnvironment.WebRootPath, options.Value.ServerUploadFolder);
-            }
->>>>>>> Stashed changes
         }
 
         [HttpGet("{id}")]
@@ -87,19 +76,10 @@ namespace ESchool.Admin.Controllers
             {
                 var entity = ToBlob(file);
 
-<<<<<<< Updated upstream
                 await _fileService.CreateAsync(entity);
                 var fileDto = await _fileService.UploadFileAsync(file, entity);
 
                 return Created("Post", fileDto);
-=======
-                // Return byte[].
-                Stream inputStream = file.OpenReadStream();
-                BinaryReader binaryReader = new BinaryReader(inputStream);
-                byte[] content = binaryReader.ReadBytes((int)file.Length);
-
-                return Created("Post", new { Id = entity.Id, Content = content });
->>>>>>> Stashed changes
             }
 
             return BadRequest();
