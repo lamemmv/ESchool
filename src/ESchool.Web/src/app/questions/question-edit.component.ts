@@ -170,7 +170,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
       });
   };
 
-  cancel(): void { this.router.navigate(['/questions']); };
+  cancel(): void { this.router.navigate(['/admin/questions']); };
 
   save(): void {
     let self = this, promise = null;
@@ -198,7 +198,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
       self.alert.type = 'success';
       self.alert.message = self._translate.instant('SAVED');
-      this.router.navigate(['/questions']);
+      this.router.navigate(['/admin/questions']);
     },
       error => {
         self.notificationService.printErrorMessage('Failed to create question. ' + error);

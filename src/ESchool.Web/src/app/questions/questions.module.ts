@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AlertModule, ModalModule as BootstrapModalModule } from 'ng2-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
@@ -14,16 +12,15 @@ import { ModalModule } from "ngx-modal";
 import { TRANSLATION_PROVIDERS, TranslateModule, TranslateService }   from './../shared/translate';
 import { QuestionsComponent } from './questions.component';
 import { EditQuestionComponent } from './question-edit.component';
+import { QuestionListComponent } from './question-list.component';
 import { QuestionsService } from './questions.service';
 import { UtilitiesService } from './../shared/utils/utilities.service';
 
-//import { QuestionsRoutingModule } from './questions-routing.module';
+import { QuestionsRoutingModule } from './questions-routing.module';
 
 @NgModule({
     imports: [
         CommonModule,
-        BrowserModule,
-        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         AlertModule.forRoot(),
@@ -34,10 +31,11 @@ import { UtilitiesService } from './../shared/utils/utilities.service';
         RatingModule,
         TranslateModule,
         CKEditorModule,
-        //QuestionsRoutingModule 
+        QuestionsRoutingModule 
     ],
     declarations: [
         QuestionsComponent,
+        QuestionListComponent,
         EditQuestionComponent
     ],
     providers: [

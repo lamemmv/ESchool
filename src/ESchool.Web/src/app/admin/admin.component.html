@@ -2,7 +2,7 @@
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a [routerLink]="['/admin']" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>LT</span>
       <!-- logo for regular state and mobile devices -->
@@ -304,7 +304,7 @@
           <ul class="treeview-menu">
             <li><a [routerLink]=" ['./questionTags'] " routerLinkActive="active"><i class="fa fa-circle-o"></i> {{'QUESTION_TAGS' | translate}} </a></li>
             <li><a [routerLink]=" ['./questions'] " routerLinkActive="active"><i class="fa fa-circle-o"></i> {{'QUESTIONS' | translate}}</a></li>
-            <li><a [routerLink]=" ['./questionPapers'] " routerLinkActive="active"><i class="fa fa-circle-o"></i> {{'QUESTION_PAPERS' | translate}}</a></li>
+            <li><a [routerLink]=" ['./examPapers'] " routerLinkActive="active"><i class="fa fa-circle-o"></i> {{'QUESTION_PAPERS' | translate}}</a></li>
           </ul>
         </li>
         <li class="treeview">
