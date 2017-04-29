@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
 
@@ -6,13 +7,25 @@ namespace ESchool.Domain.Extensions
 {
     public static class EntitiesExtensions
     {
+        public static GroupDto ToGroupDto(this Group entity)
+        {
+            return new GroupDto
+            {
+                Id = entity.Id,
+                Name = entity.Name
+            };
+        }
+
         public static QTagDto ToQTagDto(this QTag entity)
         {
             return new QTagDto
             {
+                Group = entity.Group.ToGroupDto(),
+                ParentId = entity.ParentId,
                 Id = entity.Id,
                 Name = entity.Name,
-                Description = entity.Description
+                Description = entity.Description,
+                SubQTags = new List<QTagDto>()
             };
         }
 
@@ -25,7 +38,12 @@ namespace ESchool.Domain.Extensions
                 Description = entity.Description,
                 Type = entity.Type,
                 DifficultLevel = entity.DifficultLevel,
-                QTags = entity.QuestionTags.Select(qt => new QTagDto { Id = qt.QTag.Id, Name = qt.QTag.Name }),
+                Specialized = entity.Specialized,
+                QTag = new QTagDto
+                {
+                    Id = entity.QTag.Id,
+                    Name = entity.QTag.Name
+                },
                 Answers = entity.Answers.Select(a => a.ToAnswerDto())
             };
         }

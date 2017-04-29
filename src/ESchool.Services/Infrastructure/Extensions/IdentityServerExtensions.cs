@@ -10,7 +10,7 @@ namespace ESchool.Services.Infrastructure.Extensions
 {
     public static class IdentityServerExtensions
     {
-        private const string HostUrl = "http://localhost:52923";
+        private const string HostUrl = "http://localhost:59999";
 
         public static IServiceCollection AddCustomIdentityServer(this IServiceCollection services)
         {
@@ -37,7 +37,8 @@ namespace ESchool.Services.Infrastructure.Extensions
                 SupportedTokens = SupportedTokens.Both,
                 // TokenRetriever = _tokenRetriever,
                 // Required if you want to return a 403 and not a 401 for forbidden responses.
-                AutomaticChallenge = true
+                AutomaticChallenge = true,
+                RequireHttpsMetadata = false
             };
         }
 

@@ -12,7 +12,11 @@ namespace ESchool.Domain.Entities.Examinations
 
         public int DifficultLevel { get; set; }
 
-        public virtual ICollection<QuestionTag> QuestionTags { get; set; }
+        public bool Specialized { get; set; }
+
+        public int QTagId { get; set; }
+
+        public virtual QTag QTag { get; set; }
 
         public virtual ICollection<Answer> Answers { get; set; }
 

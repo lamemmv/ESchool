@@ -37,15 +37,37 @@ namespace ESchool.Services.Examinations
 
         public async Task<IEnumerable<QTagDto>> GetListAsync()
         {
-            return await QTags.AsNoTracking()
-                .OrderBy(t => t.Id)
-                .Select(t => t.ToQTagDto())
+            var qtags = await QTags.AsNoTracking()
+                .Include(t => t.Group)
                 .ToListAsync();
+
+            if (qtags.Count == 0)
+            {
+                return Enumerable.Empty<QTagDto>();
+            }
+
+            IList<QTagDto> hierarchyQTags = new List<QTagDto>();
+
+            var rootQTags = qtags
+                .Where(t => t.ParentId == 0)
+                .ToList();
+
+            QTagDto hierarchyQTag;
+
+            foreach (var qtag in rootQTags)
+            {
+                hierarchyQTag = qtag.ToQTagDto();
+                hierarchyQTags.Add(hierarchyQTag);
+
+                GetHierarchyQTags(qtags, hierarchyQTag);
+            }
+
+            return hierarchyQTags;
         }
 
         public async Task<QTag> CreateAsync(QTag entity)
         {
-            var duplicateEntity = await FindAsync(entity.Name);
+            var duplicateEntity = await FindAsync(entity.Group.Id, entity.Name);
 
             if (duplicateEntity != null)
             {
@@ -67,7 +89,7 @@ namespace ESchool.Services.Examinations
                 throw new EntityNotFoundException("QTag not found.");
             }
 
-            var duplicateEntity = await FindAsync(entity.Name);
+            var duplicateEntity = await FindAsync(entity.GroupId, entity.Name);
 
             if (duplicateEntity != null && duplicateEntity.Id != entity.Id)
             {
@@ -76,6 +98,7 @@ namespace ESchool.Services.Examinations
 
             updatedEntity.Name = entity.Name;
             updatedEntity.Description = entity.Description;
+            updatedEntity.Group = entity.Group;
 
             return await CommitAsync();
         }
@@ -102,10 +125,25 @@ namespace ESchool.Services.Examinations
             }
         }
 
-        private async Task<QTag> FindAsync(string name)
+        private async Task<QTag> FindAsync(int groupId, string name)
         {
             return await QTags.AsNoTracking()
-                .SingleOrDefaultAsync(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                .SingleOrDefaultAsync(t => t.GroupId == groupId && t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private void GetHierarchyQTags(IList<QTag> allQTags, QTagDto hierarchyQTag)
+        {
+            var subQTags = allQTags.Where(m => m.ParentId == hierarchyQTag.Id);
+
+            QTagDto subHierarchyQTag;
+
+            foreach (var qtag in subQTags)
+            {
+                subHierarchyQTag = qtag.ToQTagDto();
+                hierarchyQTag.SubQTags.Add(subHierarchyQTag);
+
+                GetHierarchyQTags(allQTags, subHierarchyQTag);
+            }
         }
     }
 }

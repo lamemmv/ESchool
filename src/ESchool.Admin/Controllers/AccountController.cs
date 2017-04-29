@@ -33,16 +33,16 @@ namespace ESchool.Admin.Controllers
             _interaction = interaction;
         }
 
-        [AllowAnonymous]
-        [HttpPost(Name = "Login")]
-        public async Task<IActionResult> Login([FromBody]LoginViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
+        //[AllowAnonymous]
+        //[HttpPost(Name = "Login")]
+        //public async Task<IActionResult> Login([FromBody]LoginViewModel viewModel)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
 
-            }
+        //    }
 
-            return BadRequest(viewModel);
-        }
+        //    return BadRequest(viewModel);
+        //}
     }
 }

@@ -18,7 +18,7 @@ namespace ESchool.Data.Mapping
                     new SettingMap(),
                     new BlobMap(),
 
-                    new QuestionTagMap(),
+                    new GroupMap(),
                     new QTagMap(),
                     new QuestionMap(),
                     new AnswerMap(),

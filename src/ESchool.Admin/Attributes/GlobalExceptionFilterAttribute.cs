@@ -4,6 +4,7 @@ using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ESchool.Admin.Attributes
@@ -28,6 +29,12 @@ namespace ESchool.Admin.Attributes
                 if (exception is UnauthorizedAccessException)
                 {
                     apiError = new ApiError(ErrorCode.Unauthorized, "Unauthorized Access.");
+                }
+                else if (exception is DbUpdateException)
+                {
+                    var innerException = exception.InnerException;
+
+                    apiError = new ApiError(ErrorCode.InternalServerError, innerException.Message, innerException.StackTrace);
                 }
                 else
                 {

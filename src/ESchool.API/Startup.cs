@@ -64,28 +64,28 @@ namespace ESchool.API
                 opts.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationsAssembly)));
 
             services.AddCustomIdentity();
-            //services.AddCustomIdentityServer();
+            services.AddCustomIdentityServer();
 
-            //var guestPolicy = new AuthorizationPolicyBuilder()
-            //    .RequireAuthenticatedUser()
-            //    .RequireClaim("scope", "dataEventRecords")
-            //    .Build();
+            var guestPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireClaim("scope", "dataEventRecords")
+                .Build();
 
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("dataEventRecordsAdmin", policyAdmin =>
-            //    {
-            //        policyAdmin.RequireClaim("role", "dataEventRecords.admin");
-            //    });
-            //    options.AddPolicy("admin", policyAdmin =>
-            //    {
-            //        policyAdmin.RequireClaim("role", "admin");
-            //    });
-            //    options.AddPolicy("dataEventRecordsUser", policyUser =>
-            //    {
-            //        policyUser.RequireClaim("role", "dataEventRecords.user");
-            //    });
-            //});
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("dataEventRecordsAdmin", policyAdmin =>
+                {
+                    policyAdmin.RequireClaim("role", "dataEventRecords.admin");
+                });
+                options.AddPolicy("admin", policyAdmin =>
+                {
+                    policyAdmin.RequireClaim("role", "admin");
+                });
+                options.AddPolicy("dataEventRecordsUser", policyUser =>
+                {
+                    policyUser.RequireClaim("role", "dataEventRecords.user");
+                });
+            });
 
             // Adds a default in-memory implementation of IDistributedCache.
             services.AddMemoryCache();
@@ -126,9 +126,9 @@ namespace ESchool.API
             }
 
             app.UseIdentity();
-            //app.UseIdentityServer();
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            //app.UseIdentityServerAuthentication(IdentityServerExtensions.GetIdentityServerAuthenticationOptions());
+            app.UseIdentityServer();
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            app.UseIdentityServerAuthentication(IdentityServerExtensions.GetIdentityServerAuthenticationOptions());
 
             //app.UseSession();
 

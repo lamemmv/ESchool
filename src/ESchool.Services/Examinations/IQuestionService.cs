@@ -14,9 +14,9 @@ namespace ESchool.Services.Examinations
 
         Task<IPagedList<QuestionDto>> GetListAsync(int page, int size);
 
-        Task<Question> CreateAsync(Question entity, string[] qtags);
+        Task<Question> CreateAsync(Question entity);
 
-        Task<int> UpdateAsync(Question entity, string[] qtags);
+        Task<int> UpdateAsync(Question entity);
 
         Task<int> DeleteAsync(int id);
     }

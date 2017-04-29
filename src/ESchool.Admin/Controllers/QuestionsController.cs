@@ -36,7 +36,7 @@ namespace ESchool.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var entity = viewModel.ToQuestion();
-                await _questionService.CreateAsync(entity, viewModel.QTags);
+                await _questionService.CreateAsync(entity);
 
                 return Created("Post", entity.Id);
             }
@@ -50,7 +50,7 @@ namespace ESchool.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var entity = viewModel.ToQuestion(id);
-                await _questionService.UpdateAsync(entity, viewModel.QTags);
+                await _questionService.UpdateAsync(entity);
 
                 return NoContent();
             }
