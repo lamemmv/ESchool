@@ -20,7 +20,6 @@ namespace ESchool.Domain.Extensions
         {
             return new QTagDto
             {
-                Group = entity.Group.ToGroupDto(),
                 ParentId = entity.ParentId,
                 Id = entity.Id,
                 Name = entity.Name,

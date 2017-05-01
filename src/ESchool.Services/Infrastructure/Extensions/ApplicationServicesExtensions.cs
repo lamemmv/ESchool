@@ -36,6 +36,7 @@ namespace ESchool.Services.Infrastructure.Extensions
             services.AddScoped<IFileService, FileService>();
 
             // Examinations.
+            services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IQTagService, QTagService>();
             services.AddScoped<IQuestionService, QuestionService>();
 

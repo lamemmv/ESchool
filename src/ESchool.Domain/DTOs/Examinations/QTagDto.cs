@@ -4,8 +4,6 @@ namespace ESchool.Domain.DTOs.Examinations
 {
     public class QTagDto
     {
-        public GroupDto Group { get; set; }
-
         public int ParentId { get; set; }
 
         public int Id { get; set; }

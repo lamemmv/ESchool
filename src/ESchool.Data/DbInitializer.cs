@@ -21,8 +21,7 @@ namespace ESchool.Data
             // This protects from deadlocks by starting the async method on the ThreadPool.
             Task.Run(() => SeedIdentity(roleManager, userManager)).Wait();
 
-            Task.Run(() => SeedGroupsAsync(dbContext)).Wait();
-            Task.Run(() => SeedQTagsAsync(dbContext)).Wait();
+            Task.Run(() => SeedGroupsAndQTagsAsync(dbContext)).Wait();
 
             //SeedScheduleTasks(dbContext);
 
@@ -44,7 +43,7 @@ namespace ESchool.Data
             return configSettings;
         }
 
-        private async Task<IdentityResult> SeedIdentity(
+        private async Task SeedIdentity(
             RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager)
         {
@@ -80,66 +79,51 @@ namespace ESchool.Data
 
                 if (result.Succeeded)
                 {
-                    user = await userManager.FindByNameAsync(email);
-
                     await userManager.AddToRolesAsync(user, roles);
                 }
             }
-
-            return await Task.FromResult(new IdentityResult());
         }
 
-        private async Task<int> SeedGroupsAsync(ObjectDbContext dbContext)
+        private async Task SeedGroupsAndQTagsAsync(ObjectDbContext dbContext)
         {
-            var groups = new List<string> { "Khối 6", "Khối 7", "Khối 8", "Khối 9" };
-
-            var qtagDbSet = dbContext.Set<Group>();
-            var existingGroups = qtagDbSet.AsNoTracking().Where(g => groups.Contains(g.Name));
-
-            if (await existingGroups.AnyAsync())
-            {
-                groups = groups.Except(existingGroups.Select(t => t.Name)).ToList();
-            }
-
-            await qtagDbSet.AddRangeAsync(groups.Select(g => new Group { Name = g }));
-
-            return await dbContext.SaveChangesAsync();
-        }
-
-        private async Task<int> SeedQTagsAsync(ObjectDbContext dbContext)
-        {
-            var qtags = new List<string> { "Kỹ năng tính toán cơ bản", "Nâng cao", "Kiến thức cũ" };
-            var qtagDbSet = dbContext.Set<QTag>();
+            var groupNames = new List<string> { "Khối 6", "Khối 7", "Khối 8", "Khối 9" };
+            var qtagNames = new List<string> { "Kỹ năng tính toán cơ bản", "Nâng cao", "Kiến thức cũ" };
 
             var groupDbSet = dbContext.Set<Group>();
-            var groups = await groupDbSet
-                .Include(g => g.QTags)
-                .ToListAsync();
+            var qtagDbSet = dbContext.Set<QTag>();
 
-            bool needToSaveChange = false;
-
-            foreach (var group in groups)
+            if (!await groupDbSet.AnyAsync())
             {
-                var existingQTags = group.QTags.Where(t => qtags.Contains(t.Name));
+                // Add Groups.
+                var groups = groupNames.Select(g => new Group { Name = g }).ToList();
 
-                if (existingQTags.Any())
-                {
-                    qtags = qtags.Except(existingQTags.Select(t => t.Name)).ToList();
-                }
+                await groupDbSet.AddRangeAsync(groups);
 
-                foreach (var qtag in qtags)
-                {
-                    group.QTags.Add(new QTag { ParentId = 0, Name = qtag, Description = qtag, Group = new Group { Id = group.Id } });
-                    needToSaveChange = true;
-                }
-            }
-
-            if (needToSaveChange)
-            {
                 await dbContext.SaveChangesAsync();
-            }
 
-            return 0;
+                if (!await qtagDbSet.AnyAsync())
+                {
+                    // Add QTags.
+                    var qtags = qtagNames.Select(t => new QTag
+                    {
+                        ParentId = 0,
+                        Name = t,
+                        Description = t,
+                        GroupQTags = groups.Select(g => new GroupQTag
+                        {
+                            Group = new Group
+                            {
+                                Id = g.Id,
+                                Name = g.Name
+                            }
+                        }).ToList()
+                    });
+
+                    await qtagDbSet.AddRangeAsync(qtags);
+
+                    await dbContext.SaveChangesAsync();
+                }
+            }
         }
     }
 }

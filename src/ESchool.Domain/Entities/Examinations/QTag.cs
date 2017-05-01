@@ -10,9 +10,7 @@ namespace ESchool.Domain.Entities.Examinations
 
         public string Description { get; set; }
 
-        public int GroupId { get; set; }
-
-        public virtual Group Group { get; set; }
+        public virtual ICollection<GroupQTag> GroupQTags { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
     }

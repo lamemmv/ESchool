@@ -6,6 +6,6 @@ namespace ESchool.Domain.Entities.Examinations
     {
         public string Name { get; set; }
 
-        public virtual ICollection<QTag> QTags { get; set; }
+        public virtual ICollection<GroupQTag> GroupQTags { get; set; }
     }
 }

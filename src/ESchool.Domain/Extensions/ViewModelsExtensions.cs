@@ -11,8 +11,11 @@ namespace ESchool.Domain.Extensions
         {
             return new QTag
             {
-                Group = new Group { Id = viewModel.GroupId },
                 ParentId = viewModel.ParentId,
+                GroupQTags = new List<GroupQTag>
+                {
+                    new GroupQTag { GroupId = viewModel.GroupId }
+                },
                 Id = id,
                 Name = viewModel.Name.Trim(),
                 Description = viewModel.Description.TrimNull()
