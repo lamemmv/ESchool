@@ -38,6 +38,7 @@ namespace ESchool.Domain.Extensions
                 Type = entity.Type,
                 DifficultLevel = entity.DifficultLevel,
                 Specialized = entity.Specialized,
+                Month = entity.Month,
                 QTag = new QTagDto
                 {
                     Id = entity.QTag.Id,

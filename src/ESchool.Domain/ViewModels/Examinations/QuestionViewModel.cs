@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ESchool.Domain.ViewModels.Examinations
 {
@@ -12,6 +13,10 @@ namespace ESchool.Domain.ViewModels.Examinations
         public int Type { get; set; }
 
         public int DifficultLevel { get; set; }
+
+        public bool Specialized { get; set; }
+
+        public DateTime Month { get; set; }
 
         public string[] QTags { get; set; }
 

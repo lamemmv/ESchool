@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ESchool.Domain.Entities.Examinations
 {
@@ -13,6 +14,8 @@ namespace ESchool.Domain.Entities.Examinations
         public int DifficultLevel { get; set; }
 
         public bool Specialized { get; set; }
+
+        public DateTime Month { get; set; }
 
         public int QTagId { get; set; }
 

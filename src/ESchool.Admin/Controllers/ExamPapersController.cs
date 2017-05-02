@@ -39,8 +39,8 @@ namespace ESchool.Admin.Controllers
             {
                 var entity = viewModel.ToExamPaper();
 
-                var questionIds = await GetQuestionIds(viewModel.QTags);
-                await _examPaperService.CreateAsync(entity, questionIds);
+                //var questionIds = await GetQuestionIds(viewModel.QTags);
+                //await _examPaperService.CreateAsync(entity, questionIds);
 
                 return Created("Post", entity.Id);
             }
@@ -55,8 +55,8 @@ namespace ESchool.Admin.Controllers
             {
                 var entity = viewModel.ToExamPaper(id);
 
-                var questionIds = await GetQuestionIds(viewModel.QTags);
-                await _examPaperService.UpdateAsync(entity, questionIds);
+                //var questionIds = await GetQuestionIds(viewModel.QTags);
+                //await _examPaperService.UpdateAsync(entity, questionIds);
 
                 return NoContent();
             }
@@ -77,33 +77,33 @@ namespace ESchool.Admin.Controllers
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid ExamPaper Id.");
         }
 
-        private async Task<IList<int>> GetQuestionIds(ExamPaperQTagViewModel[] qtags)
-        {
-            List<int> questionIds = new List<int>();
+        //private async Task<IList<int>> GetQuestionIds(ExamPaperQTagViewModel[] qtags)
+        //{
+        //    List<int> questionIds = new List<int>();
 
-            int qtagsLength = qtags != null ? qtags.Length : 0;
+        //    int qtagsLength = qtags != null ? qtags.Length : 0;
 
-            if (qtagsLength > 0)
-            {
-                ExamPaperQTagViewModel qtag;
-                var randomQuestionTasks = new Task<IList<int>>[qtagsLength];
+        //    if (qtagsLength > 0)
+        //    {
+        //        ExamPaperQTagViewModel qtag;
+        //        var randomQuestionTasks = new Task<IList<int>>[qtagsLength];
 
-                for (int i = 0; i < qtagsLength; i++)
-                {
-                    qtag = qtags[i];
+        //        for (int i = 0; i < qtagsLength; i++)
+        //        {
+        //            qtag = qtags[i];
 
-                    randomQuestionTasks[i] = _questionService.GetRandomQuestionsAsync(qtag.Id, qtag.NumberOfQuestion, qtag.DifficultLevel);
-                }
+        //            randomQuestionTasks[i] = _questionService.GetRandomQuestionsAsync(qtag.Id, qtag.NumberOfQuestion, qtag.DifficultLevel);
+        //        }
 
-                var randomQuestionResults = await Task.WhenAll(randomQuestionTasks);
+        //        var randomQuestionResults = await Task.WhenAll(randomQuestionTasks);
 
-                foreach (var item in randomQuestionResults)
-                {
-                    questionIds.AddRange(item);
-                }
-            }
+        //        foreach (var item in randomQuestionResults)
+        //        {
+        //            questionIds.AddRange(item);
+        //        }
+        //    }
 
-            return questionIds;
-        }
+        //    return questionIds;
+        //}
     }
 }

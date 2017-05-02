@@ -100,6 +100,8 @@ namespace ESchool.Services.Examinations
             updatedEntity.Description = entity.Description;
             updatedEntity.Type = entity.Type;
             updatedEntity.DifficultLevel = entity.DifficultLevel;
+            updatedEntity.Specialized = entity.Specialized;
+            updatedEntity.Month = entity.Month;
             updatedEntity.QTag = entity.QTag;
             updatedEntity.Answers = entity.Answers;
 

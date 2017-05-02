@@ -40,6 +40,8 @@ namespace ESchool.Domain.Extensions
                 Description = viewModel.Description.TrimNull(),
                 Type = viewModel.Type,
                 DifficultLevel = viewModel.DifficultLevel,
+                Specialized = viewModel.Specialized,
+                Month = viewModel.Month,
                 Answers = answers
             };
         }

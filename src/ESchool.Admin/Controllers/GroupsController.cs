@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Services.Examinations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
 {
@@ -14,7 +15,8 @@ namespace ESchool.Admin.Controllers
             _groupService = groupService;
         }
 
-        public async Task<IList<GroupDto>> GetListAsync()
+        [HttpGet]
+        public async Task<IList<GroupDto>> Get()
         {
             return await _groupService.GetListAsync();
         }
