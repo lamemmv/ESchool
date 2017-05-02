@@ -34,7 +34,7 @@ namespace ESchool.Admin.Attributes
                 {
                     var innerException = exception.InnerException;
 
-                    apiError = new ApiError(ErrorCode.InternalServerError, innerException.Message, innerException.StackTrace);
+                    apiError = new ApiError(ErrorCode.InternalServerError, innerException.Message, innerException.ToString());
                 }
                 else
                 {
@@ -43,7 +43,7 @@ namespace ESchool.Admin.Attributes
                     string stackTrace = null;
 #else
                     string message = exception.Message;
-                    string stackTrace = exception.StackTrace;
+                    string stackTrace = exception.ToString();
 #endif
 
                     apiError = new ApiError(ErrorCode.InternalServerError, message, stackTrace);

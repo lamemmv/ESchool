@@ -20,7 +20,6 @@ namespace ESchool.Data.Mapping
 
                     new GroupMap(),
                     new QTagMap(),
-                    new GroupQTagMap(),
                     new QuestionMap(),
                     new AnswerMap(),
                     new ExamPaperMap(),

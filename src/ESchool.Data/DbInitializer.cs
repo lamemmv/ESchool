@@ -92,37 +92,23 @@ namespace ESchool.Data
             var groupDbSet = dbContext.Set<Group>();
             var qtagDbSet = dbContext.Set<QTag>();
 
-            if (!await groupDbSet.AnyAsync())
+            if (!await groupDbSet.AnyAsync() && !await qtagDbSet.AnyAsync())
             {
                 // Add Groups.
-                var groups = groupNames.Select(g => new Group { Name = g }).ToList();
+                var groups = groupNames.Select(g => new Group
+                {
+                    Name = g,
+                    QTags = qtagNames.Select(t => new QTag
+                    {
+                        ParentId = 0,
+                        Name = t,
+                        Description = t
+                    }).ToList()
+                }).ToList();
 
                 await groupDbSet.AddRangeAsync(groups);
 
                 await dbContext.SaveChangesAsync();
-
-                if (!await qtagDbSet.AnyAsync())
-                {
-                    // Add QTags.
-                    var qtags = qtagNames.Select(t => new QTag
-                    {
-                        ParentId = 0,
-                        Name = t,
-                        Description = t,
-                        GroupQTags = groups.Select(g => new GroupQTag
-                        {
-                            Group = new Group
-                            {
-                                Id = g.Id,
-                                Name = g.Name
-                            }
-                        }).ToList()
-                    });
-
-                    await qtagDbSet.AddRangeAsync(qtags);
-
-                    await dbContext.SaveChangesAsync();
-                }
             }
         }
     }
