@@ -42,6 +42,7 @@ namespace ESchool.Domain.Extensions
                 DifficultLevel = viewModel.DifficultLevel,
                 Specialized = viewModel.Specialized,
                 Month = viewModel.Month,
+                QTagId = viewModel.QTagId,
                 Answers = answers
             };
         }

@@ -9,9 +9,7 @@ namespace ESchool.Data.Mapping.Examinations
         {
             var builder = modelBuilder.Entity<QuestionExamPaper>();
 
-            builder.ToTable("QuestionExamPapers", "dbo").HasKey(p => p.Id);
-
-            builder.Property(p => p.Comment).HasMaxLength(512);
+            builder.ToTable("QuestionExamPapers", "dbo").HasKey(p => new { p.ExamPaperId, p.QuestionId });
 
             builder.HasOne(qe => qe.ExamPaper)
                .WithMany(e => e.QuestionExamPapers)

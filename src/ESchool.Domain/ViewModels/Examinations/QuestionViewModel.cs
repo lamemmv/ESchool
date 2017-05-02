@@ -18,7 +18,7 @@ namespace ESchool.Domain.ViewModels.Examinations
 
         public DateTime Month { get; set; }
 
-        public string[] QTags { get; set; }
+        public int QTagId { get; set; }
 
         public AnswerViewModel[] Answers { get; set; }
     }

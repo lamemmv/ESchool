@@ -1,8 +1,8 @@
 ﻿namespace ESchool.Domain.Entities.Examinations
 {
-    public class QuestionExamPaper : BaseEntity
+    public class QuestionExamPaper
     {
-        public string Comment { get; set; }
+        public double Mark { get; set; }
 
         public int ExamPaperId { get; set; }
 

@@ -102,7 +102,7 @@ namespace ESchool.Services.Examinations
             updatedEntity.DifficultLevel = entity.DifficultLevel;
             updatedEntity.Specialized = entity.Specialized;
             updatedEntity.Month = entity.Month;
-            updatedEntity.QTag = entity.QTag;
+            updatedEntity.QTagId = entity.QTagId;
             updatedEntity.Answers = entity.Answers;
 
             return await CommitAsync();

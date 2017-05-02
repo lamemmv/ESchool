@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Domain.Entities.Examinations;
@@ -87,7 +88,8 @@ namespace ESchool.Data
         private async Task SeedGroupsAndQTagsAsync(ObjectDbContext dbContext)
         {
             var groupNames = new List<string> { "Khối 6", "Khối 7", "Khối 8", "Khối 9" };
-            var qtagNames = new List<string> { "Kỹ năng tính toán cơ bản", "Nâng cao", "Kiến thức cũ" };
+            var qtagNames = new List<string> { "Kỹ năng tính toán cơ bản", "Kiến thức cũ", "Kiến thức hiện tại", "Kiến thức trước chương trình", "Nâng cao" };
+            var subQTagNames = new List<string> { "Đại số", "Hình học" };
 
             var groupDbSet = dbContext.Set<Group>();
             var qtagDbSet = dbContext.Set<QTag>();
@@ -107,8 +109,27 @@ namespace ESchool.Data
                 }).ToList();
 
                 await groupDbSet.AddRangeAsync(groups);
-
                 await dbContext.SaveChangesAsync();
+
+                // Add Sub QTags.
+                foreach (var qtagName in qtagNames)
+                {
+                    var qtags = qtagDbSet.AsNoTracking()
+                        .Where(t => t.Name.Equals(qtagName, StringComparison.OrdinalIgnoreCase));
+
+                    foreach (var qtag in qtags)
+                    {
+                        await qtagDbSet.AddRangeAsync(subQTagNames.Select(t => new QTag
+                        {
+                            ParentId = qtag.Id,
+                            GroupId = qtag.GroupId,
+                            Name = t,
+                            Description = t
+                        }));
+                    }
+
+                    await dbContext.SaveChangesAsync();
+                }
             }
         }
     }
