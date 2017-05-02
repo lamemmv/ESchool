@@ -23,7 +23,7 @@
       '@angular/platform-browser': 'npm:@angular/platform-browser/bundles/platform-browser.umd.js',
       '@angular/platform-browser/animations': 'npm:@angular/platform-browser/bundles/platform-browser-animations.umd.js',
       '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
-      '@angular/http': 'npm:@angular/http/bundles/http.umd.js',      
+      '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
       '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
       'ng2-bootstrap': 'npm:ng2-bootstrap/bundles/ngx-bootstrap.umd.js',
@@ -35,6 +35,7 @@
       'ng2-material-dropdown': 'npm:ng2-material-dropdown',
       'ngx-rating': 'npm:ngx-rating',
       'ngx-modal': 'npm:ngx-modal',
+      'primeng': 'npm:primeng',
       // other libraries
       'rxjs': 'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
@@ -85,6 +86,10 @@
       'ngx-modal': {
         defaultExtension: 'js',
         main: 'index.js'
+      },
+      'primeng': {
+        defaultExtension: 'js',
+        main: 'primeng.js'
       }
     }
   });

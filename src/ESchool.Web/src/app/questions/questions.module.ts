@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { AlertModule, ModalModule as BootstrapModalModule } from 'ng2-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { TagInputModule } from 'ng2-tag-input';
-import { Ng2DropdownModule } from 'ng2-material-dropdown';
 import { RatingModule } from 'ngx-rating';
 import { ModalModule } from "ngx-modal";
 
@@ -26,7 +25,6 @@ import { QuestionsRoutingModule } from './questions-routing.module';
         AlertModule.forRoot(),
         BootstrapModalModule.forRoot(),
         ModalModule,
-        Ng2DropdownModule,
         TagInputModule,
         RatingModule,
         TranslateModule,

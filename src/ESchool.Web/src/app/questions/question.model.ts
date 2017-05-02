@@ -3,8 +3,9 @@ export class Question {
     content: string;
     description: string;
     type: number;
+    specialized: boolean;
     difficultLevel: number;
-    qTags: QTag[] = new Array();
+    qtagId: number;
     answers: Answer[] = new Array();
 }
 
@@ -13,8 +14,9 @@ export class CreateQuestionModel {
     content: string;
     description: string;
     type: number;
+    specialized: boolean;
     difficultLevel: number;
-    qTags: string[] = new Array();
+    qtagId: number;
     answers: Answer[] = new Array();
 }
 

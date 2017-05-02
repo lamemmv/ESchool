@@ -35,3 +35,7 @@ table tr:hover td span.remove {
     background-color: #00a7d0 !important; 
     color: white; 
 }
+
+.ui-treetable th, .ui-treetable tfoot td {
+    text-align: left;
+}

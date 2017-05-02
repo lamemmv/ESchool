@@ -16,13 +16,13 @@ export class QuestionsService {
         this._baseUrl = configService.getAdminApiURI();
     }
 
-    getUploadFileUrl():string{
+    getUploadFileUrl(): string {
         return this._baseUrl + 'files';
     };
 
     get() {
-        let self = this;
-        return self.http.get(self._baseUrl + 'questions')
+        let self = this, request = { page: 1, size: 20 };
+        return self.http.get(self._baseUrl + 'questions', { params: request })
             .map((res: Response) => {
                 return res.json();
             })
@@ -47,7 +47,7 @@ export class QuestionsService {
             .catch(self.appService.handleError);
     };
 
-    update(request: any){
+    update(request: any) {
         let self = this;
         let bodyString = JSON.stringify(request); // Stringify payload
         let headers = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
@@ -69,7 +69,7 @@ export class QuestionsService {
     };
 
     upload(fileToUpload: any) {
-        let input = new FormData(), self =this;
+        let input = new FormData(), self = this;
         input.append("file", fileToUpload);
 
         return self.http

@@ -22,6 +22,7 @@ export const LANG_EN_TRANS = {
     'ENUM_QUESTION_TYPES_SINGLE_CHOICE': 'Single choice',
     'EXAM_MANAGEMENT': 'Exam management',
     'FORGOTTEN_PASSWORD': 'Forgot my password',
+    'GROUP': 'Group of class',
     'LOGIN': 'Login',
     'MSG_CONFIRM_DELETEING_QUESTION_TAGS': 'Are you sure want to delete question tags(s)?',
     'NAME': 'Name',
@@ -48,6 +49,7 @@ export const LANG_EN_TRANS = {
     'SELECT_A_IMAGE': 'Browse image',
     'SIGNIN_USING_FACEBOOK': 'Sign in using facebook',
     'SIGNIN_USING_GOOGLE_PLUS': 'Sign in using Google+',
+    'SPECIALIZED':'Specialized',
     'UPDATE': 'Update',
     'UPLOAD': 'Upload'
 };

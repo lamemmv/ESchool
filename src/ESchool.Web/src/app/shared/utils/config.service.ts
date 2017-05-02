@@ -7,8 +7,8 @@ export class ConfigService {
     _adminApiURI: string;
 
     constructor() {
-        this._apiURI = 'http://localhost:27629/api/';
-        this._adminApiURI = 'http://localhost:27629/admin/';
+        this._apiURI = 'http://localhost:59999/api/';
+        this._adminApiURI = 'http://localhost:59999/admin/';
      }
 
      getApiURI() {

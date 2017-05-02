@@ -121,18 +121,10 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     var self = this;
     self.questionService.getById(id).subscribe((question) => {
       self.question = question;
-      self.getSelectedQTags(self.question.qTags);
     },
       error => {
         self.notificationService.printErrorMessage('Failed to load question. ' + error);
       });
-  };
-
-  getSelectedQTags(qtags: QTag[]) {
-    let self = this;
-    qtags.forEach(qtag => {
-      self.selectedQtags.push({ id: qtag.id, name: qtag.name });
-    });
   };
 
   onReady(): void { };
@@ -161,7 +153,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
   getQuestionTags = () => {
     var self = this;
-    self.questionTagsService.get()
+    self.questionTagsService.get(1)
       .subscribe((questionTags) => {
         self.questionTags = questionTags;
       },
@@ -174,21 +166,11 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
   save(): void {
     let self = this, promise = null;
-    let model = new CreateQuestionModel();
-    model.content = self.question.content;
-    model.description = self.question.description;
-    model.type = self.question.type;
-    model.answers = self.question.answers;
-    model.difficultLevel = self.question.difficultLevel;
-    model.id = self.questionId;
-    self.question.qTags.forEach(qtag => {
-      model.qTags.push(qtag.name);
-    });
 
     if (self.questionId) {
-      promise = self.questionService.update(model);
+      promise = self.questionService.update(self.question);
     } else {
-      promise = self.questionService.create(model);
+      promise = self.questionService.create(self.question);
     }
 
     promise.subscribe((id: any) => {
@@ -216,31 +198,6 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   removeAnswer(answer: Answer): void {
     let index = this.question.answers.indexOf(answer);
     this.question.answers.splice(index, 1);
-  };
-
-  onItemAdded(item: QuestionTag) {
-    this.selectedQtags.push(item);
-    this.updateQTagsModel();
-  };
-
-  onItemSelected(item: QuestionTag) {
-    console.log('onItemSelected: ' + item.name);
-  }
-
-  onItemRemoved(item: QuestionTag) {
-    var self = this;
-    let index = self.selectedQtags.indexOf(self.selectedQtags.find(i => i.name == item.name));
-    self.selectedQtags.splice(index, 1);
-    self.updateQTagsModel();
-  };
-
-  updateQTagsModel() {
-    var self = this;
-    this.selectedQtags.forEach((qtag: QuestionTag) => {
-      if (!self.question.qTags.find(q => q.name == qtag.name)) {
-        self.question.qTags.push({ id: qtag.id, name: qtag.name });
-      }
-    });
   };
 
   onClickRating(event: any) {

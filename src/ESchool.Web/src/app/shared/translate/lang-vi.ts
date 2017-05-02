@@ -22,6 +22,7 @@ export const LANG_VI_TRANS = {
     'ENUM_QUESTION_TYPES_SINGLE_CHOICE': 'Câu hỏi một đáp án',
     'EXAM_MANAGEMENT': 'Quản lý thi',
     'FORGOTTEN_PASSWORD': 'Quên mật khẩu',
+    'GROUP': 'Khối',
     'LOGIN': 'Đăng nhập',
     'MSG_CONFIRM_DELETEING_QUESTION_TAGS': 'Bạn có chắc muốn xóa loại câu hỏi không?',
     'NAME': 'Tên',
@@ -48,6 +49,7 @@ export const LANG_VI_TRANS = {
     'SELECT_A_IMAGE': 'Chọn hình ảnh',
     'SIGNIN_USING_FACEBOOK': 'Đăng nhập bằng tài khoản facebook',
     'SIGNIN_USING_GOOGLE_PLUS': 'Đăng nhập bằng tài khoản Google+',
+    'SPECIALIZED': 'Lớp chuyên',
     'UPDATE': 'Cập nhật',
     'UPLOAD': 'Tải lên'
 };

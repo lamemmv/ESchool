@@ -16,9 +16,9 @@ export class QuestionTagsService {
         this._baseUrl = configService.getAdminApiURI();
     }
 
-    get = () => {
+    get = (groupId: number) => {
         var self = this;
-        return this.http.get(this._baseUrl + 'qtags')
+        return this.http.get(this._baseUrl + 'qtags/getByGroup/' + groupId)
             .map((res: Response) => {
                 return res.json();
             })

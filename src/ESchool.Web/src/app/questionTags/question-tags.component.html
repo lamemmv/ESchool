@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="dataTables_filter"> 
+                    <div class="dataTables_filter">
                         <label>{{ 'SEARCH' | translate }}
                             <input #searchBox class="form-control input-sm" 
                                 placeholder="{{'PLACEHOLDER_SEARCH_QUESTION_TAGS' | translate}}"
@@ -29,30 +29,28 @@
                 </div>
             </div>
             <div class="row">
-                <div *ngFor="let hero of filteredList | async"
-                    class="search-result" >
+                <div class="form-group col-sm-6">
+                    <label>{{ 'GROUP' | translate }}</label>
+                    <select id="groups" name="groups" class="form-control" [(ngModel)]="selectedGroup" (ngModelChange)="onChangeGroup($event)"> 
+                        <option *ngFor="let group of groups" [ngValue]="group">{{group.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div *ngFor="let hero of filteredList | async" class="search-result">
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <table class="table table-bordered table-hover dataTable">
-                        <thead>
-                            <tr>
-                                <th class="col-sm-4">{{'NAME' | translate }}</th>
-                                <th class="col-sm-8">{{'DESCRIPTION' | translate }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor='let qtag of questionTags; let index=index; let odd=odd; let even=even;' 
-                                [ngClass]="{ odd: odd, even: even }"
-                                role="row" (click)="openEditDialog(qtag)">
-                                <td class="col-sm-4">{{qtag.name}}</td> 
-                                <td class="col-sm-8">{{qtag.description}}<span class="fa fa-times remove pull-right" (click)="removeQTag($event, qtag)"></span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>            
+                    <p-treeTable [value]="dataGrid" 
+                        selectionMode="single" 
+                        [(selection)]="selectedFiles" 
+                        (onNodeSelect)="openEditDialog($event)">
+                        <p-column field="name" header="{{'NAME' | translate }}"></p-column>
+                        <p-column field="description" header="{{'DESCRIPTION' | translate }}"></p-column>
+                    </p-treeTable>
+                </div>
+            </div>
         </div>
         <div class="box-footer clearfix">
             <ul class="pagination pagination-sm no-margin pull-right">
@@ -74,17 +72,22 @@
                 </div>
                 <div class="modal-body">
                     <form #questionTagEditForm="ngForm">
-                        <div class="form-group required">
-                            <label for="editQuestionTagName" class="control-label">{{'NAME' | translate }}</label> 
-                            <input id="editQuestionTagName" 
-                                name="editQuestionTagName" 
-                                type="text" 
+                        <div class="form-group">
+                            <label for="editQuestionTagParent">{{ 'QUESTION_TAGS' | translate }}</label>
+                            <select id="editQuestionTagParent" 
+                                name="editQuestionTagParent" 
                                 class="form-control" 
-                                [(ngModel)]="questionTag.name" 
-                                #editQuestionTagName="ngModel"
-                                required />
-                            <div *ngIf="editQuestionTagName.errors && (editQuestionTagName.dirty || editQuestionTagName.touched)" 
-                                class="alert alert-danger field-required">
+                                [(ngModel)]="questionTag.parentId" 
+                                (ngModelChange)="onChangeGroup($event)"
+                                #editQuestionTagParent="ngModel"> 
+                                <option *ngFor="let qtag of questionTags" [value]="qtag.id">{{qtag.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group required">
+                            <label for="editQuestionTagName" class="control-label">{{'NAME' | translate }}</label>
+                            <input id="editQuestionTagName" name="editQuestionTagName" type="text" class="form-control" [(ngModel)]="questionTag.name"
+                                #editQuestionTagName="ngModel" required />
+                            <div *ngIf="editQuestionTagName.errors && (editQuestionTagName.dirty || editQuestionTagName.touched)" class="alert alert-danger field-required">
                                 <div [hidden]="!editQuestionTagName.errors.required">
                                     {{ 'NAME_REQUIRED' | translate }}
                                 </div>
@@ -92,26 +95,18 @@
                         </div>
                         <div class="form-group">
                             <label for="editQuestionTagDescription">{{ DESCRIPTION }}</label>
-                            <textarea id="editQuestionTagDescription" 
-                                name="editQuestionTagDescription" 
-                                class="form-control" 
-                                [(ngModel)]="questionTag.description"
+                            <textarea id="editQuestionTagDescription" name="editQuestionTagDescription" class="form-control" [(ngModel)]="questionTag.description"
                                 #editQuestionTagDescription="ngModel"></textarea>
-                        </div>                        
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" 
-                        class="btn btn-default pull-right cancel" 
-                        (click)="cancelUpdate()"><i class="fa fa-times"></i>
+                    <button type="button" class="btn btn-default pull-right cancel" (click)="cancelUpdate()"><i class="fa fa-times"></i>
                         {{ modal.cancelText }}
                     </button>
-                    <button type="submit" 
-                        class="btn btn-primary pull-right" 
-                        [disabled]="!questionTagEditForm.form.valid"
-                        (click)="submitForm()"><i class="fa fa-check"></i> 
+                    <button type="submit" class="btn btn-primary pull-right" [disabled]="!questionTagEditForm.form.valid" (click)="submitForm()"><i class="fa fa-check"></i> 
                         {{ modal.okText }}
-                    </button>                    
+                    </button>
                 </div>
             </div>
         </div>
