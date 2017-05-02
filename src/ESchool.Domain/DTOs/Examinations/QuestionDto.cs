@@ -19,7 +19,7 @@ namespace ESchool.Domain.DTOs.Examinations
 
         public DateTime Month { get; set; }
 
-        public QTagDto QTag { get; set; }
+        public int QTagId { get; set; }
 
         public IEnumerable<AnswerDto> Answers { get; set; }
     }
