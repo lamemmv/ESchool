@@ -39,11 +39,7 @@ namespace ESchool.Domain.Extensions
                 DifficultLevel = entity.DifficultLevel,
                 Specialized = entity.Specialized,
                 Month = entity.Month,
-                QTag = new QTagDto
-                {
-                    Id = entity.QTag.Id,
-                    Name = entity.QTag.Name
-                },
+                QTagId = entity.QTagId,
                 Answers = entity.Answers.Select(a => a.ToAnswerDto())
             };
         }

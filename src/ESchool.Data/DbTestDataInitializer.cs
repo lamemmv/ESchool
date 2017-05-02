@@ -19,27 +19,9 @@
 
 //        public async Task<int> SeedAsync()
 //        {
-//            await SeedQTagsAsync();
 //            await SeedQuestionsAsync();
 
 //            return 0;
-//        }
-
-//        private async Task<int> SeedQTagsAsync()
-//        {
-//            var qtags = new string[] { "Toán", "Vật Lý", "Hóa Học", "Anh Văn", "Địa Lý", "Lịch Sử", "Sinh Học", "Văn Học" };
-
-//            var dbSet = _dbContext.Set<QTag>();
-//            var existingQTags = dbSet.AsNoTracking().Where(t => qtags.Contains(t.Name));
-
-//            if (await existingQTags.AnyAsync())
-//            {
-//                qtags = qtags.Except(existingQTags.Select(t => t.Name)).ToArray();
-//            }
-
-//            await dbSet.AddRangeAsync(qtags.Select(t => new QTag { Name = t, Description = t }));
-
-//            return await _dbContext.SaveChangesAsync();
 //        }
 
 //        private async Task<int> SeedQuestionsAsync()
@@ -52,6 +34,13 @@
 //            await SeedQuestionsLichSuAsync(qtagDbSet, questionDbSet);
 
 //            return 0;
+//        }
+
+//        private async Task SeedQuestionsKhoi6Async(DbSet<QTag> qtagDbSet, DbSet<Question> questionDbSet)
+//        {
+//            string groupName = "Khối 6";
+//            string parentQTagName = "Kỹ năng tính toán cơ bản";
+//            string qtagName = "Đại số";
 //        }
 
 //        private async Task<int> SeedQuestionsVanHocAsync(DbSet<QTag> qtagDbSet, DbSet<Question> questionDbSet)

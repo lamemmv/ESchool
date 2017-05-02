@@ -31,7 +31,7 @@ namespace ESchool.Services.Examinations
                 .Where(g => GroupNames.Contains(g.Name))
                 .ToListAsync();
 
-            var qtagIds = qtags.Select(t => t.Id);
+            var qtagIds = qtags.Select(t => t.Id).ToList();
 
             var questions = Questions.AsNoTracking()
                 .Include(q => q.QTag)
