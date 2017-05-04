@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
-import { AlertModule, ModalModule as BootstrapModalModule } from 'ng2-bootstrap';
+import { AlertModule, DatepickerModule, ModalModule as BootstrapModalModule } from 'ng2-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { TagInputModule } from 'ng2-tag-input';
 import { RatingModule } from 'ngx-rating';
@@ -24,6 +24,7 @@ import { QuestionsRoutingModule } from './questions-routing.module';
         ReactiveFormsModule,
         AlertModule.forRoot(),
         BootstrapModalModule.forRoot(),
+        DatepickerModule,
         ModalModule,
         TagInputModule,
         RatingModule,
