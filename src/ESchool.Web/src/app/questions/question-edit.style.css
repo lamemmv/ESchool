@@ -39,3 +39,7 @@ label.input-file {
    position: absolute;
    z-index: -1;
 }
+
+.hand {
+    cursor: pointer;
+}

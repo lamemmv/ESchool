@@ -5,17 +5,7 @@ export class Question {
     type: number;
     specialized: boolean;
     difficultLevel: number;
-    qtagId: number;
-    answers: Answer[] = new Array();
-}
-
-export class CreateQuestionModel {
-    id: number;
-    content: string;
-    description: string;
-    type: number;
-    specialized: boolean;
-    difficultLevel: number;
+    month: Date;
     qtagId: number;
     answers: Answer[] = new Array();
 }

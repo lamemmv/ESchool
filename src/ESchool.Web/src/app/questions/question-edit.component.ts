@@ -17,7 +17,7 @@ import { QuestionsService } from './questions.service';
 import { QuestionTagsService } from './../questionTags/question-tags.service';
 import { AlertModel } from './../shared/models/alerts';
 import {
-  Question, QTag, CreateQuestionModel,
+  Question, QTag,
   Answer, QuestionView, QuestionType,
   QuestionTypes, FormFile
 } from './question.model';
@@ -75,6 +75,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     } else {
       this.view.title = this._translate.instant('CREATE_QUESTION_TITLE');
       this.view.okText = this._translate.instant('BUTTON_SAVE');
+      this.question.month = new Date();
     }
 
     this.getQuestionTags();
@@ -243,5 +244,9 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     let imageElement = String.format('<img alt="{0}" title="{0}" src="{1}" />', self.file.name, self.questionService.getUploadFileUrl() + '/' + self.file.id);
     this.editor.insertHtml(imageElement);
     this.uploadModal.hide();
+  };
+
+  dateModelChange(dt: Date) {
+    console.log(dt);
   };
 }
