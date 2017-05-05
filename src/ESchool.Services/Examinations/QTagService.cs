@@ -38,7 +38,7 @@ namespace ESchool.Services.Examinations
                 .Where(t => t.GroupId == groupId)
                 .ToListAsync();
 
-            if (qtags.Count != 0)
+            if (qtags.Count > 0)
             {
                 var rootQTags = qtags
                     .Where(t => t.ParentId == 0)

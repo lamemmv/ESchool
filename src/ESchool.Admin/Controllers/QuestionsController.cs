@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using ESchool.Data.Paginations;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Extensions;
 using ESchool.Domain.ViewModels.Examinations;
@@ -25,7 +25,7 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<QuestionDto>> Get(int? page, int? size)
+        public async Task<IPagedList<QuestionDto>> Get(int? page, int? size)
         {
             return await _questionService.GetListAsync(page ?? DefaultPage, size ?? DefaultSize);
         }

@@ -52,7 +52,10 @@ namespace ESchool.Domain.Extensions
             return new ExamPaper
             {
                 Id = id,
-                Name = viewModel.Name.Trim()
+                Name = viewModel.Name.Trim(),
+                GroupId = viewModel.GroupId,
+                Duration = viewModel.Duration,
+                Specialized = viewModel.Specialized
             };
         }
     }

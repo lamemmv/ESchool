@@ -90,6 +90,25 @@ namespace ESchool.Data
             var groupNames = new List<string> { "Khối 6", "Khối 7", "Khối 8", "Khối 9" };
             var qtagNames = new List<string> { "Kỹ năng tính toán cơ bản", "Kiến thức cũ", "Kiến thức hiện tại", "Kiến thức trước chương trình", "Nâng cao" };
             var subQTagNames = new List<string> { "Đại số", "Hình học" };
+            var group6DaiSoQTagNames = new List<string>
+            {
+                "Tập hợp",
+                "Các phép toán trên tập hợp số tự nhiên",
+                "So sánh hai lũy thừa",
+                "Tính chia hết trên tập hợp số tự nhiên",
+                "Số nguyên tố. Hợp số",
+                "Uớc chung lớn nhất. Bội chung nhỏ nhất",
+                "Số nguyên",
+                "Phân số",
+                "Hỗn số. số thập phân. Phần trăm.",
+                "Ba bài toán cơ bản về phân số"
+            };
+
+            var group6HinhHocQTagNames = new List<string>
+            {
+                "Đoạn thẳng",
+                "Góc"
+            };
 
             var groupDbSet = dbContext.Set<Group>();
             var qtagDbSet = dbContext.Set<QTag>();

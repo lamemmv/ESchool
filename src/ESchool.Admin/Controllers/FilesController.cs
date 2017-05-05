@@ -45,25 +45,6 @@ namespace ESchool.Admin.Controllers
             return NotFound();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Post(IFormFile file)
-        //{
-        //    if (!IsMultipartContentType())
-        //    {
-        //        return new StatusCodeResult((int)HttpStatusCode.UnsupportedMediaType);
-        //    }
-
-        //    if (file != null && file.Length > 0)
-        //    {
-        //        var entity = await _fileService.UploadFileAsync(file, _serverUploadPath);
-        //        var code = await _fileService.CreateAsync(entity);
-
-        //        return PostResult(code, entity.Id);
-        //    }
-
-        //    return BadRequest();
-        //}
-
         [HttpPost]
         public async Task<IActionResult> Post(IFormFile file)
         {

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ESchool.Data.Paginations;
 using ESchool.Domain.DTOs.Examinations;
+using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Extensions;
 using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Examinations;
@@ -27,7 +29,7 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ExamPaperDto>> Get(int? page, int? size)
+        public async Task<IPagedList<ExamPaperDto>> Get(int? page, int? size)
         {
             return await _examPaperService.GetListAsync(page ?? DefaultPage, size ?? DefaultSize);
         }
@@ -38,27 +40,11 @@ namespace ESchool.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var entity = viewModel.ToExamPaper();
+                entity.QuestionExamPapers = GetQuestionExamPapers(viewModel.Parts);
 
-                //var questionIds = await GetQuestionIds(viewModel.QTags);
-                //await _examPaperService.CreateAsync(entity, questionIds);
+                await _examPaperService.CreateAsync(entity);
 
                 return Created("Post", entity.Id);
-            }
-
-            return BadRequest(ModelState);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]ExamPaperViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var entity = viewModel.ToExamPaper(id);
-
-                //var questionIds = await GetQuestionIds(viewModel.QTags);
-                //await _examPaperService.UpdateAsync(entity, questionIds);
-
-                return NoContent();
             }
 
             return BadRequest(ModelState);
@@ -77,33 +63,34 @@ namespace ESchool.Admin.Controllers
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid ExamPaper Id.");
         }
 
-        //private async Task<IList<int>> GetQuestionIds(ExamPaperQTagViewModel[] qtags)
-        //{
-        //    List<int> questionIds = new List<int>();
+        private IList<QuestionExamPaper> GetQuestionExamPapers(QuestionExamPaperViewModel[] parts)
+        {
+            throw new System.NotImplementedException();
+            //List<int> questionIds = new List<int>();
 
-        //    int qtagsLength = qtags != null ? qtags.Length : 0;
+            //int qtagsLength = qtags != null ? qtags.Length : 0;
 
-        //    if (qtagsLength > 0)
-        //    {
-        //        ExamPaperQTagViewModel qtag;
-        //        var randomQuestionTasks = new Task<IList<int>>[qtagsLength];
+            //if (qtagsLength > 0)
+            //{
+            //    ExamPaperQTagViewModel qtag;
+            //    var randomQuestionTasks = new Task<IList<int>>[qtagsLength];
 
-        //        for (int i = 0; i < qtagsLength; i++)
-        //        {
-        //            qtag = qtags[i];
+            //    for (int i = 0; i < qtagsLength; i++)
+            //    {
+            //        qtag = qtags[i];
 
-        //            randomQuestionTasks[i] = _questionService.GetRandomQuestionsAsync(qtag.Id, qtag.NumberOfQuestion, qtag.DifficultLevel);
-        //        }
+            //        randomQuestionTasks[i] = _questionService.GetRandomQuestionsAsync(qtag.Id, qtag.NumberOfQuestion, qtag.DifficultLevel);
+            //    }
 
-        //        var randomQuestionResults = await Task.WhenAll(randomQuestionTasks);
+            //    var randomQuestionResults = await Task.WhenAll(randomQuestionTasks);
 
-        //        foreach (var item in randomQuestionResults)
-        //        {
-        //            questionIds.AddRange(item);
-        //        }
-        //    }
+            //    foreach (var item in randomQuestionResults)
+            //    {
+            //        questionIds.AddRange(item);
+            //    }
+            //}
 
-        //    return questionIds;
-        //}
+            //return questionIds;
+        }
     }
 }

@@ -2,7 +2,9 @@
 {
     public class QuestionExamPaper
     {
-        public double Mark { get; set; }
+        public float Grade { get; set; }
+
+        public int Order { get; set; }
 
         public int ExamPaperId { get; set; }
 

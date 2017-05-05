@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
@@ -6,6 +6,7 @@ using ESchool.Data.Paginations;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Extensions;
+using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,44 +39,17 @@ namespace ESchool.Services.Examinations
             return await ExamPapers.AsNoTracking()
                 .Include(ep => ep.QuestionExamPapers)
                     .ThenInclude(qep => qep.Question)
-                .OrderBy(ep => ep.Id)
+                .OrderBy(ep => ep.GroupId)
                 .Select(ep => ep.ToExamPaperDto())
                 .GetListAsync(page, size);
         }
 
-        public async Task<ExamPaper> CreateAsync(ExamPaper entity, IList<int> questionIds)
+        public async Task<ExamPaper> CreateAsync(ExamPaper entity)
         {
-            if (questionIds != null && questionIds.Count > 0)
-            {
-                entity.QuestionExamPapers = questionIds.Select(q => new QuestionExamPaper { QuestionId = q }).ToList();
-            }
-
             await ExamPapers.AddAsync(entity);
             await CommitAsync();
+
             return entity;
-        }
-
-        public async Task<int> UpdateAsync(ExamPaper entity, IList<int> questionIds)
-        {
-            var updatedEntity = await ExamPapers.FindAsync(entity.Id);
-
-            if (updatedEntity == null)
-            {
-                throw new EntityNotFoundException("ExamPaper not found.");
-            }
-
-            // Delete current QuestionExamPapers.
-            DeleteQuestionExamPapers(entity.Id);
-
-            // Update.
-            updatedEntity.Name = entity.Name;
-
-            if (questionIds != null && questionIds.Count > 0)
-            {
-                entity.QuestionExamPapers = questionIds.Select(q => new QuestionExamPaper { QuestionId = q }).ToList();
-            }
-
-            return await CommitAsync();
         }
 
         public async Task<int> DeleteAsync(int id)
@@ -83,7 +57,7 @@ namespace ESchool.Services.Examinations
             var dbSet = ExamPapers;
             var entity = await dbSet
                 .Include(ep => ep.QuestionExamPapers)
-                .SingleOrDefaultAsync(e => e.Id == id);
+                .SingleOrDefaultAsync(ep => ep.Id == id);
 
             if (entity == null)
             {
@@ -95,11 +69,47 @@ namespace ESchool.Services.Examinations
             return await CommitAsync();
         }
 
+        public async Task AAA(QuestionExamPaperViewModel[] parts)
+        {
+            var parentQTagIds = parts.Select(p => p.QTagId).ToList();
+
+            var qtagIds = await QTags.AsNoTracking()
+                .Where(t => parentQTagIds.Contains(t.ParentId))
+                .Select(t => t.Id)
+                .ToListAsync();
+
+            var questions = Questions.AsNoTracking()
+                .Include(q => q.QTag)
+                .Where(q => qtagIds.Contains(q.QTagId))
+                .GroupBy(q => q.QTag.ParentId);
+
+            //var random = new Random();
+
+            //foreach (var part in parts)
+            //{
+            //    var aaa = qtags[part.QTagId].ToList();
+
+            //    do
+            //    {
+            //        var index = random.Next(aaa.Count);
+
+            //    } while (true);
+            //}
+        }
+
         private DbSet<ExamPaper> ExamPapers
         {
             get
             {
                 return _dbContext.Set<ExamPaper>();
+            }
+        }
+
+        private DbSet<QTag> QTags
+        {
+            get
+            {
+                return _dbContext.Set<QTag>();
             }
         }
 

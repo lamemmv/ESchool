@@ -1,60 +1,89 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace ESchool.Services.Exceptions
 {
     public sealed class ApiError
     {
-        public ApiError(ErrorCode code)
-            : this(code, null, null)
+        private readonly Exception _exception;
+
+        public ApiError(Exception exception)
         {
+            _exception = exception;
         }
 
         public ApiError(ErrorCode code, string message)
-            : this(code, message, null)
-        {
-        }
-
-        public ApiError(ErrorCode code, string message, string stackTrace)
         {
             Code = (int)code;
             Message = message;
-            StackTrace = stackTrace;
-            StatusCode = GetHttpStatusCode(code);
         }
 
-        public int Code { get; set; }
+        public int Code { get; private set; }
 
-        public string Message { get; set; }
+        public string Message { get; private set; }
 
-        public string StackTrace { get; set; }
+        [JsonIgnore]
+        public HttpStatusCode StatusCode { get; private set; }
 
-        public int StatusCode { get; }
+        [JsonIgnore]
+        public string ExceptionDetail { get; private set; }
 
-        private int GetHttpStatusCode(ErrorCode errorCode)
+        public void AssignErrorCodeAndMessage()
         {
-            HttpStatusCode statusCode;
+            ErrorCode errorCode;
+            string message;
 
-            switch (errorCode)
+            if (_exception is EntityDuplicateException)
             {
-                case ErrorCode.Unauthorized:
-                    statusCode = HttpStatusCode.Unauthorized;
-                    break;
+                errorCode = ErrorCode.DuplicateEntity;
+                message = ((EntityDuplicateException)_exception).Message;
+                StatusCode = HttpStatusCode.BadRequest;
+            }
+            else if (_exception is EntityNotFoundException)
+            {
+                errorCode = ErrorCode.NotFound;
+                message = ((EntityNotFoundException)_exception).Message;
+                StatusCode = HttpStatusCode.NotFound;
+            }
+            else if (_exception is UnauthorizedAccessException)
+            {
+                errorCode = ErrorCode.Unauthorized;
+                message = "Unauthorized Access.";
+                StatusCode = HttpStatusCode.Unauthorized;
+            }
+            else
+            {
+                var innerException = _exception is DbUpdateException ? _exception.InnerException : _exception;
 
-                case ErrorCode.NotFound:
-                    statusCode = HttpStatusCode.NotFound;
-                    break;
-
-                case ErrorCode.DuplicateEntity:
-                    statusCode = HttpStatusCode.BadRequest;
-                    break;
-
-                case ErrorCode.InternalServerError:
-                default:
-                    statusCode = HttpStatusCode.InternalServerError;
-                    break;
+                errorCode = ErrorCode.InternalServerError;
+#if !DEBUG
+                message = "An unhandled error occurred.";                
+#else
+                message = innerException.Message;
+#endif
+                StatusCode = HttpStatusCode.InternalServerError;
+                ExceptionDetail = GetExceptionDetail(innerException).ToString();
             }
 
-            return (int)statusCode;
+            Code = (int)errorCode;
+            Message = message;
+        }
+
+        private StringBuilder GetExceptionDetail(Exception exception)
+        {
+            StringBuilder sb = new StringBuilder(256);
+
+            if (exception != null)
+            {
+                sb.Append("Source: ").Append(exception.Source).Append("\r\n");
+                sb.Append("Message: ").Append(exception.Message).Append("\r\n");
+                sb.Append("Detail: ").Append(exception.ToString());
+            }
+
+            return sb;
         }
     }
 }

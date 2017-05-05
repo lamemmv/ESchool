@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ESchool.Data.Paginations;
 using ESchool.Domain.Entities.Systems;
 using ESchool.Services.Exceptions;
 using ESchool.Services.Systems;
@@ -25,7 +26,7 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Log>> Get(DateTime fromData, DateTime toDate, string level, int? page, int? size)
+        public async Task<IPagedList<Log>> Get(DateTime fromData, DateTime toDate, string level, int? page, int? size)
         {
             return await _logService.GetListAsync(fromData, toDate, level, page ?? DefaultPage, size ?? DefaultSize);
         }

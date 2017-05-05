@@ -25,7 +25,7 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpGet("GetByGroup/{groupId}")]
-        public async Task<IList<QTagDto>> GetByGroup(int groupId)
+        public async Task<IEnumerable<QTagDto>> GetByGroup(int groupId)
         {
             return await _qtagService.GetListAsync(groupId);
         }
