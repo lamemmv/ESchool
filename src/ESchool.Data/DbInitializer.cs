@@ -86,6 +86,8 @@ namespace ESchool.Data
             }
         }
 
+        #region Groups and QTags
+        
         private async Task SeedGroupsAndQTagsAsync(ObjectDbContext dbContext)
         {
             var groupDbSet = dbContext.Set<Group>();
@@ -131,8 +133,7 @@ namespace ESchool.Data
                 subDaiSoQTagNames, 
                 subHinhHocQTagNames,
                 GetQuestionsKhoi6DaiSo(),
-                GetQuestionsKhoi6HinhHoc(),
-                1);
+                GetQuestionsKhoi6HinhHoc());
         }
 
         private async Task SeedGroup7QTagsAsync(ObjectDbContext dbContext, DbSet<Group> groupDbSet, DbSet<QTag> qtagDbSet)
@@ -239,8 +240,7 @@ namespace ESchool.Data
             IList<string> subDaiSoQTagNames,
             IList<string> subHinhHocQTagNames,
             IList<Question> daisoQuestions = null,
-            IList<Question> hinhhocQuestions = null,
-            int numberOfQuestionPerQTag = 0)
+            IList<Question> hinhhocQuestions = null)
         {
             var group = await groupDbSet.SingleOrDefaultAsync(g => g.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase));
 
@@ -281,6 +281,8 @@ namespace ESchool.Data
 
                 // Level 12.
                 int index = 0;
+                int numberOfQuestionPerQTag = daisoQuestions != null ? daisoQuestions.Count / 50 : 0;
+
                 var daisoQTags = level1QTags.Where(t => t.Name.Equals("Đại số", StringComparison.OrdinalIgnoreCase));
 
                 foreach (var qtag in daisoQTags)
@@ -295,7 +297,7 @@ namespace ESchool.Data
                             Description = name
                         };
 
-                        if (daisoQuestions != null && numberOfQuestionPerQTag != 0)
+                        if (numberOfQuestionPerQTag != 0)
                         {
                             subQTag.Questions = daisoQuestions.Skip(index * numberOfQuestionPerQTag).Take(numberOfQuestionPerQTag).ToList();
                             index++;
@@ -306,6 +308,8 @@ namespace ESchool.Data
                 }
 
                 index = 0;
+                numberOfQuestionPerQTag = hinhhocQuestions != null ? hinhhocQuestions.Count / 10 : 0;
+
                 var hinhhocQTags = level1QTags.Where(t => t.Name.Equals("Hình học", StringComparison.OrdinalIgnoreCase));
 
                 foreach (var qtag in hinhhocQTags)
@@ -320,7 +324,7 @@ namespace ESchool.Data
                             Description = name
                         };
 
-                        if (hinhhocQuestions != null && numberOfQuestionPerQTag != 0)
+                        if (numberOfQuestionPerQTag != 0)
                         {
                             subQTag.Questions = hinhhocQuestions.Skip(index * numberOfQuestionPerQTag).Take(numberOfQuestionPerQTag).ToList();
                             index++;
@@ -3094,6 +3098,652 @@ namespace ESchool.Data
                             DSS = false
                         }
                     }
+                },
+                new Question
+                {
+                    Content = "Kết luận nào sau đây <b>không đúng</b>?",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Tập ước của 9 là : {– 9 ; – 3 ; – 1 ; 0 ; 1 ; 3 ; 9}",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Tập bội của 6 là : {... ; – 12 ; – 6 ; 0 ; 6 ; 12 ; ...}",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Số lớn nhất khác 9 trong tập hợp ước của 9 là 3",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Số dương nhỏ nhất khác 0 trong tập bội của 6 là 6",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "<p>Kết luận nào sau đây đúng?</p><p>Giao của tập ước của 6 và tập ước của 15 là:</p>",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "{1 ; 3}",
+                            DSS = true
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "{– 3 ; – 1}",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "{– 3 ; – 1 ; 1 ; 3}",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "{– 15 ; – 6 ; – 5 ; – 3 ; – 1 ; 1 ; 3 ; 5 ; 6 ; 15}",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "<p>Kết quả nào sau đây đúng?</p><p>Với mọi x, y , ∈ Z đặt T = 21x + 2010y, khi đó:</p>",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "T chia hết cho 2",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "T chia hết cho 3",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "T chia hết cho 5",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "T chia hết cho 7",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Khẳng định nào sau đây <b>không đúng</b>?",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Mọi số tự nhiên đều có số liền sau",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Mọi số nguyên đều có số liền trước",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Giữa hai số nguyên trên trục số đều có một số nguyên khác nằm giữa",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Tập hợp số nguyên Z gồm tập các số nguyên âm và tập các số nguyên dương và số 0",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Khẳng định nào sau đây <b>không đúng</b>?",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Tổng của hai số nguyên dương là một số nguyên dương",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Tổng của hai số nguyên âm là một số nguyên âm",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Tổng của hai số nguyên trái dấu là một số nguyên âm",
+                            DSS = true
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Tổng của hai số nguyên cùng dấu là một số nguyên dương hoặc là một số nguyên âm",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = " Khẳng định nào sau đây <b>không đúng</b>?",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Tích của hai số nguyên dương là một số nguyên dương",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Tích của hai số nguyên âm là một số nguyên âm",
+                            DSS = true
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Tích của hai số nguyên trái dấu là một số nguyên âm",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Tích của hai số nguyên bằng 0 khi và chỉ khi ít nhất một trong hai số nguyên đó bằng 0",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Kết quả nào sau đây <b>không đúng</b>?",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "(– 47) + 3 . (36 – 17) = 10",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "(– 19) – 28 . (– 2) + 14 = 51",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "(– 4) . [29 – 3 . (–19 – 25)] + 489 = 155",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "1 – {2 – [3 – (4 – 5)]} = 3",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "<p>Khẳng định nào sau đây không đúng?</p><p>Với a, b∈ Z , khi đó:</p>",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Hiệu a – (– b) là một số nguyên dương khi a dương và b dương",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Hiệu (– a) – b là một số nguyên âm",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Hiệu a – b là một số nguyên âm nếu a âm và b dương",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Hiệu a – b là một số nguyên dương nếu a dương và b âm",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Khẳng định nào sau đây <b>không đúng</b>?",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Số đối của 2 là –2",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Số đối của số nguyên x là –x",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Số đối của |−3| là 3",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Số đối của |4| là –4",
+                            DSS = true
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Kết quả nào sau đây <b>không đúng</b>?",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "(– 14) . 0 = 0",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "(– 7) . (– 8) = 56",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "6 . (–12) = –72",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "(– 4) . (– 5) . (– 6) = 120",
+                            DSS = true
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "<p>Khẳng định nào sau đây đúng?</p><p>Cho (123 – x) . [(–12) . x + (–7) . (–24)] = 0, khi đó:</p>",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "x ∈ {–14 ; 123}",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "x ∈ {-123 ; 14}",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "x ∈ {14 ; 123}",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "x ∈ {-123 ; -14}",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Kết quả nào sau đây <b>không đúng</b>?",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "2008 – (2001 + 2007) = 2000",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "(– 1999 + 2001) – 2009 = – 2007",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "2006 – 2010 + (– 2001) = – 2005",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "(– 1991) – (–1992) – 1993 = – 1992",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Kết quả của phép tính 3.(−5).(−8) là:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "−120",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "−39",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "16",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "120",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Các cặp phân số bằng nhau là:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "-3/4 và -4/3",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "-2/3 và 6/9",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "3/7 và -3/7",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "7/8 và -35/-40",
+                            DSS = true
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Kết quả rút gọn phân số-210/300 đến tối giản là:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "-21/30",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "21/30",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "-7/10",
+                            DSS = true
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "7/10",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "So sánh hai phân số -3/4 và 4/-5",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "-3/4 = 4/-5",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "-3/4 < 4/-5",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "-3/4 > 4/-5",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "-3/4 >= 4/-5",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Số đối của 5/11 là:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "5/11",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "-5/11",
+                            DSS = true
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "-11/5",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "11/5",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Phân số 2/5 viết dưới dạng phần trăm là:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "13/3",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "2.5%",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "4%",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "40%",
+                            DSS = true
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Lớp 6A có 40 học sinh trong đó có 12,5% là học sinh giỏi. Số học sinh giỏi của lớp 6A là:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "5",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "6",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "8",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "10",
+                            DSS = false
+                        }
+                    }
                 }
             };
         }
@@ -3760,14 +4410,10 @@ namespace ESchool.Data
                             DSS = false
                         }
                     }
-                }
-            };
-        }
-
-        /*
-         new Question
+                },
+                new Question
                 {
-                    Content = "",
+                    Content = "Cho hai đường thẳng cắt nhau tại một điểm. Số góc tạo bởi hai đường thẳng cắt nhau là:",
                     Type = type,
                     Specialized = false,
                     Month = currentDate,
@@ -3776,29 +4422,338 @@ namespace ESchool.Data
                         new Answer
                         {
                             AnswerName = "A",
-                            Body = "",
+                            Body = "4 góc",
                             DSS = false
                         },
                         new Answer
                         {
                             AnswerName = "B",
-                            Body = "",
+                            Body = "5 góc",
                             DSS = false
                         },
                         new Answer
                         {
                             AnswerName = "C",
-                            Body = "",
+                            Body = "6 góc",
                             DSS = false
                         },
                         new Answer
                         {
                             AnswerName = "D",
-                            Body = "",
+                            Body = "7 góc",
                             DSS = false
                         }
                     }
                 },
-         */
+                new Question
+                {
+                    Content = "Lúc 6 giờ 00 phút, số đo góc tạo bởi kim giờ và kim phút là:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "180 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "120 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "90 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "45 độ",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "<p>Cho (O ; 2,5 cm). Biết OM = 1cm ; ON = 2,5cm ; OP = 3cm ; OQ = 2cm.</p><p>Khi đó số điểm nằm trong đường tròn tâm O là:</p>",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "1 điểm",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "2 điểm",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "3 điểm",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "4 điểm",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Kết luận nào sau đây là đúng?",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Hai góc kề nhau có tổng số đo bằng 90 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Hai góc phụ nhau có tổng số đo bằng 180 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Hai góc bù nhau có tổng số đo bằng 90 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Hai góc bù nhau có tổng số đo bằng 180 độ",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Cho hai góc bù nhau, trong đó có một góc bằng 35 độ. Số đo góc còn lại sẽ là:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "65 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "55 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "145 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "165 độ",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Góc vuông là góc có số đo:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Bằng 180 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Nhỏ hơn 90 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Bằng 90 độ",
+                            DSS = true
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Lớn hơn 90 độ",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Góc 30 độ phụ với góc có số đo bằng:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "0 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "60 độ",
+                            DSS = true
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "90 độ",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "180 độ",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Biết rằng MNP = 180 độ câu nào sau đây <b>không đúng</b>",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Ba điểm M, N, P thẳng hàng",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Hai tia MP và MN đối nhau",
+                            DSS = true
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Hai tia NP và NM đối nhau",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Góc MNP là góc bẹt",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Nếu xOy + yOz = xOz thì:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Tia Oz nằm giữa hai tia Ox và Oy",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Tia Ox nằm giữa hai tia Oz và Oy",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Tia Oy nằm giữa hai tia Ox và Oz",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Không có tia nào nằm giữa hai tia còn lại",
+                            DSS = false
+                        }
+                    }
+                },
+                new Question
+                {
+                    Content = "Hình gồm các điểm cách đều điểm I một khoảng cách IA = 3cm là:",
+                    Type = type,
+                    Specialized = false,
+                    Month = currentDate,
+                    Answers = new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerName = "A",
+                            Body = "Tia IA",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "B",
+                            Body = "Đường tròn tâm I bán kính 3cm",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "C",
+                            Body = "Đoạn thẳng IA",
+                            DSS = false
+                        },
+                        new Answer
+                        {
+                            AnswerName = "D",
+                            Body = "Cả A; B; C đều đúng",
+                            DSS = false
+                        }
+                    }
+                }
+            };
+        }
+
+        #endregion
     }
 }
