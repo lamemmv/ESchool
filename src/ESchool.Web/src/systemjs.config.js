@@ -16,7 +16,6 @@
       // angular bundles
       '@angular/animations': 'npm:@angular/animations/bundles/animations.umd.js',
       '@angular/animations/browser': 'npm:@angular/animations/bundles/animations-browser.umd.js',
-      '@angular/animations/browser': 'npm:@angular/animations/bundles/animations-browser.umd.js',
       '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
       '@angular/common': 'npm:@angular/common/bundles/common.umd.js',
       '@angular/compiler': 'npm:@angular/compiler/bundles/compiler.umd.js',
@@ -36,9 +35,11 @@
       'ngx-rating': 'npm:ngx-rating',
       'ngx-modal': 'npm:ngx-modal',
       'primeng': 'npm:primeng',
+      'ng2-tree':'npm:ng2-tree',
       // other libraries
       'rxjs': 'npm:rxjs',
-      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
+      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+       lodash: 'node_modules/lodash/lodash.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -90,6 +91,10 @@
       'primeng': {
         defaultExtension: 'js',
         main: 'primeng.js'
+      },
+      'ng2-tree': {
+        defaultExtension: 'js',
+        main: 'index.js'
       }
     }
   });

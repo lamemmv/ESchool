@@ -47,7 +47,8 @@
     "ng2-tag-input":"1.0.5",
     "ngx-rating":"0.0.9",
     "ngx-modal": "0.0.29",
-    "primeng": "4.0.0"
+    "primeng": "4.0.0",
+    "ng2-tree": "2.0.0-alpha.5"
   },
   "devDependencies": {
     "concurrently": "^3.2.0",

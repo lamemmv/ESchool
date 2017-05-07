@@ -9,6 +9,7 @@ import { AlertModule, ModalDirective } from 'ng2-bootstrap';
 import { Modal } from 'ngx-modal';
 import { RatingModule } from "ngx-rating";
 import { CKButtonDirective, CKEditorComponent } from 'ng2-ckeditor';
+import { NodeEvent, Ng2TreeSettings } from 'ng2-tree';
 
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
@@ -19,7 +20,7 @@ import { AlertModel } from './../shared/models/alerts';
 import {
   Question, QTag,
   Answer, QuestionView, QuestionType,
-  QuestionTypes, FormFile
+  QuestionTypes, FormFile, ESTreeNode
 } from './question.model';
 import { QuestionTag } from './../questionTags/question-tags.model';
 
@@ -47,6 +48,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   private questionId: number;
   private editor: any;
   private file = new FormFile();
+  private tree: ESTreeNode;
+  private treeSetting: Ng2TreeSettings;
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -80,6 +83,9 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
     this.getQuestionTags();
     this.buildQuestionTypes();
+    this.treeSetting = {
+      rootIsVisible: false
+    };
   };
 
   buildQuestionTypes() {
@@ -157,10 +163,55 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     self.questionTagsService.get(1)
       .subscribe((questionTags) => {
         self.questionTags = questionTags;
+        self.buildTree(self.questionTags);
       },
       error => {
         self.notificationService.printErrorMessage('Failed to load question tags. ' + error);
       });
+  };
+
+  buildTree(questionTags: QuestionTag[]) {
+    let self = this;
+    self.tree = {
+      value: self._translate.instant('QUESTION_GROUP'),
+      id: 0,
+      children: []
+    };
+
+    questionTags.forEach(qtag => {
+      let node: ESTreeNode = {
+        id: qtag.id,
+        value: qtag.name
+      };
+
+      if (qtag.subQTags && qtag.subQTags.length > 0) {
+        self.buildSubTree(qtag.subQTags, node);
+      }
+
+      self.tree.children.push(node);
+    });
+  };
+
+  buildSubTree(qtags: QuestionTag[], node: ESTreeNode) {
+    let self = this;
+    let children: ESTreeNode[] = [];
+    qtags.forEach(qtag => {
+      let childNode: ESTreeNode = {
+        id: qtag.id,
+        value: qtag.name,
+        children: []
+      };
+      if (qtag.subQTags && qtag.subQTags.length > 0){
+        self.buildSubTree(qtag.subQTags, childNode);
+      }
+      children.push(childNode);
+    });
+
+    node.loadChildren = (callback) => {
+      setTimeout(() => {
+        callback(children);
+      }, 500);
+    };
   };
 
   cancel(): void { this.router.navigate(['/admin/questions']); };
@@ -248,5 +299,9 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
   dateModelChange(dt: Date) {
     console.log(dt);
+  };
+
+  handleSelected(event: any): void {
+    this.question.qtagId = event.node.node.id;
   };
 }

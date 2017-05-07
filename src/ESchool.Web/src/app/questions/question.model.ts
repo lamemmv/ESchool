@@ -1,3 +1,7 @@
+import { TreeModel, RenamableNode, 
+    TreeModelSettings, FoldingType, NodeEvent } from 'ng2-tree';
+import {ChildrenLoadingFunction, TreeStatus } from 'ng2-tree/src/tree.types';
+
 export class Question {
     id: number;
     content: string;
@@ -62,4 +66,15 @@ String.format = function (...args: string[]): string {
         result = result.replace(reg, arguments[i + 1]);
     }
     return result;
-}
+};
+
+
+export class ESTreeNode implements TreeModel {
+    id: number;
+    value: string | RenamableNode;
+    children?: ESTreeNode[];
+    loadChildren?: ChildrenLoadingFunction;
+    settings?: TreeModelSettings;
+    _status?: TreeStatus;
+    _foldingType?: FoldingType;
+};

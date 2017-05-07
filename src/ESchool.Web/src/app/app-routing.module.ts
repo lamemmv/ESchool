@@ -11,7 +11,7 @@ const appRoutes: Routes = [
     loadChildren: 'app/admin/admin.module#AdminModule',
     canLoad: [AuthGuard]
   },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/admin', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 @NgModule({

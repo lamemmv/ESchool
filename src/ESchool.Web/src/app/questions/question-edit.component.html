@@ -20,12 +20,9 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="questionTags"> {{ 'QUESTION_GROUP' | translate }} </label>
-                        <select id="questionTags" 
-                            name="questionTags" 
-                            class="form-control" 
-                            [(ngModel)]="question.qtagId"> 
-                            <option *ngFor="let qtag of questionTags" [value]="qtag.id">{{qtag.name}}</option>
-                        </select>
+                        <tree [tree]="tree" 
+                            [settings]="treeSetting"
+                            (nodeSelected)="handleSelected($event)"></tree>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="questionTypes"> {{ 'QUESTION_TYPE' | translate }} </label>
