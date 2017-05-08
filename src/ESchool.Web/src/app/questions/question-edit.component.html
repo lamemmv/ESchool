@@ -73,7 +73,7 @@
                             <input type="checkbox" [(ngModel)]="question.specialized"> {{ 'SPECIALIZED' | translate }}
                         </label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 mt5">
                         <es-datepicker [id]="'month-datepicker'" 
                             [value]="question.month"
                             (dateModelChange)="dateModelChange($event)"></es-datepicker>

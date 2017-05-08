@@ -298,7 +298,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   };
 
   dateModelChange(dt: Date) {
-    console.log(dt);
+    this.question.month = dt;
   };
 
   handleSelected(event: any): void {

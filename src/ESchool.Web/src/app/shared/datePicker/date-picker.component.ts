@@ -1,4 +1,7 @@
-import { NgModule, Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import {
+    NgModule, Component, Input, Output,
+    EventEmitter, AfterViewInit, OnChanges, SimpleChange
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -16,7 +19,7 @@ import { DatePipe } from '@angular/common';
     .input-group.date { width:200px;}
   `]
 })
-export class DatepickerComponent implements AfterViewInit {
+export class DatepickerComponent implements AfterViewInit, OnChanges {
     public dt: Date = new Date();
     @Input() value: string;
     @Input() id: string;
@@ -58,13 +61,22 @@ export class DatepickerComponent implements AfterViewInit {
         this.apply();
         this.close();
     }
-    
+
     onClickedOutside(event: any) {
         if (this.showDatepicker) this.close();
     }
 
     ngAfterViewInit() {
         this.dt = new Date(this.value);
+    }
+
+    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+        for (let propName in changes) {
+            let changedProp = changes[propName];            
+            if (!changedProp.isFirstChange()) {
+                this.dt = new Date(changedProp.currentValue);
+            }
+        }
     }
 }
 
