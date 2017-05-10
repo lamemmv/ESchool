@@ -45,7 +45,8 @@
                     <p-treeTable [value]="dataGrid" 
                         selectionMode="single" 
                         [(selection)]="selectedFiles" 
-                        (onNodeSelect)="openEditDialog($event)">
+                        (onNodeSelect)="openEditDialog($event)"
+                        (onNodeExpand)="onNodeExpand($event)">
                         <p-column field="name" header="{{'NAME' | translate }}"></p-column>
                         <p-column field="description" header="{{'DESCRIPTION' | translate }}"></p-column>
                     </p-treeTable>

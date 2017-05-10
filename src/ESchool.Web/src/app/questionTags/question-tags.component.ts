@@ -124,9 +124,9 @@ export class QuestionTagsComponent implements OnInit {
     questionTags.forEach(qtag => {
       let children: TreeNode[] = [];
       let treeNode = {
-        data: qtag, children: children
+        data: qtag, children: children, leaf: false
       };
-      if (qtag.subQTags.length > 0){
+      if (qtag.subQTags && qtag.subQTags.length > 0) {
         treeNode.children = this.getDataGrid(qtag.subQTags);
       }
       treeNodes.push(treeNode);
@@ -251,5 +251,29 @@ export class QuestionTagsComponent implements OnInit {
       arr.push(Object.assign({}, x));
     });
     return arr;
-  }
+  };
+
+  onNodeExpand(e: any) {
+    let self = this;
+    if (e.node) {
+      self.questionTagsService.getById(e.node.data.id)
+        .subscribe((qtag: QuestionTag) => {
+          let nodes : TreeNode[] = [];
+          if (qtag.subQTags) {
+            qtag.subQTags.forEach((subTag) => {
+              let children : any[] = [];
+              let treeNode = {
+                data: subTag, children: children, leaf: false
+              };
+              nodes.push(treeNode);
+            });
+          }
+
+          e.node.children = nodes;
+        },
+        error => {
+          self.notificationService.printErrorMessage('Failed to update question tag. ' + error);
+        });
+    }
+  };
 }

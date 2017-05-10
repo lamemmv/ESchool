@@ -25,6 +25,15 @@ export class QuestionTagsService {
             .catch(self.appService.handleError);
     };
 
+    getById = (id: number) => {
+        var self = this;
+        return this.http.get(this._baseUrl + 'qtags/' + id)
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(self.appService.handleError);
+    };
+    
     create = (qtag: any) => {
         var self = this;
         return this.http.post(this._baseUrl + 'qtags', qtag)
