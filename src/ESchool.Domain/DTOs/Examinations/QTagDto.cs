@@ -12,6 +12,8 @@ namespace ESchool.Domain.DTOs.Examinations
 
         public string Description { get; set; }
 
+        public IList<QTagDto> ParentQTags { get; set; }
+
         public IList<QTagDto> SubQTags { get; set; }
     }
 }

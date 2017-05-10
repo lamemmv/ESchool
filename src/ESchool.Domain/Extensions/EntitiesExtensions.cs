@@ -24,6 +24,7 @@ namespace ESchool.Domain.Extensions
                 Id = entity.Id,
                 Name = entity.Name,
                 Description = entity.Description,
+                ParentQTags = new List<QTagDto>(),
                 SubQTags = new List<QTagDto>()
             };
         }
