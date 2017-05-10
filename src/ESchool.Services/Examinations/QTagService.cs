@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
+using ESchool.Domain.DTOs;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Extensions;
@@ -32,6 +33,7 @@ namespace ESchool.Services.Examinations
                 .ToListAsync();
 
             var qtagDto = entity.ToQTagDto();
+            qtagDto.ParentQTags = new List<IdNameDto>();
             int parentId = qtagDto.ParentId;
 
             while (parentId != 0)
@@ -44,11 +46,11 @@ namespace ESchool.Services.Examinations
                 }
 
                 parentId = temporaryQTag.ParentId;
-                qtagDto.ParentQTags.Insert(0, temporaryQTag.ToQTagDto());
+                qtagDto.ParentQTags.Insert(0, new IdNameDto(temporaryQTag.Id, temporaryQTag.Name));
             }
 
             qtagDto.SubQTags = qtags.Where(t => t.ParentId == entity.Id)
-                .Select(t => t.ToQTagDto())
+                .Select(t => new IdNameDto(t.Id, t.Name))
                 .ToList();
 
             return qtagDto;
@@ -60,31 +62,6 @@ namespace ESchool.Services.Examinations
                 .Where(t => t.GroupId == groupId && t.ParentId == 0)
                 .Select(t => t.ToQTagDto())
                 .ToListAsync();
-
-            //IList<QTagDto> hierarchyQTags = new List<QTagDto>();
-
-            //var qtags = QTags.AsNoTracking()
-            //    .Where(t => t.GroupId == groupId)
-            //    .ToListAsync();
-
-            //if (qtags.Any() > 0)
-            //{
-            //    var rootQTags = qtags
-            //        .Where(t => t.ParentId == 0)
-            //        .ToList();
-
-            //    QTagDto hierarchyQTag;
-
-            //    foreach (var qtag in rootQTags)
-            //    {
-            //        hierarchyQTag = qtag.ToQTagDto();
-            //        hierarchyQTags.Add(hierarchyQTag);
-
-            //        GetDirectHierarchyQTags(qtags, hierarchyQTag);
-            //    }
-            //}
-
-            //return hierarchyQTags;
         }
 
         public async Task<QTag> CreateAsync(QTag entity)
@@ -157,19 +134,6 @@ namespace ESchool.Services.Examinations
                     t.GroupId == groupId && 
                     t.ParentId == parentId &&
                     t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private void GetHierarchyQTags(IList<QTag> allQTags, QTagDto hierarchyQTag)
-        {
-            var subQTags = allQTags.Where(m => m.ParentId == hierarchyQTag.Id);
-
-            QTagDto subHierarchyQTag;
-
-            foreach (var qtag in subQTags)
-            {
-                subHierarchyQTag = qtag.ToQTagDto();
-                hierarchyQTag.SubQTags.Add(subHierarchyQTag);
-            }
         }
     }
 }

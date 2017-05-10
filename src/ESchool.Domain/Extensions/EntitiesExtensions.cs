@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ESchool.Domain.DTOs.Examinations;
 using ESchool.Domain.Entities.Examinations;
 
@@ -23,9 +22,7 @@ namespace ESchool.Domain.Extensions
                 ParentId = entity.ParentId,
                 Id = entity.Id,
                 Name = entity.Name,
-                Description = entity.Description,
-                ParentQTags = new List<QTagDto>(),
-                SubQTags = new List<QTagDto>()
+                Description = entity.Description
             };
         }
 
