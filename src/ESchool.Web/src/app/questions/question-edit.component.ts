@@ -184,33 +184,33 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
         value: qtag.name
       };
 
-      if (qtag.subQTags && qtag.subQTags.length > 0) {
-        self.buildSubTree(qtag.subQTags, node);
-      }
+      self.buildSubTree(node);
 
       self.tree.children.push(node);
     });
   };
 
-  buildSubTree(qtags: QuestionTag[], node: ESTreeNode) {
-    let self = this;
-    let children: ESTreeNode[] = [];
-    qtags.forEach(qtag => {
-      let childNode: ESTreeNode = {
-        id: qtag.id,
-        value: qtag.name,
-        children: []
-      };
-      if (qtag.subQTags && qtag.subQTags.length > 0){
-        self.buildSubTree(qtag.subQTags, childNode);
-      }
-      children.push(childNode);
-    });
-
+  buildSubTree(node: ESTreeNode) {
+    let self =this;
     node.loadChildren = (callback) => {
-      setTimeout(() => {
-        callback(children);
-      }, 500);
+      self.questionTagsService.getById(node.id)
+        .subscribe((_qtag: QuestionTag) => {
+          let children: ESTreeNode[] = [];
+          if (_qtag.subQTags && _qtag.subQTags.length > 0) {
+            _qtag.subQTags.forEach(qtag => {
+              let childNode: ESTreeNode = {
+                id: qtag.id,
+                value: qtag.name
+              };
+              self.buildSubTree(childNode);
+              children.push(childNode);
+            });
+          }
+          callback(children);
+        },
+        error => {
+          self.notificationService.printErrorMessage('Failed to load question tag. ' + error);
+        });
     };
   };
 
