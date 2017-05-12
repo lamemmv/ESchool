@@ -2,12 +2,14 @@
 using System.Net;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace ESchool.Services.Exceptions
 {
     public sealed class ApiError
     {
+        private string _exceptionDetail;
+        private HttpStatusCode _httpStatusCode;
+
         private readonly Exception _exception;
 
         public ApiError(Exception exception)
@@ -25,11 +27,15 @@ namespace ESchool.Services.Exceptions
 
         public string Message { get; private set; }
 
-        [JsonIgnore]
-        public HttpStatusCode StatusCode { get; private set; }
+        public HttpStatusCode GetStatusCode()
+        {
+            return _httpStatusCode;
+        }
 
-        [JsonIgnore]
-        public string ExceptionDetail { get; private set; }
+        public string GetExceptionDetail()
+        {
+            return _exceptionDetail;
+        }
 
         public void AssignErrorCodeAndMessage()
         {
@@ -40,19 +46,19 @@ namespace ESchool.Services.Exceptions
             {
                 errorCode = ErrorCode.DuplicateEntity;
                 message = ((EntityDuplicateException)_exception).Message;
-                StatusCode = HttpStatusCode.BadRequest;
+                _httpStatusCode = HttpStatusCode.BadRequest;
             }
             else if (_exception is EntityNotFoundException)
             {
                 errorCode = ErrorCode.NotFound;
                 message = ((EntityNotFoundException)_exception).Message;
-                StatusCode = HttpStatusCode.NotFound;
+                _httpStatusCode = HttpStatusCode.NotFound;
             }
             else if (_exception is UnauthorizedAccessException)
             {
                 errorCode = ErrorCode.Unauthorized;
                 message = "Unauthorized Access.";
-                StatusCode = HttpStatusCode.Unauthorized;
+                _httpStatusCode = HttpStatusCode.Unauthorized;
             }
             else
             {
@@ -64,8 +70,8 @@ namespace ESchool.Services.Exceptions
 #else
                 message = innerException.Message;
 #endif
-                StatusCode = HttpStatusCode.InternalServerError;
-                ExceptionDetail = GetExceptionDetail(innerException).ToString();
+                _httpStatusCode = HttpStatusCode.InternalServerError;
+                _exceptionDetail = GetExceptionDetail(innerException).ToString();
             }
 
             Code = (int)errorCode;

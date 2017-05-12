@@ -1,19 +1,17 @@
 ﻿using ESchool.Services.Examinations;
 using ESchool.Services.Files;
+using ESchool.Services.Infrastructure;
 using ESchool.Services.Infrastructure.Cache;
 using ESchool.Services.Systems;
-using IdentityServer4.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ESchool.Services.Infrastructure.Extensions
+namespace ESchool.API.Extensions
 {
     public static class ApplicationServicesExtensions
     {
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfigurationRoot configuration)
         {
-            services.AddScoped<IProfileService, IdentityWithAdditionalClaimsProfileService>();
-
             // If you need access to generic IConfiguration this is required.
             services.AddSingleton<IConfiguration>(x => configuration);
 

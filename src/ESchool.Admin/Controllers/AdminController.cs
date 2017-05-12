@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
 {
+    //[Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     //[Authorize]
     [Route("admin/[controller]")]
     public abstract class AdminController : Controller

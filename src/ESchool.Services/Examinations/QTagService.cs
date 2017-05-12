@@ -19,41 +19,54 @@ namespace ESchool.Services.Examinations
         {
         }
 
-        public async Task<QTagDto> GetAsync(int id)
+        public async Task<QTagDto> GetAsync(int id, bool includeParents = false)
         {
-            var entity = await QTags.FindAsync(id);
-
-            if (entity == null)
+            if (!includeParents)
             {
-                return null;
+                return await GetWithoutParentsAsync(id);
             }
 
-            var qtags = await QTags.AsNoTracking()
-                .Where(t => t.GroupId == entity.GroupId)
-                .ToListAsync();
+            //var entity = await QTags.FindAsync(id);
 
-            var qtagDto = entity.ToQTagDto();
-            qtagDto.ParentQTags = new List<IdNameDto>();
-            int parentId = qtagDto.ParentId;
+            //if (entity == null)
+            //{
+            //    return null;
+            //}
 
-            while (parentId != 0)
-            {
-                var temporaryQTag = qtags.SingleOrDefault(t => t.Id == parentId);
+            //var qtagDto = entity.ToQTagDto();
 
-                if (temporaryQTag == null)
-                {
-                    break;
-                }
+            //if (!includeParents)
+            //{
+            //    qtagDto.SubQTags = await QTags.AsNoTracking()
+            //        .Where(t => t.ParentId == entity.Id)
+            //        .Select(t => new QTagDto
+            //        {
+            //            ParentId = t.ParentId,
+            //            Id = t.Id,
+            //            Name = t.Name,
+            //            Description = t.Description
+            //        }).ToListAsync();
+            //}
 
-                parentId = temporaryQTag.ParentId;
-                qtagDto.ParentQTags.Insert(0, new IdNameDto(temporaryQTag.Id, temporaryQTag.Name));
-            }
+            //var qtags = await QTags.AsNoTracking()
+            //    .Where(t => t.GroupId == entity.GroupId)
+            //    .ToListAsync();
 
-            qtagDto.SubQTags = qtags.Where(t => t.ParentId == entity.Id)
-                .Select(t => new IdNameDto(t.Id, t.Name))
-                .ToList();
+            //if (qtagDto.ParentId != 0)
+            //{
+            //    qtagDto.ParentQTags = GetParentQTags(qtags, qtagDto.ParentId);
+            //}
 
-            return qtagDto;
+            //qtagDto.SubQTags = qtags.Where(t => t.ParentId == entity.Id)
+            //    .Select(t => new QTagDto
+            //    {
+            //        ParentId = t.ParentId,
+            //        Id = t.Id,
+            //        Name = t.Name,
+            //        Description = t.Description
+            //    }).ToList();
+
+            return null;
         }
 
         public async Task<IList<QTagDto>> GetListAsync(int groupId)
@@ -134,6 +147,53 @@ namespace ESchool.Services.Examinations
                     t.GroupId == groupId && 
                     t.ParentId == parentId &&
                     t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private async Task<QTagDto> GetWithoutParentsAsync(int id)
+        {
+            var qtags = await QTags.AsNoTracking()
+                .Where(t => t.Id == id || t.ParentId == id)
+                .ToListAsync();
+
+            QTagDto qtagDto = null;
+            IList<QTagDto> subQTagDtos = new List<QTagDto>();
+
+            foreach (var qtag in qtags)
+            {
+                if (qtag.Id == id)
+                {
+                    qtagDto = qtag.ToQTagDto();
+                }
+                else
+                {
+                    subQTagDtos.Add(qtag.ToQTagDto());
+                }
+            }
+
+            qtagDto.SubQTags = subQTagDtos;
+
+            return qtagDto;
+        }
+
+        private IList<IdNameDto> GetParentQTags(IList<QTag> allQTags, int parentId)
+        {
+            IList<IdNameDto> parentQTags = new List<IdNameDto>();
+            QTag qtag;
+
+            while (parentId != 0)
+            {
+                qtag = allQTags.SingleOrDefault(t => t.Id == parentId);
+
+                if (qtag == null)
+                {
+                    break;
+                }
+
+                parentId = qtag.ParentId;
+                parentQTags.Insert(0, new IdNameDto(qtag.Id, qtag.Name));
+            }
+
+            return parentQTags;
         }
     }
 }

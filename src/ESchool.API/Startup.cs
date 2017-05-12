@@ -1,11 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
+using AspNet.Security.OpenIdConnect.Primitives;
 using ESchool.Admin.Attributes;
+using ESchool.API.Extensions;
 using ESchool.Data;
 using ESchool.Data.Configurations;
 using ESchool.Domain.Entities.Systems;
-using ESchool.Services.Infrastructure.Extensions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NLog;
@@ -58,34 +58,7 @@ namespace ESchool.API
                 opts.AddPolicy("AllowAllOrigins", corsBuilder.Build());
             });
 
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            var migrationsAssembly = typeof(ObjectDbContext).GetTypeInfo().Assembly.GetName().Name;
-            services.AddDbContext<ObjectDbContext>(opts =>
-                opts.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationsAssembly)));
-
-            services.AddCustomIdentity();
-            services.AddCustomIdentityServer();
-
-            var guestPolicy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .RequireClaim("scope", "dataEventRecords")
-                .Build();
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("dataEventRecordsAdmin", policyAdmin =>
-                {
-                    policyAdmin.RequireClaim("role", "dataEventRecords.admin");
-                });
-                options.AddPolicy("admin", policyAdmin =>
-                {
-                    policyAdmin.RequireClaim("role", "admin");
-                });
-                options.AddPolicy("dataEventRecordsUser", policyUser =>
-                {
-                    policyUser.RequireClaim("role", "dataEventRecords.user");
-                });
-            });
+            services.AddCustomAuthorization(Configuration.GetConnectionString("DefaultConnection"));
 
             // Adds a default in-memory implementation of IDistributedCache.
             services.AddMemoryCache();
@@ -125,25 +98,43 @@ namespace ESchool.API
                 //app.UseDeveloperExceptionPage();
             }
 
-            app.UseIdentity();
-            app.UseIdentityServer();
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            app.UseIdentityServerAuthentication(IdentityServerExtensions.GetIdentityServerAuthenticationOptions());
-
-            //app.UseSession();
-
             app.UseCors("AllowAllOrigins");
 
-            app.UseMvc(/*routes =>
-            {
-                routes.MapRoute(
-                    name: "area_default",
-                    template: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+            // Add a middleware used to validate access
+            // tokens and protect the API endpoints.
+            //app.UseOAuthValidation();
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            }*/);
+            // If you prefer using JWT, don't forget to disable the automatic
+            // JWT -> WS-Federation claims mapping used by the JWT middleware:
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                Authority = "http://localhost:59999/",
+                Audience = "http://localhost:59999/",
+                RequireHttpsMetadata = false,
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = OpenIdConnectConstants.Claims.Subject,
+                    RoleClaimType = OpenIdConnectConstants.Claims.Role
+                }
+            });
+
+            // Alternatively, you can also use the introspection middleware.
+            // Using it is recommended if your resource server is in a
+            // different application/separated from the authorization server.
+            // app.UseOAuthIntrospection(options =>
+            // {
+            //     options.Authority = new Uri("http://localhost:59999/");
+            //     options.Audiences.Add("resource_server");
+            //     options.ClientId = "eschool.web";
+            //     options.ClientSecret = "eschool.web.P@$$w0rd";
+            //     options.RequireHttpsMetadata = false;
+
+            app.UseOpenIddict();
+
+            app.UseMvcWithDefaultRoute();
 
             InitializeDefaultData(app);
         }
