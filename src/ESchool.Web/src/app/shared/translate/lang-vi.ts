@@ -47,6 +47,7 @@ export const LANG_VI_TRANS = {
     'SAVED': 'Đã lưu',
     'SEARCH': 'Tìm',
     'SELECT_A_IMAGE': 'Chọn hình ảnh',
+    'SELECT_GROUP':'Chọn nhóm',
     'SIGNIN_USING_FACEBOOK': 'Đăng nhập bằng tài khoản facebook',
     'SIGNIN_USING_GOOGLE_PLUS': 'Đăng nhập bằng tài khoản Google+',
     'SPECIALIZED': 'Lớp chuyên',

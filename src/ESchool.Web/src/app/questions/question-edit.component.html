@@ -20,9 +20,24 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="questionTags"> {{ 'QUESTION_GROUP' | translate }} </label>
-                        <tree [tree]="tree" 
-                            [settings]="treeSetting"
-                            (nodeSelected)="handleSelected($event)"></tree>
+                        <div class="input-group">
+                            <input type="text" class="form-control"/>
+                            <span class="input-group-btn">
+                                <button type="button" 
+                                    (click)="toggleTree($event)" 
+                                    class="btn btn-info btn-flat">{{'SELECT_GROUP' | translate}}</button>
+                            </span>
+                        </div>
+                        <div *ngIf="showTree" class="tree-container">
+                            <p-treeTable [value]="dataGrid" 
+                                selectionMode="single" 
+                                (onNodeSelect)="handleSelected($event)"
+                                (onNodeExpand)="onNodeExpand($event)"
+                                (onNodeCollapse)="onNodeCollapse($event)">
+                                <p-column field="name" header="{{'NAME' | translate }}"></p-column>
+                                <p-column field="description" header="{{'DESCRIPTION' | translate }}"></p-column>
+                            </p-treeTable>
+                        </div>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="questionTypes"> {{ 'QUESTION_TYPE' | translate }} </label>
