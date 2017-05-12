@@ -212,6 +212,18 @@ tree-internal .loading-children:after {
   animation-iteration-count: infinite;
 }
 
+.tree-container {
+    border-radius: 3px;
+    background: #ffffff;
+    border: 1px solid #00c0ef;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    padding: 1px;
+    position: absolute;
+    z-index: 10;
+    min-width: 500px;
+    right: 16px;
+}
+
 @keyframes loading-children {
   0%    { color: #f3e5f5; }
   12.5% { color: #e1bee7; }

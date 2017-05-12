@@ -1,6 +1,7 @@
 import {
   Component, OnInit, ViewChild, ViewChildren, AfterViewChecked,
-  AfterViewInit, Renderer, QueryList, ViewEncapsulation, NgZone
+  AfterViewInit, Renderer, QueryList, ViewEncapsulation, NgZone,
+  ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -9,7 +10,7 @@ import { AlertModule, ModalDirective } from 'ng2-bootstrap';
 import { Modal } from 'ngx-modal';
 import { RatingModule } from "ngx-rating";
 import { CKButtonDirective, CKEditorComponent } from 'ng2-ckeditor';
-import { NodeEvent, Ng2TreeSettings } from 'ng2-tree';
+import { TreeNode } from 'primeng/primeng';
 
 import { NotificationService } from './../shared/utils/notification.service';
 import { TranslateService } from './../shared/translate';
@@ -20,7 +21,7 @@ import { AlertModel } from './../shared/models/alerts';
 import {
   Question, QTag,
   Answer, QuestionView, QuestionType,
-  QuestionTypes, FormFile, ESTreeNode
+  QuestionTypes, FormFile
 } from './question.model';
 import { QuestionTag } from './../questionTags/question-tags.model';
 
@@ -31,6 +32,9 @@ declare var CKEDITOR: any;
   styleUrls: [
     './question-edit.style.css'
   ],
+  host: {
+    '(document:click)': 'onDocumentClick($event)',
+  },
   encapsulation: ViewEncapsulation.None
 })
 export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterViewInit {
@@ -48,8 +52,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   private questionId: number;
   private editor: any;
   private file = new FormFile();
-  private tree: ESTreeNode;
-  private treeSetting: Ng2TreeSettings;
+  private dataGrid: TreeNode[];
+  private showTree: boolean = false;
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -58,7 +62,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     private questionService: QuestionsService,
     private utilitiesService: UtilitiesService,
     private rd: Renderer,
-    private zone: NgZone) {
+    private zone: NgZone,
+    private _eref: ElementRef) {
     this.registerCKEditorCommands = this.registerCKEditorCommands.bind(this);
   }
 
@@ -83,9 +88,6 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
     this.getQuestionTags();
     this.buildQuestionTypes();
-    this.treeSetting = {
-      rootIsVisible: false
-    };
   };
 
   buildQuestionTypes() {
@@ -163,55 +165,26 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     self.questionTagsService.get(1)
       .subscribe((questionTags) => {
         self.questionTags = questionTags;
-        self.buildTree(self.questionTags);
+        self.dataGrid = self.getDataGrid(self.questionTags);
       },
       error => {
         self.notificationService.printErrorMessage('Failed to load question tags. ' + error);
       });
   };
 
-  buildTree(questionTags: QuestionTag[]) {
-    let self = this;
-    self.tree = {
-      value: self._translate.instant('QUESTION_GROUP'),
-      id: 0,
-      children: []
-    };
-
+  getDataGrid(questionTags: QuestionTag[]): TreeNode[] {
+    let treeNodes: TreeNode[] = [];
     questionTags.forEach(qtag => {
-      let node: ESTreeNode = {
-        id: qtag.id,
-        value: qtag.name
+      let children: TreeNode[] = [];
+      let treeNode = {
+        data: qtag, children: children, leaf: false
       };
-
-      self.buildSubTree(node);
-
-      self.tree.children.push(node);
+      if (qtag.subQTags && qtag.subQTags.length > 0) {
+        treeNode.children = this.getDataGrid(qtag.subQTags);
+      }
+      treeNodes.push(treeNode);
     });
-  };
-
-  buildSubTree(node: ESTreeNode) {
-    let self =this;
-    node.loadChildren = (callback) => {
-      self.questionTagsService.getById(node.id)
-        .subscribe((_qtag: QuestionTag) => {
-          let children: ESTreeNode[] = [];
-          if (_qtag.subQTags && _qtag.subQTags.length > 0) {
-            _qtag.subQTags.forEach(qtag => {
-              let childNode: ESTreeNode = {
-                id: qtag.id,
-                value: qtag.name
-              };
-              self.buildSubTree(childNode);
-              children.push(childNode);
-            });
-          }
-          callback(children);
-        },
-        error => {
-          self.notificationService.printErrorMessage('Failed to load question tag. ' + error);
-        });
-    };
+    return treeNodes;
   };
 
   cancel(): void { this.router.navigate(['/admin/questions']); };
@@ -302,6 +275,44 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   };
 
   handleSelected(event: any): void {
-    this.question.qtagId = event.node.node.id;
+    this.question.qtagId = event.node.data.id;
+  };
+
+  toggleTree(event: any) {
+    this.showTree = !this.showTree;
+    event.stopPropagation();
+  };
+
+  onDocumentClick(event: any) {
+    this.showTree = false;
+  };
+
+  onNodeExpand(e: any) {
+    let self = this;
+    if (e.node) {
+      self.questionTagsService.getById(e.node.data.id)
+        .subscribe((qtag: QuestionTag) => {
+          let nodes: TreeNode[] = [];
+          if (qtag.subQTags) {
+            qtag.subQTags.forEach((subTag) => {
+              let children: any[] = [];
+              let treeNode = {
+                data: subTag, children: children, leaf: false
+              };
+              nodes.push(treeNode);
+            });
+          }
+
+          e.node.children = nodes;
+        },
+        error => {
+          self.notificationService.printErrorMessage('Failed to update question tag. ' + error);
+        });
+        e.originalEvent.stopPropagation();
+    }    
+  };
+
+  onNodeCollapse(e: any) { 
+    e.originalEvent.stopPropagation();
   };
 }

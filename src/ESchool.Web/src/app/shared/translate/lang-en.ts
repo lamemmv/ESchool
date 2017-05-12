@@ -47,6 +47,7 @@ export const LANG_EN_TRANS = {
     'SAVED': 'Saved',
     'SEARCH': 'Search',
     'SELECT_A_IMAGE': 'Browse image',
+    'SELECT_GROUP':'Select group',
     'SIGNIN_USING_FACEBOOK': 'Sign in using facebook',
     'SIGNIN_USING_GOOGLE_PLUS': 'Sign in using Google+',
     'SPECIALIZED':'Specialized',

@@ -7,7 +7,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
 import { TagInputModule } from 'ng2-tag-input';
 import { RatingModule } from 'ngx-rating';
 import { ModalModule } from "ngx-modal";
-import { TreeModule } from 'ng2-tree';
+import { TreeTableModule } from 'primeng/primeng';
 
 import { TRANSLATION_PROVIDERS, TranslateModule, TranslateService } from './../shared/translate';
 import { QuestionsComponent } from './questions.component';
@@ -32,7 +32,7 @@ import { QuestionsRoutingModule } from './questions-routing.module';
         ModalModule,
         TagInputModule,
         RatingModule,
-        TreeModule,
+        TreeTableModule,
         TranslateModule,
         CKEditorModule,
         QuestionsRoutingModule
