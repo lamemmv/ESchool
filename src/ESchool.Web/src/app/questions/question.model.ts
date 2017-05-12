@@ -12,6 +12,7 @@ export class Question {
     month: Date;
     qtagId: number;
     answers: Answer[] = new Array();
+    qTag: any;
 }
 
 export class CKEditorConfig {

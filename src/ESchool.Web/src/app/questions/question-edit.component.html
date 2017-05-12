@@ -21,11 +21,12 @@
                     <div class="form-group col-md-6">
                         <label for="questionTags"> {{ 'QUESTION_GROUP' | translate }} </label>
                         <div class="input-group">
-                            <input type="text" class="form-control"/>
+                            <input type="text" class="form-control"
+                                [(ngModel)]="selectedQTag.path"/>
                             <span class="input-group-btn">
                                 <button type="button" 
                                     (click)="toggleTree($event)" 
-                                    class="btn btn-info btn-flat">{{'SELECT_GROUP' | translate}}</button>
+                                    class="btn btn-primary">{{'SELECT_GROUP' | translate}}</button>
                             </span>
                         </div>
                         <div *ngIf="showTree" class="tree-container">

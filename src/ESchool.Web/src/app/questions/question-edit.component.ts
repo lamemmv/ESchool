@@ -54,6 +54,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   private file = new FormFile();
   private dataGrid: TreeNode[];
   private showTree: boolean = false;
+  private selectedQTag = new QuestionTag();
   constructor(private _translate: TranslateService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
@@ -130,10 +131,23 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     var self = this;
     self.questionService.getById(id).subscribe((question) => {
       self.question = question;
+      self.selectedQTag = self.question.qTag;
+      self.selectedQTag.path = self.getPath(self.selectedQTag) + self.selectedQTag.name;
     },
       error => {
         self.notificationService.printErrorMessage('Failed to load question. ' + error);
       });
+  };
+
+  getPath(qtag: QuestionTag): string {
+    let path = '';
+    if (qtag.parentQTags && qtag.parentQTags.length > 0) {
+      qtag.parentQTags.forEach((parent) => {
+        path += parent.name + ' > ';
+      });
+      return path;
+    }
+    return '';
   };
 
   onReady(): void { };
@@ -275,7 +289,16 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   };
 
   handleSelected(event: any): void {
+    let self = this;
     this.question.qtagId = event.node.data.id;
+    self.questionTagsService.getById(this.question.qtagId)
+      .subscribe((qtag: QuestionTag) => {
+        this.selectedQTag = qtag;
+        this.selectedQTag.path = this.getPath(this.selectedQTag) + this.selectedQTag.name;
+      },
+      error => {
+        self.notificationService.printErrorMessage('Failed to update question tag. ' + error);
+      });
   };
 
   toggleTree(event: any) {
@@ -308,11 +331,11 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
         error => {
           self.notificationService.printErrorMessage('Failed to update question tag. ' + error);
         });
-        e.originalEvent.stopPropagation();
-    }    
+      e.originalEvent.stopPropagation();
+    }
   };
 
-  onNodeCollapse(e: any) { 
+  onNodeCollapse(e: any) {
     e.originalEvent.stopPropagation();
   };
 }
