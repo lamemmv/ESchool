@@ -6,7 +6,6 @@ using ESchool.Domain.Entities.Systems;
 using ESchool.Services.Exceptions;
 using ESchool.Services.Systems;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ESchool.Admin.Controllers
 {
@@ -19,6 +18,21 @@ namespace ESchool.Admin.Controllers
             _logService = logService;
         }
 
+        [HttpGet("GetLevels")]
+        public IList<string> GetLevels()
+        {
+            return new List<string>
+            {
+                "All",
+                "Fatal",
+                "Error",
+                "Warn",
+                "Info",
+                "Debug",
+                "Trace"
+            };
+        }
+
         [HttpGet("{id}")]
         public async Task<Log> Get(int id)
         {
@@ -26,9 +40,9 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IPagedList<Log>> Get(DateTime fromData, DateTime toDate, string level, int? page, int? size)
+        public async Task<IPagedList<Log>> Get(DateTime fromDate, DateTime toDate, string level, int? page, int? size)
         {
-            return await _logService.GetListAsync(fromData, toDate, level, page ?? DefaultPage, size ?? DefaultSize);
+            return await _logService.GetListAsync(fromDate, toDate, level, page ?? DefaultPage, size ?? DefaultSize);
         }
 
         [HttpDelete("{id}")]
@@ -55,23 +69,6 @@ namespace ESchool.Admin.Controllers
             }
 
             return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Log Ids.");
-        }
-
-        [NonAction]
-        public void PopularLogLevel()
-        {
-            IEnumerable<SelectListItem> logLevels = new List<SelectListItem>
-            {
-                new SelectListItem { Text = "All", Value = "0", Selected = true },
-                new SelectListItem { Text = "Fatal", Value = "1" },
-                new SelectListItem { Text = "Error", Value = "2" },
-                new SelectListItem { Text = "Warn", Value = "3" },
-                new SelectListItem { Text = "Info", Value = "4" },
-                new SelectListItem { Text = "Debug", Value = "5" },
-                new SelectListItem { Text = "Trace", Value = "6" }
-            };
-
-            ViewData["LogLevel"] = new SelectList(logLevels);
         }
     }
 }

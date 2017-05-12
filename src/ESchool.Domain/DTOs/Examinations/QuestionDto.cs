@@ -21,6 +21,8 @@ namespace ESchool.Domain.DTOs.Examinations
 
         public int QTagId { get; set; }
 
+        public QTagDto QTag { get; set; }
+
         public IEnumerable<AnswerDto> Answers { get; set; }
     }
 }

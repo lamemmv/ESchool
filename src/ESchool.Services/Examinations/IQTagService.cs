@@ -7,7 +7,7 @@ namespace ESchool.Services.Examinations
 {
     public interface IQTagService : IService
     {
-        Task<QTagDto> GetAsync(int id, bool includeParents = false);
+        Task<QTagDto> GetAsync(int id);
 
         Task<IList<QTagDto>> GetListAsync(int groupId);
 

@@ -19,54 +19,34 @@ namespace ESchool.Services.Examinations
         {
         }
 
-        public async Task<QTagDto> GetAsync(int id, bool includeParents = false)
+        public async Task<QTagDto> GetAsync(int id)
         {
-            if (!includeParents)
+            var entity = await QTags.FindAsync(id);
+
+            if (entity == null)
             {
-                return await GetWithoutParentsAsync(id);
+                return null;
             }
 
-            //var entity = await QTags.FindAsync(id);
+            var allQTags = await QTags.AsNoTracking()
+                .Where(t => t.GroupId == entity.GroupId)
+                .ToListAsync();
 
-            //if (entity == null)
-            //{
-            //    return null;
-            //}
+            var qtagDto = entity.ToQTagDto();
 
-            //var qtagDto = entity.ToQTagDto();
+            if (qtagDto.ParentId != 0)
+            {
+                qtagDto.ParentQTags = GetParentQTags(allQTags, qtagDto.ParentId);
+            }
 
-            //if (!includeParents)
-            //{
-            //    qtagDto.SubQTags = await QTags.AsNoTracking()
-            //        .Where(t => t.ParentId == entity.Id)
-            //        .Select(t => new QTagDto
-            //        {
-            //            ParentId = t.ParentId,
-            //            Id = t.Id,
-            //            Name = t.Name,
-            //            Description = t.Description
-            //        }).ToListAsync();
-            //}
+            var children = allQTags.Where(t => t.ParentId == qtagDto.Id);
 
-            //var qtags = await QTags.AsNoTracking()
-            //    .Where(t => t.GroupId == entity.GroupId)
-            //    .ToListAsync();
+            if (children.Any())
+            {
+                qtagDto.SubQTags = children.Select(t => t.ToQTagDto()).ToList();
+            }
 
-            //if (qtagDto.ParentId != 0)
-            //{
-            //    qtagDto.ParentQTags = GetParentQTags(qtags, qtagDto.ParentId);
-            //}
-
-            //qtagDto.SubQTags = qtags.Where(t => t.ParentId == entity.Id)
-            //    .Select(t => new QTagDto
-            //    {
-            //        ParentId = t.ParentId,
-            //        Id = t.Id,
-            //        Name = t.Name,
-            //        Description = t.Description
-            //    }).ToList();
-
-            return null;
+            return qtagDto;
         }
 
         public async Task<IList<QTagDto>> GetListAsync(int groupId)
@@ -143,42 +123,16 @@ namespace ESchool.Services.Examinations
         private async Task<QTag> FindAsync(string name, int groupId, int parentId)
         {
             return await QTags.AsNoTracking()
-                .SingleOrDefaultAsync(t => 
-                    t.GroupId == groupId && 
+                .SingleOrDefaultAsync(t =>
+                    t.GroupId == groupId &&
                     t.ParentId == parentId &&
                     t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        private async Task<QTagDto> GetWithoutParentsAsync(int id)
-        {
-            var qtags = await QTags.AsNoTracking()
-                .Where(t => t.Id == id || t.ParentId == id)
-                .ToListAsync();
-
-            QTagDto qtagDto = null;
-            IList<QTagDto> subQTagDtos = new List<QTagDto>();
-
-            foreach (var qtag in qtags)
-            {
-                if (qtag.Id == id)
-                {
-                    qtagDto = qtag.ToQTagDto();
-                }
-                else
-                {
-                    subQTagDtos.Add(qtag.ToQTagDto());
-                }
-            }
-
-            qtagDto.SubQTags = subQTagDtos;
-
-            return qtagDto;
-        }
-
         private IList<IdNameDto> GetParentQTags(IList<QTag> allQTags, int parentId)
         {
-            IList<IdNameDto> parentQTags = new List<IdNameDto>();
             QTag qtag;
+            IList<IdNameDto> parentQTags = new List<IdNameDto>();
 
             while (parentId != 0)
             {

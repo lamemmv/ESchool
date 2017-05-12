@@ -125,6 +125,14 @@ namespace ESchool.Services.Examinations
             return await CommitAsync();
         }
 
+        private DbSet<QTag> QTags
+        {
+            get
+            {
+                return _dbContext.Set<QTag>();
+            }
+        }
+
         private DbSet<Question> Questions
         {
             get
@@ -143,25 +151,5 @@ namespace ESchool.Services.Examinations
                 dbSet.RemoveRange(answers);
             }
         }
-
-        //private async Task<string[]> AddQTags(string[] qtags)
-        //{
-        //    qtags = qtags.Distinct().Select(t => t.Trim()).ToArray();
-
-        //    var dbSet = _dbContext.Set<QTag>();
-
-        //    var existingQTags = await dbSet.Where(t => qtags.Contains(t.Name)).ToListAsync();
-
-        //    var newQTags = qtags.Except(existingQTags.Select(t => t.Name));
-
-        //    if (newQTags.Any())
-        //    {
-        //        await dbSet.AddRangeAsync(newQTags.Select(t => new QTag { Name = t }));
-
-        //        await _dbContext.SaveChangesAsync();
-        //    }
-
-        //    return qtags;
-        //}
     }
 }

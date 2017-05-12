@@ -11,17 +11,26 @@ namespace ESchool.Admin.Controllers
 {
     public class QuestionsController : AdminController
     {
+        private readonly IQTagService _qtagService;
         private readonly IQuestionService _questionService;
 
-        public QuestionsController(IQuestionService questionService)
+        public QuestionsController(IQTagService qtagService, IQuestionService questionService)
         {
+            _qtagService = qtagService;
             _questionService = questionService;
         }
 
         [HttpGet("{id}")]
         public async Task<QuestionDto> Get(int id)
         {
-            return await _questionService.GetAsync(id);
+            var questionDto = await _questionService.GetAsync(id);
+
+            if (questionDto != null)
+            {
+                questionDto.QTag = await _qtagService.GetAsync(questionDto.QTagId);
+            }
+
+            return questionDto;
         }
 
         [HttpGet]

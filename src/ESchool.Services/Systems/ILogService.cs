@@ -9,7 +9,7 @@ namespace ESchool.Services.Systems
     {
         Task<Log> FindAsync(int id);
 
-        Task<IPagedList<Log>> GetListAsync(DateTime fromData, DateTime toDate, string level, int page, int size);
+        Task<IPagedList<Log>> GetListAsync(DateTime fromDate, DateTime toDate, string level, int page, int size);
 
         Task<int> DeleteAsync(int id);
 

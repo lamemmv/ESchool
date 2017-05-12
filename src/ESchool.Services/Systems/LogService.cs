@@ -5,6 +5,7 @@ using ESchool.Data;
 using ESchool.Data.Paginations;
 using ESchool.Domain.Entities.Systems;
 using ESchool.Services.Exceptions;
+using ESchool.Services.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Systems
@@ -21,15 +22,17 @@ namespace ESchool.Services.Systems
             return await Logs.FindAsync(id);
         }
 
-        public async Task<IPagedList<Log>> GetListAsync(DateTime fromData, DateTime toDate, string level, int page, int size)
+        public async Task<IPagedList<Log>> GetListAsync(DateTime fromDate, DateTime toDate, string level, int page, int size)
         {
-            var entities = Logs.AsNoTracking()
-                .Where(l =>
-                    (l.Logged.Date >= fromData.Date && l.Logged.Date <= toDate.Date) ||
-                    string.Equals(l.Level, level, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(l => l.Id);
+            var startDate = fromDate.StartOfDay();
+            var endDate = toDate.EndOfDay();
 
-            return await entities.GetListAsync(page, size);
+            return await Logs.AsNoTracking()
+                .Where(l =>
+                    (l.Logged >= startDate && l.Logged <= endDate) ||
+                    string.Equals(l.Level, level, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(l => l.Id)
+                .GetListAsync(page, size);
         }
 
         public async Task<int> DeleteAsync(int id)
