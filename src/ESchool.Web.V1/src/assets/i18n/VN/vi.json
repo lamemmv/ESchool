@@ -1,0 +1,116 @@
+{
+  "login": {
+    "title": "Đăng nhập vào Eschool-admin",
+    "signup_link": "Thành viên mới của Eschool-admin? Đăng ký!",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "sign_in": "Đăng nhập",
+    "forgot_password": "Quên mật khẩu?",
+    "sign_from_app_text": "hoặc đăng nhập bằng một nhấp chuột",
+    "share_on_facebook": "Chia sẽ trên Facebook",
+    "share_on_twitter": "Chia sẽ trên Twitter",
+    "share_on_google_plus": "Chia sẽ trên Google Plus"
+  },
+  "general": {
+    "akveo": "Akveo",
+    "home": "Home",
+    "forms": {
+      "option1": "Option 1"
+    },
+    "menu": {
+      "dashboard": "Dashboard",
+      "editors": "Trình soạn thảo",
+      "ck_editor": "CKEditor",
+      "components": "Các bộ phận",
+      "tree_view": "Cây",
+      "charts": "Biểu đồ",
+      "chartist_js": "Chartist.Js",
+      "ui_features": "Các tính năng UI",
+      "typography": "Typography",
+      "buttons": "Các nút",
+      "icons": "Icons",
+      "modals": "Modals",
+      "grid": "Grid",
+      "form_elements": "Form Elements",
+      "form_inputs": "Form Inputs",
+      "form_layouts": "Form Layouts",
+      "tables": "Tables",
+      "basic_tables": "Basic Tables",
+      "smart_tables": "Smart Tables",
+      "maps": "Maps",
+      "google_maps": "Google Maps",
+      "leaflet_maps": "Leaflet Maps",
+      "bubble_maps": "Bubble Maps",
+      "line_maps": "Line Maps",
+      "pages": "Pages",
+      "login": "Login",
+      "register": "Register",
+      "menu_level_1": "Menu Level 1",
+      "menu_level_1_1": "Menu Level 1.1",
+      "menu_level_1_2": "Menu Level 1.2",
+      "menu_level_1_2_1": "Menu Level 1.2.1",
+      "external_link": "External Link",
+      "questionTags": "Nhóm câu hỏi"
+    },
+    "created_with": "Created with"
+  },
+  "dashboard": {
+    "acquisition_channels": "Acquisition Channels",
+    "users_by_country": "Users by Country",
+    "revenue": "Revenue",
+    "feed": "Feed",
+    "todo_list": "To Do List",
+    "calendar": "Calendar",
+    "new_visits": "New Visits",
+    "purchases": "Purchases",
+    "active_users": "Active Users",
+    "returned": "Returned",
+    "popular_app": {
+      "super_app": "Super App",
+      "most_popular_app": "Most Popular App",
+      "total_visits": "Total Visits",
+      "new_visits": "New Visits",
+      "sales": "Sales"
+    },
+    "todo": {
+      "task_todo": "Task to do.."
+    },
+    "traffic_chart": {
+      "view_total": "Views Total"
+    }
+  },
+  "tree_view": {
+    "title": "basic",
+    "programming": "Programming languages by programming paradigm",
+    "oop": "Object-oriented programming",
+    "java": "Java",
+    "c_plus_plus": "C++",
+    "c_sharp": "C#",
+    "prototype": "Prototype-based programming",
+    "java_script": "JavaScript",
+    "coffee_script": "CoffeeScript",
+    "lua": "Lua"
+  },
+  "chart": {
+    "lines": "Lines",
+    "bars": "Bars",
+    "simple_line_chart": "Simple line chart",
+    "line_chart": "Line chart with area",
+    "bi_polar_line_chart": "Bi-polar line chart with area only",
+    "simple_bar_chart": "Simple bar chart",
+    "multi_line_labels_bar_chart": "Multi-line labels bar chart",
+    "stacked_bar_chart": "Stacked bar chart",
+    "pies_and_donuts": "Pies & Donuts",
+    "simple_pie": "Simple Pie",
+    "pie_with_labels": "Pie with labels",
+    "donut": "Donut"
+  },
+  "ADD": "Thêm",
+  "DESCRIPTION": "Mô tả",
+  "GROUP": "Khối",
+  "NAME": "Tên",
+  "PLACEHOLDER_SEARCH_QUESTION_TAGS": "Tìm nhóm câu hỏi",
+  "QUESTION_TAGS": "Nhóm câu hỏi",
+  "SAVE": "Lưu",
+  "SEARCH": "Tìm"
+}

@@ -1,0 +1,46 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgaModule } from '../../theme/nga.module';
+import { TreeModule } from 'ng2-tree';
+import { AlertModule, ModalModule } from 'ng2-bootstrap';
+import { TreeTableModule } from 'primeng/primeng';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { AppTranslationModule } from '../../app.translation.module';
+import { routing } from './components.routing';
+import { Components } from './components.component';
+import { TreeView } from './components/treeView/treeView.component';
+import { QuestionTagsComponent } from './components/questionTags/question-tags.component';
+import { GroupsService } from './components/groups/groups.service';
+import { QuestionTagsService } from './components/questionTags/question-tags.service';
+import { EditQuestionTagComponent } from './components/questionTags/question-tag-edit.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgaModule,
+    TreeModule,
+    AlertModule.forRoot(),
+    ModalModule.forRoot(),
+    TreeTableModule,
+    NgbModalModule,
+    AppTranslationModule,
+    routing
+  ],
+  declarations: [
+    Components,
+    TreeView,
+    QuestionTagsComponent,
+    EditQuestionTagComponent
+  ],
+  entryComponents: [
+    EditQuestionTagComponent
+  ],
+  providers: [
+      QuestionTagsService,
+      GroupsService
+  ]
+})
+export class ComponentsModule { }
