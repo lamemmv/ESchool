@@ -184,7 +184,7 @@ export class QuestionTagsComponent implements OnInit {
   };
 
   openAddDialog() {
-    const activeModal = this.modalService.open(EditQuestionTagComponent, {size: 'sm',
+    const activeModal = this.modalService.open(EditQuestionTagComponent, {size: 'lg',
                                                               backdrop: 'static'});
     activeModal.componentInstance.modalHeader = 'Static modal';
     activeModal.componentInstance.modalContent = `This is static modal, backdrop click

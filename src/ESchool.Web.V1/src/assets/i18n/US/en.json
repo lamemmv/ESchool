@@ -106,6 +106,7 @@
     "donut": "Donut"
   },
   "ADD": "Add",
+  "CANCEL":"Cancel",
   "DESCRIPTION": "Description",
   "GROUP": "Group of class",
   "NAME": "Name",
