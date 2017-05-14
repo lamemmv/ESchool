@@ -113,6 +113,8 @@ namespace ESchool.API
             {
                 Authority = "http://localhost:59999/",
                 Audience = "http://localhost:59999/",
+                //AutomaticAuthenticate = true,
+                //AutomaticChallenge = true,
                 RequireHttpsMetadata = false,
                 TokenValidationParameters = new TokenValidationParameters
                 {

@@ -39,22 +39,39 @@ namespace ESchool.Services.Examinations
                 qtagDto.ParentQTags = GetParentQTags(allQTags, qtagDto.ParentId);
             }
 
-            var children = allQTags.Where(t => t.ParentId == qtagDto.Id);
+            var children = allQTags.Where(t => t.ParentId == qtagDto.Id)
+                .Select(t => t.ToQTagDto())
+                .ToList();
 
-            if (children.Any())
+            foreach (var qtag in children)
             {
-                qtagDto.SubQTags = children.Select(t => t.ToQTagDto()).ToList();
+                qtag.SubQTagsCount = allQTags.Count(t => t.ParentId == qtag.Id);
             }
+
+            qtagDto.SubQTags = children;
 
             return qtagDto;
         }
 
         public async Task<IList<QTagDto>> GetListAsync(int groupId)
         {
-            return await QTags.AsNoTracking()
-                .Where(t => t.GroupId == groupId && t.ParentId == 0)
+            IList<QTagDto> qtagDtos = new List<QTagDto>();
+
+            var qtags = await QTags.AsNoTracking()
+                .Where(t => t.GroupId == groupId)
                 .Select(t => t.ToQTagDto())
                 .ToListAsync();
+
+            foreach (var qtag in qtags)
+            {
+                if (qtag.ParentId == 0)
+                {
+                    qtag.SubQTagsCount = qtags.Count(t => t.ParentId == qtag.Id);
+                    qtagDtos.Add(qtag);
+                }
+            }
+
+            return qtagDtos;
         }
 
         public async Task<QTag> CreateAsync(QTag entity)
