@@ -28,27 +28,29 @@ namespace ESchool.Services.Examinations
                 return null;
             }
 
-            var allQTags = await QTags.AsNoTracking()
+            var qtags = await QTags.AsNoTracking()
                 .Where(t => t.GroupId == entity.GroupId)
+                .Select(t => t.ToQTagDto())
                 .ToListAsync();
 
             var qtagDto = entity.ToQTagDto();
 
             if (qtagDto.ParentId != 0)
             {
-                qtagDto.ParentQTags = GetParentQTags(allQTags, qtagDto.ParentId);
+                qtagDto.ParentQTags = GetParentQTags(qtags, qtagDto.ParentId);
             }
 
-            var children = allQTags.Where(t => t.ParentId == qtagDto.Id)
-                .Select(t => t.ToQTagDto())
-                .ToList();
+            var children = qtags.Where(t => t.ParentId == qtagDto.Id).ToList();
 
-            foreach (var qtag in children)
+            if (children.Any())
             {
-                qtag.SubQTagsCount = allQTags.Count(t => t.ParentId == qtag.Id);
-            }
+                foreach (var qtag in children)
+                {
+                    qtag.SubQTagsCount = qtags.Count(t => t.ParentId == qtag.Id);
+                }
 
-            qtagDto.SubQTags = children;
+                qtagDto.SubQTags = children;
+            }
 
             return qtagDto;
         }
@@ -146,14 +148,14 @@ namespace ESchool.Services.Examinations
                     t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        private IList<IdNameDto> GetParentQTags(IList<QTag> allQTags, int parentId)
+        private IList<IdNameDto> GetParentQTags(IList<QTagDto> qtags, int parentId)
         {
-            QTag qtag;
+            QTagDto qtag;
             IList<IdNameDto> parentQTags = new List<IdNameDto>();
 
             while (parentId != 0)
             {
-                qtag = allQTags.SingleOrDefault(t => t.Id == parentId);
+                qtag = qtags.SingleOrDefault(t => t.Id == parentId);
 
                 if (qtag == null)
                 {
