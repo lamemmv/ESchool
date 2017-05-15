@@ -106,12 +106,18 @@
     "donut": "Donut"
   },
   "ADD": "Thêm",
-  "CANCEL":"Hủy",
+  "ADD_QUESTION_TAG_HEADER": "Thêm nhóm câu hỏi",
+  "CANCEL": "Hủy",
   "DESCRIPTION": "Mô tả",
+  "EDIT_QUESTION_TAG_HEADER": "Sửa nhóm câu hỏi",
   "GROUP": "Khối",
   "NAME": "Tên",
+  "PLACEHOLDER_NAME_QUESTION_TAG": "Tên nhóm",
+  "PLACEHOLDER_DESCRIPTION_QUESTION_TAG": "Mô tả nhóm",
   "PLACEHOLDER_SEARCH_QUESTION_TAGS": "Tìm nhóm câu hỏi",
   "QUESTION_TAGS": "Nhóm câu hỏi",
+  "QUESTION_TAG_BELONG_TO": "Thuộc nhóm câu hỏi?",
   "SAVE": "Lưu",
-  "SEARCH": "Tìm"
+  "SEARCH": "Tìm",
+  "SELECT_GROUP": "Chọn nhóm"
 }
