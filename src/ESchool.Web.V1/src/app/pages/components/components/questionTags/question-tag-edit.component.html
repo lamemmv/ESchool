@@ -1,51 +1,57 @@
 <div class="modal-content">
     <div class="modal-header">
-        <h4 class="modal-title">{{modalHeader}}</h4>
-        <button class="close" aria-label="Close" (click)="closeModal()">
+        <h4 class="modal-title">{{'QUESTION_TAGS' | translate }}</h4>
+        <button class="close" aria-label="Close" (click)="cancel()">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
     <div class="modal-body">
-        <ba-card title="Standard Fields" baCardClass="with-scroll">
+        <ba-card title="{{modalHeader}}" baCardClass="with-scroll">
             <form>
                 <div class="form-group">
-                    <label for="input01">Text</label>
-                    <input type="text" class="form-control" id="input01" placeholder="Text">
+                    <label for="qtagName">{{'NAME' | translate}}</label>
+                    <input type="text" class="form-control" 
+                        id="qtagName" 
+                        name="qtagName"
+                        placeholder="{{'PLACEHOLDER_NAME_QUESTION_TAG' | translate}}"
+                        [(ngModel)]="modalContent.name"/>
                 </div>
                 <div class="form-group">
-                    <label for="input02">Password</label>
-                    <input type="password" class="form-control" id="input02" placeholder="Password">
+                    <label for="qtagDescription">{{'DESCRIPTION' | translate}}</label>
+                    <textarea placeholder="{{'PLACEHOLDER_DESCRIPTION_QUESTION_TAG' | translate}}" 
+                        class="form-control" 
+                        id="qtagDescription"    
+                        name="qtagDescription"                    
+                        [(ngModel)]="modalContent.description"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="input03">Rounded Corners</label>
-                    <input type="text" class="form-control form-control-rounded" id="input03" placeholder="Rounded Corners">
-                </div>
-                <div class="form-group">
-                    <label for="input04">With help</label>
-                    <input type="text" class="form-control" id="input04" placeholder="With help">
-                    <span class="help-block sub-little-text">A block of help text that breaks onto a new line and may extend beyond one line.</span>
-                </div>
-                <div class="form-group">
-                    <label for="input05">Disabled Input</label>
-                    <input type="text" class="form-control" id="input05" placeholder="Disabled Input" disabled>
-                </div>
-
-                <div class="form-group">
-                    <label for="textarea01">Textarea</label>
-                    <textarea placeholder="Default Input" class="form-control" id="textarea01"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" class="form-control form-control-sm" id="input2" placeholder="Small Input">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control form-control-lg" id="input4" placeholder="Large Input">
+                    <label for="qtagPath"> {{ 'QUESTION_TAG_BELONG_TO' | translate }} </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control"
+                            [(ngModel)]="selectedQTag.path"
+                            name="qtagPath"/>
+                        <span class="input-group-btn">
+                            <button type="button" 
+                                (click)="toggleTree($event)" 
+                                class="btn btn-primary">{{'SELECT_GROUP' | translate}}</button>
+                        </span>
+                    </div>
+                    <div *ngIf="showTree" class="tree-container">
+                        <p-treeTable [value]="dataGrid" 
+                            selectionMode="single" 
+                            (onNodeSelect)="handleSelected($event)"
+                            (onNodeExpand)="onNodeExpand($event)"
+                            (onNodeCollapse)="onNodeCollapse($event)">
+                            <p-column field="name" header="{{'NAME' | translate }}"></p-column>
+                            <p-column field="description" header="{{'DESCRIPTION' | translate }}"></p-column>
+                        </p-treeTable>
+                    </div>
                 </div>
             </form>
         </ba-card>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary confirm-btn" (click)="closeModal()">{{'SAVE' | translate}}</button>
-        <button class="btn btn-default" type="button">{{'CANCEL' | translate }}</button>
+        <button class="btn btn-primary confirm-btn" (click)="save()">{{'SAVE' | translate}}</button>
+        <button class="btn btn-default" type="button" (click)="cancel()">{{'CANCEL' | translate }}</button>
     </div>
 </div>

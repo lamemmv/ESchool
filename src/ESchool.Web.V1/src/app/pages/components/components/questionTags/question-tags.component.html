@@ -4,25 +4,12 @@
             <alert *ngIf="alert.type" [type]="alert.type" dismissible="true" dismissOnTimeout="3000">{{alert.message}}
             </alert>
             <form class="row">
-                <div class="col-md-6">
-                    <div class="dataTables_length">
-                        <label>
-                            <button type="submit" 
-                                class="btn btn-primary pull-right" 
-                                (click)="openAddDialog()" translate><i class="fa fa-plus"></i> 
-                                {{'ADD'}}
-                            </button>
-                        </label>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <input #searchBox class="form-control" placeholder="{{questionTagsTranslation.searchPlaceholder}}" type="text"
-                            (keyup)="onKeyStroke(searchBox.value)" />
-                        <span class="input-group-btn">
-                                <button class="btn btn-danger" type="button" translate>{{'SEARCH'}}</button>
-                            </span>
-                    </div>
+                <div class="col-md-12 form-group">
+                    <button type="submit" 
+                        class="btn btn-primary" 
+                        (click)="openAddDialog()" translate><i class="fa fa-plus"></i> 
+                        {{'ADD'}}
+                    </button>
                 </div>
                 <div class="form-group col-md-6">
                     <label translate>{{ 'GROUP' }}</label>
@@ -30,6 +17,16 @@
                             <option *ngFor="let group of groups" [ngValue]="group">{{group.name}}</option>
                         </select>
                 </div>
+                <div class="col-md-6 form-group">
+                    <label translate>{{ 'SEARCH' }}</label>
+                    <div class="input-group">
+                        <input #searchBox class="form-control" placeholder="{{questionTagsTranslation.searchPlaceholder}}" type="text"
+                            (keyup)="onKeyStroke(searchBox.value)" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="button" translate>{{'SEARCH'}}</button>
+                        </span>
+                    </div>
+                </div>                                
                 <div class="row">
                     <div *ngFor="let hero of filteredList | async" class="search-result">
                     </div>

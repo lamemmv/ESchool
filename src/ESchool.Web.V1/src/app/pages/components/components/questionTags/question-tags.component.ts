@@ -34,7 +34,9 @@ export class QuestionTagsComponent implements OnInit {
   private originalQTags: QuestionTag[] = [];
   private modal = new Modal();
   private questionTagsTranslation = {
-    searchPlaceholder: ''
+    searchPlaceholder: '',
+    addQTagHeader: '',
+    editQTagHeader: ''
   };
   private groups: Group[] = [];
   private selectedGroup = new Group();
@@ -55,9 +57,13 @@ export class QuestionTagsComponent implements OnInit {
       message: ''
     };
 
-    this._translate.get('PLACEHOLDER_SEARCH_QUESTION_TAGS').subscribe((res: string) => {
-      this.questionTagsTranslation.searchPlaceholder = res;
-    });
+    this._translate.get(['PLACEHOLDER_SEARCH_QUESTION_TAGS',
+      'ADD_QUESTION_TAG_HEADER',
+      'EDIT_QUESTION_TAG_HEADER']).subscribe((res: any) => {
+        this.questionTagsTranslation.searchPlaceholder = res.PLACEHOLDER_SEARCH_QUESTION_TAGS;
+        this.questionTagsTranslation.addQTagHeader = res.ADD_QUESTION_TAG_HEADER;
+        this.questionTagsTranslation.editQTagHeader = res.EDIT_QUESTION_TAG_HEADER;
+      });
 
     this.filteredList = this.searchTerms
       .debounceTime(1000)        // wait 300ms after each keystroke before considering the term
@@ -74,7 +80,7 @@ export class QuestionTagsComponent implements OnInit {
       });
 
     this.getGroups();
-  };
+  }
 
   getGroups() {
     let self = this;
@@ -87,12 +93,12 @@ export class QuestionTagsComponent implements OnInit {
       error => {
         self.notificationService.printErrorMessage('Failed to load question tags. ' + error);
       });
-  };
+  }
 
   onChangeGroup(group: Group) {
     this.getQuestionTags(this.selectedGroup.id);
     this.questionTag.groupId = this.selectedGroup.id;
-  };
+  }
 
   getQuestionTags = (groupId: number) => {
     var self = this;
@@ -105,7 +111,7 @@ export class QuestionTagsComponent implements OnInit {
       error => {
         self.notificationService.printErrorMessage('Failed to load question tags. ' + error);
       });
-  };
+  }
 
   getDataGrid(questionTags: QuestionTag[]): TreeNode[] {
     let treeNodes: TreeNode[] = [];
@@ -120,22 +126,7 @@ export class QuestionTagsComponent implements OnInit {
       treeNodes.push(treeNode);
     });
     return treeNodes;
-  };
-
-  addQuestionTag = () => {
-    var self = this;
-    self.questionTagsService.create(self.questionTag)
-      .subscribe((id: number) => {
-        self.questionTag.id = id;
-        self.alert.type = 'success';
-        self.alert.message = this._translate.instant('SAVED');
-        self.getQuestionTags(self.selectedGroup.id);
-      },
-      (error) => {
-        self.alert.type = 'danger';
-        self.alert.message = self._translate.instant(JSON.parse(error._body).code);
-      });
-  };
+  }
 
   removeQTag = (event: any, qtag: QuestionTag) => {
     event.stopPropagation();
@@ -159,54 +150,52 @@ export class QuestionTagsComponent implements OnInit {
             });
         }
       });
-  };
-
-  updateQuestionTag = () => {
-    var self = this;
-    self.questionTagsService.update(self.questionTag)
-      .subscribe((questionTagCreated) => {
-        self.alert.type = 'success';
-        self.alert.message = this._translate.instant('SAVED');
-        self.getQuestionTags(self.selectedGroup.id);
-        self.questionTag = new QuestionTag();
-      },
-      error => {
-        self.notificationService.printErrorMessage('Failed to update question tag. ' + error);
-      });
-  };
-
-  submitForm = () => {
-    if (this.questionTag.id) {
-      this.updateQuestionTag();
-    } else {
-      this.addQuestionTag();
-    }
-  };
+  }
 
   openAddDialog() {
-    const activeModal = this.modalService.open(EditQuestionTagComponent, {size: 'lg',
-                                                              backdrop: 'static'});
-    activeModal.componentInstance.modalHeader = 'Static modal';
-    activeModal.componentInstance.modalContent = `This is static modal, backdrop click
-                                                    will not close it. Click × or confirmation button to close modal.`;
-  };
+    let self = this;
+    let questionTag = new QuestionTag();
+    questionTag.groupId = self.selectedGroup.id;
+    self.openDialog(this.questionTagsTranslation.addQTagHeader, questionTag);
+  }
 
   openEditDialog(event: any) {
-    this.showChildModal(event.node.data);
-  };
+    let self = this;
+    self.questionTagsService.getById(event.node.data.id)
+      .subscribe((question) => {        
+        question.groupId = self.selectedGroup.id;
+        self.openDialog(this.questionTagsTranslation.editQTagHeader, question);
+      },
+      error => {
+        self.notificationService.printErrorMessage('Failed to load question. ' + error);
+      });
+  }
 
-  showChildModal(qtag: QuestionTag): void {
-    this.questionTag = Object.assign({}, qtag);
-    this.questionTag.groupId = this.selectedGroup.id;
-  };
+  openDialog(header: string, content: QuestionTag) {
+    let self = this;
+    const activeModal = this.modalService.open(EditQuestionTagComponent, {
+      size: 'lg',
+      backdrop: 'static'
+    });
+    activeModal.componentInstance.modalHeader = header;
+    activeModal.componentInstance.modalContent = content;
+    activeModal.result.then((result) => {
+      self.handleDialogClose(result);
+    }, (reason) => {
+      self.handleDialogClose(null);
+    });
+  }
 
-  cancelUpdate = () => {
+  handleDialogClose(result: any) {
+    let self = this;
+    if (result) {
+      self.getQuestionTags(self.selectedGroup.id);
+    }
   };
 
   search(term: string): Observable<QuestionTag[]> {
     var self = this;
     let filtered: QuestionTag[] = [];
-    console.log(term);
 
     if (!term.trim()) {
       self.questionTags = self.cloneArray(self.originalQTags);
@@ -218,7 +207,7 @@ export class QuestionTagsComponent implements OnInit {
       self.dataGrid = self.getDataGrid(self.questionTags);
       return Observable.of(items);
     }
-  };
+  }
 
   onKeyStroke(keyword: string): void {
     this.searchTerms.next(keyword);
@@ -234,19 +223,19 @@ export class QuestionTagsComponent implements OnInit {
       arr.push(Object.assign({}, x));
     });
     return arr;
-  };
+  }
 
   onNodeExpand(e: any) {
     let self = this;
     if (e.node) {
       self.questionTagsService.getById(e.node.data.id)
         .subscribe((qtag: QuestionTag) => {
-          let nodes : TreeNode[] = [];
+          let nodes: TreeNode[] = [];
           if (qtag.subQTags) {
             qtag.subQTags.forEach((subTag: QuestionTag) => {
-              let children : any[] = [];
+              let children: any[] = [];
               let treeNode = {
-                data: subTag, children: children, leaf: subTag.subQTagsCount > 0 ? false: true
+                data: subTag, children: children, leaf: subTag.subQTagsCount > 0 ? false : true
               };
               nodes.push(treeNode);
             });
@@ -258,5 +247,5 @@ export class QuestionTagsComponent implements OnInit {
           self.notificationService.printErrorMessage('Failed to load question tag. ' + error);
         });
     }
-  };
+  }
 }

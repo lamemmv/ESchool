@@ -106,12 +106,18 @@
     "donut": "Donut"
   },
   "ADD": "Add",
+  "ADD_QUESTION_TAG_HEADER": "Add question tag",
   "CANCEL":"Cancel",
   "DESCRIPTION": "Description",
+  "EDIT_QUESTION_TAG_HEADER": "Edit question tag",
   "GROUP": "Group of class",
   "NAME": "Name",
+  "PLACEHOLDER_NAME_QUESTION_TAG":"Name of group",
+  "PLACEHOLDER_DESCRIPTION_QUESTION_TAG":"Description of group",
   "PLACEHOLDER_SEARCH_QUESTION_TAGS": "Search question tags",
   "QUESTION_TAGS": "Question tags",
+  "QUESTION_TAG_BELONG_TO": "Belong to?",
   "SAVE": "Save",
-  "SEARCH": "Search"
+  "SEARCH": "Search",
+  "SELECT_GROUP": "Select group"
 }
