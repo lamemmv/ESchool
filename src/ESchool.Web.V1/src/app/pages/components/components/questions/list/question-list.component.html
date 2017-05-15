@@ -1,0 +1,33 @@
+<div class="horizontal-scroll">
+    <table class="table table-hover">
+        <thead>
+            <tr class="black-muted-bg">
+                <th>#</th>
+                <th>{{'NAME'|translate}}</th>
+                <th>{{'DESCRIPTION'|translate}}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of questions" class="no-top-border">
+                <td>{{item.id}}</td>
+                <td [innerHTML]="item.content"></td>
+                <td>{{item.description}}</td>
+                <td>
+                    <a class="ng2-smart-action ng2-smart-action-edit-edit">
+                        <i class="fa fa-times remove pull-right" 
+                            (click)="removeQuestion(qt)" 
+                            title="{{'REMOVE_QUESTION' | translate}}">
+                        </i>
+                    </a>
+                    <a class="ng2-smart-action ng2-smart-action-delete-delete">
+                        <i class="fa fa-pencil-square-o edit pull-right" 
+                            (click)="editQuestion(qt)" 
+                            title="{{'EDIT_QUESTION_TITLE' | translate}}">
+                        </i>
+                    </a>                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
