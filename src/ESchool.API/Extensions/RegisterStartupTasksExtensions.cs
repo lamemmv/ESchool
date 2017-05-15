@@ -27,12 +27,12 @@ namespace ESchool.API.Extensions
 
         public static IApplicationBuilder UseBackgroundTasks(this IApplicationBuilder app)
         {
-            //var serviceProvider = app.ApplicationServices;
-            //var queuedEmailService = serviceProvider.GetRequiredService<QueuedEmailService>();
-            //var emailSender = serviceProvider.GetRequiredService<MailKitEmailSender>();
+            var serviceProvider = app.ApplicationServices;
+            var queuedEmailService = serviceProvider.GetRequiredService<IQueuedEmailService>();
+            var emailSender = serviceProvider.GetRequiredService<IEmailSender>();
 
-            //IBackgroundTask emailSenderTask = new QueuedEmailSendTask(1, 5, queuedEmailService, emailSender);
-            //emailSenderTask.Start();
+            IBackgroundTask emailSenderTask = new QueuedEmailSendTask(1, 5, queuedEmailService, emailSender);
+            emailSenderTask.Start();
 
             return app;
         }

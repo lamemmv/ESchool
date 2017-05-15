@@ -67,7 +67,7 @@ namespace ESchool.Services.Messages
 
                 queuedEmail.SentOnUtc = DateTime.UtcNow;
             }
-            catch
+            catch (Exception ex)
             {
                 throw;
             }

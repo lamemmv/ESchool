@@ -86,7 +86,7 @@ namespace ESchool.Services.Messages
 
             emailMessage.Subject = subject;
 
-            if (addresses.Length != 0)
+            if (addresses.Length > 0)
             {
                 // Send multiple emails.
                 emailMessage.Importance = MessageImportance.High;
@@ -112,8 +112,7 @@ namespace ESchool.Services.Messages
         {
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync(emailAccount.Host, emailAccount.Port, emailAccount.EnableSsl)
-                    .ConfigureAwait(false);
+                client.Connect(emailAccount.Host, emailAccount.Port, emailAccount.EnableSsl);
 
                 // Note: since we don't have an OAuth2 token, disable the XOAUTH2 authentication mechanism.
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
@@ -121,12 +120,11 @@ namespace ESchool.Services.Messages
                 // Note: only needed if the SMTP server requires authentication.
                 if (emailAccount.UseDefaultCredentials)
                 {
-                    await client.AuthenticateAsync(emailAccount.UserName, emailAccount.Password)
-                        .ConfigureAwait(false);
+                    await client.AuthenticateAsync(emailAccount.UserName, emailAccount.Password);
                 }
 
-                await client.SendAsync(emailMessage).ConfigureAwait(false);
-                await client.DisconnectAsync(true).ConfigureAwait(false);
+                await client.SendAsync(emailMessage);
+                await client.DisconnectAsync(true);
             }
         }
     }

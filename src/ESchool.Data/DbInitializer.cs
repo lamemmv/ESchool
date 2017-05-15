@@ -92,8 +92,8 @@ namespace ESchool.Data
 
         private async Task SeedEmailAccountsAsync(ObjectDbContext dbContext)
         {
-            string email = "xxx@gmail.com";
-            string password = "xxxxxx";
+            string email = "eschoolapi@gmail.com";
+            string password = "1qaw3(OLP_";
 
             var emailAccountDbSet = dbContext.Set<EmailAccount>();
 
