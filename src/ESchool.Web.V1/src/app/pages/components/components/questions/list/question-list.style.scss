@@ -1,0 +1,12 @@
+@import "../../../../../theme/sass/conf/conf";
+
+a.ng2-smart-action, .ng2-smart-title {
+    font-size: 14px !important;
+    color: $default-text;
+    padding: 0 5px;
+    display: inline-block;
+
+    &.ng2-smart-action-add-add {
+        font-size: 25px !important;
+    }
+}

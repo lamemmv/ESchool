@@ -51,7 +51,7 @@
       "menu_level_1_2_1": "Menu Level 1.2.1",
       "external_link": "External Link",
       "questionTags": "Question tags",
-      "questions":"Questions"
+      "questions": "Questions"
     },
     "created_with": "Created with"
   },
@@ -108,16 +108,18 @@
   },
   "ADD": "Add",
   "ADD_QUESTION_TAG_HEADER": "Add question tag",
-  "CANCEL":"Cancel",
+  "CANCEL": "Cancel",
   "DESCRIPTION": "Description",
   "EDIT_QUESTION_TAG_HEADER": "Edit question tag",
+  "EDIT_QUESTION_TITLE": "Edit question",
   "GROUP": "Group of class",
   "NAME": "Name",
-  "PLACEHOLDER_NAME_QUESTION_TAG":"Name of group",
-  "PLACEHOLDER_DESCRIPTION_QUESTION_TAG":"Description of group",
+  "PLACEHOLDER_NAME_QUESTION_TAG": "Name of group",
+  "PLACEHOLDER_DESCRIPTION_QUESTION_TAG": "Description of group",
   "PLACEHOLDER_SEARCH_QUESTION_TAGS": "Search question tags",
   "QUESTION_TAGS": "Question tags",
   "QUESTION_TAG_BELONG_TO": "Belong to?",
+  "REMOVE_QUESTION_TITLE": "Delete question",
   "SAVE": "Save",
   "SEARCH": "Search",
   "SELECT_GROUP": "Select group"

@@ -9,23 +9,26 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of questions" class="no-top-border">
-                <td>{{item.id}}</td>
-                <td [innerHTML]="item.content"></td>
-                <td>{{item.description}}</td>
-                <td>
-                    <a class="ng2-smart-action ng2-smart-action-edit-edit">
+            <tr *ngFor="let qt of questions" 
+                class="no-top-border">
+                <td>{{qt.id}}</td>
+                <td [innerHTML]="qt.content"></td>
+                <td [innerHTML]="qt.month"></td>
+                <td class="ng2-smart-actions">
+                    <a class="ng2-smart-action ng2-smart-action-delete-delete" 
+                        href="void:javascript(0)">
                         <i class="fa fa-times remove pull-right" 
                             (click)="removeQuestion(qt)" 
-                            title="{{'REMOVE_QUESTION' | translate}}">
+                            title="{{'REMOVE_QUESTION_TITLE' | translate}}">
                         </i>
-                    </a>
-                    <a class="ng2-smart-action ng2-smart-action-delete-delete">
+                    </a>                    
+                    <a class="ng2-smart-action ng2-smart-action-edit-edit" 
+                        href="void:javascript(0)">
                         <i class="fa fa-pencil-square-o edit pull-right" 
                             (click)="editQuestion(qt)" 
                             title="{{'EDIT_QUESTION_TITLE' | translate}}">
-                        </i>
-                    </a>                    
+                        </i>   
+                    </a>                
                 </td>
             </tr>
         </tbody>

@@ -11,6 +11,14 @@ export class Question {
     qTag: any;
 }
 
+export class PagedList {
+    data: Question[] = new Array();
+    page: number;
+    size: number;
+    totalItems: number;
+    totalPages: number;
+}
+
 export class CKEditorConfig {
     uiColor: string;
 }

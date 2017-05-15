@@ -51,7 +51,7 @@
       "menu_level_1_2_1": "Menu Level 1.2.1",
       "external_link": "External Link",
       "questionTags": "Nhóm câu hỏi",
-      "questions":"Câu hỏi"
+      "questions": "Câu hỏi"
     },
     "created_with": "Created with"
   },
@@ -111,6 +111,7 @@
   "CANCEL": "Hủy",
   "DESCRIPTION": "Mô tả",
   "EDIT_QUESTION_TAG_HEADER": "Sửa nhóm câu hỏi",
+  "EDIT_QUESTION_TITLE": "Sửa câu hỏi",
   "GROUP": "Khối",
   "NAME": "Tên",
   "PLACEHOLDER_NAME_QUESTION_TAG": "Tên nhóm",
@@ -118,6 +119,7 @@
   "PLACEHOLDER_SEARCH_QUESTION_TAGS": "Tìm nhóm câu hỏi",
   "QUESTION_TAGS": "Nhóm câu hỏi",
   "QUESTION_TAG_BELONG_TO": "Thuộc nhóm câu hỏi?",
+  "REMOVE_QUESTION_TITLE": "Xóa câu hỏi",
   "SAVE": "Lưu",
   "SEARCH": "Tìm",
   "SELECT_GROUP": "Chọn nhóm"
