@@ -63,6 +63,14 @@ export const PAGES_MENU = [
                 title: 'general.menu.questionTags',
               }
             }
+          },
+          {
+            path: 'questions',
+            data: {
+              menu: {
+                title: 'general.menu.questions',
+              }
+            }
           }
         ]
       },

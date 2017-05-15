@@ -11,10 +11,14 @@ import { AppTranslationModule } from '../../app.translation.module';
 import { routing } from './components.routing';
 import { Components } from './components.component';
 import { TreeView } from './components/treeView/treeView.component';
-import { QuestionTagsComponent } from './components/questionTags/question-tags.component';
 import { GroupsService } from './components/groups/groups.service';
 import { QuestionTagsService } from './components/questionTags/question-tags.service';
+import { QuestionTagsComponent } from './components/questionTags/question-tags.component';
 import { EditQuestionTagComponent } from './components/questionTags/question-tag-edit.component';
+import { QuestionsService } from './components/questions/questions.service';
+import { QuestionsComponent } from './components/questions/questions.component';
+import { EditQuestionComponent } from './components/questions/edit/question-edit.component';
+import { QuestionListComponent } from './components/questions/list/question-list.component';
 
 @NgModule({
   imports: [
@@ -33,14 +37,18 @@ import { EditQuestionTagComponent } from './components/questionTags/question-tag
     Components,
     TreeView,
     QuestionTagsComponent,
-    EditQuestionTagComponent
+    EditQuestionTagComponent,
+    QuestionsComponent,
+    EditQuestionComponent,
+    QuestionListComponent
   ],
   entryComponents: [
     EditQuestionTagComponent
   ],
   providers: [
       QuestionTagsService,
-      GroupsService
+      GroupsService,
+      QuestionsService
   ]
 })
 export class ComponentsModule { }
