@@ -28,7 +28,7 @@ namespace ESchool.Services.Messages
 
         public override async Task Execute()
         {
-            var queuedEmails = await _queuedEmailService.GetListAsync(
+            var pagedQueuedEmail = await _queuedEmailService.GetListAsync(
                 createdFromUtc: null,
                 createdToUtc: null,
                 loadNotSentItemsOnly: true,
@@ -38,7 +38,7 @@ namespace ESchool.Services.Messages
                 page: 1,
                 size: 500);
 
-            foreach (var queuedEmail in queuedEmails)
+            foreach (var queuedEmail in pagedQueuedEmail.Data)
             {
                 await SendEmailAsync(queuedEmail);
 

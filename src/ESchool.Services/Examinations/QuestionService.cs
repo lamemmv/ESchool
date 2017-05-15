@@ -67,12 +67,11 @@ namespace ESchool.Services.Examinations
 
         public async Task<IPagedList<QuestionDto>> GetListAsync(int page, int size)
         {
-            var questions = Questions.AsNoTracking()
+            return await Questions.AsNoTracking()
                 .Include(q => q.Answers)
                 .OrderBy(q => q.Id)
-                .Select(q => q.ToQuestionDto());
-
-            return await questions.GetListAsync(page, size);
+                .Select(q => q.ToQuestionDto())
+                .GetListAsync(page, size);
         }
 
         public async Task<Question> CreateAsync(Question entity)

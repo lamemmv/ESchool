@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ESchool.Data.Paginations
 {
-    public sealed class PagedList<T> : List<T>, IPagedList<T>
+    public sealed class PagedList<T> : IPagedList<T>
     {
         public PagedList(int page, int size)
             : this(Enumerable.Empty<T>(), 0, page, size)
@@ -18,8 +18,10 @@ namespace ESchool.Data.Paginations
             TotalItems = totalItems;
 
             TotalPages = (int)Math.Ceiling(TotalItems / (double)Size);
-            AddRange(source);
+            Data = source;
         }
+
+        public IEnumerable<T> Data { get; private set; }
 
         public int Page { get; private set; }
 
