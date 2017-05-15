@@ -26,6 +26,10 @@ namespace ESchool.Data.Mapping.Messages
             builder.Property(p => p.Subject).IsRequired().HasMaxLength(256);
 
             builder.Property(p => p.Body).IsRequired();
+
+            builder.HasOne(qe => qe.EmailAccount)
+                .WithMany(ea => ea.QueuedEmails)
+                .HasForeignKey(qe => qe.EmailAccountId);
         }
     }
 }

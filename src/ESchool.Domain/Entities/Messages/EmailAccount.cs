@@ -1,4 +1,6 @@
-﻿namespace ESchool.Domain.Entities.Messages
+﻿using System.Collections.Generic;
+
+namespace ESchool.Domain.Entities.Messages
 {
     public class EmailAccount : BaseEntity
     {
@@ -26,17 +28,19 @@
 
         public bool IsDefaultEmailAccount { get; set; }
 
-        public string FriendlyName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(DisplayName))
-                {
-                    return Email;
-                }
+        //public string FriendlyName
+        //{
+        //    get
+        //    {
+        //        if (string.IsNullOrEmpty(DisplayName))
+        //        {
+        //            return Email;
+        //        }
 
-                return $"{DisplayName} ({Email})";
-            }
-        }
+        //        return $"{DisplayName} ({Email})";
+        //    }
+        //}
+
+        public virtual ICollection<QueuedEmail> QueuedEmails { get; set; }
     }
 }
