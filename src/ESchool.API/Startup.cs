@@ -1,20 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using AspNet.Security.OpenIdConnect.Primitives;
-using ESchool.Admin.Attributes;
+﻿using ESchool.Admin.Attributes;
 using ESchool.API.Extensions;
-using ESchool.Data;
 using ESchool.Data.Configurations;
-using ESchool.Domain.Entities.Systems;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NLog;
@@ -89,9 +82,15 @@ namespace ESchool.API
         {
             loggerFactory
                 .AddConsole(Configuration.GetSection("Logging"))
-                .AddDebug();
+                .AddDebug()
+                .AddNLog();
 
-            ConfigureNLog(app, loggerFactory);
+            app.AddNLogWeb();
+
+            var variables = LogManager.Configuration.Variables;
+            variables["connectionString"] = Configuration.GetConnectionString("DefaultConnection");
+            variables["configDir"] = "Logs";
+            // ----- End of NLog -----
 
             if (env.IsDevelopment())
             {
@@ -100,68 +99,12 @@ namespace ESchool.API
 
             app.UseCors("AllowAllOrigins");
 
-            // Add a middleware used to validate access
-            // tokens and protect the API endpoints.
-            //app.UseOAuthValidation();
-
-            // If you prefer using JWT, don't forget to disable the automatic
-            // JWT -> WS-Federation claims mapping used by the JWT middleware:
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
-
-            app.UseJwtBearerAuthentication(new JwtBearerOptions
-            {
-                Authority = "http://localhost:59999/",
-                Audience = "http://localhost:59999/",
-                //AutomaticAuthenticate = true,
-                //AutomaticChallenge = true,
-                RequireHttpsMetadata = false,
-                TokenValidationParameters = new TokenValidationParameters
-                {
-                    NameClaimType = OpenIdConnectConstants.Claims.Subject,
-                    RoleClaimType = OpenIdConnectConstants.Claims.Role
-                }
-            });
-
-            // Alternatively, you can also use the introspection middleware.
-            // Using it is recommended if your resource server is in a
-            // different application/separated from the authorization server.
-            // app.UseOAuthIntrospection(options =>
-            // {
-            //     options.Authority = new Uri("http://localhost:59999/");
-            //     options.Audiences.Add("resource_server");
-            //     options.ClientId = "eschool.web";
-            //     options.ClientSecret = "eschool.web.P@$$w0rd";
-            //     options.RequireHttpsMetadata = false;
-
-            app.UseOpenIddict();
+            app.UseCustomAuthorization();
 
             app.UseMvcWithDefaultRoute();
 
-            InitializeDefaultData(app);
-        }
-
-        private void ConfigureNLog(IApplicationBuilder app, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddNLog();
-
-            app.AddNLogWeb();
-
-            var variables = LogManager.Configuration.Variables;
-            variables["connectionString"] = Configuration.GetConnectionString("DefaultConnection");
-            variables["configDir"] = "Logs";
-        }
-
-        private void InitializeDefaultData(IApplicationBuilder app)
-        {
-            var serviceProvider = app.ApplicationServices;
-
-            var dbContext = serviceProvider.GetRequiredService<ObjectDbContext>();
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-            var dbInitializer = new DbInitializer();
-            dbInitializer.Initialize(dbContext, roleManager, userManager);
+            app.UseDefaultData()
+                .UseBackgroundTasks();
         }
     }
 }

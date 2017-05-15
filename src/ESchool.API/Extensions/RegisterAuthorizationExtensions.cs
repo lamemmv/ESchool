@@ -1,16 +1,18 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using AspNet.Security.OpenIdConnect.Primitives;
 using ESchool.Data;
-using ESchool.Domain.Entities.Systems;
+using ESchool.Domain.Entities.Accounts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ESchool.API.Extensions
 {
-    public static class AuthorizationExtensions
+    public static class RegisterAuthorizationExtensions
     {
         public static IServiceCollection AddCustomAuthorization(this IServiceCollection services, string connectionString)
         {
@@ -112,6 +114,47 @@ namespace ESchool.API.Extensions
             });
 
             return services;
+        }
+
+        public static IApplicationBuilder UseCustomAuthorization(this IApplicationBuilder app)
+        {
+            // Add a middleware used to validate access
+            // tokens and protect the API endpoints.
+            //app.UseOAuthValidation();
+
+            // If you prefer using JWT, don't forget to disable the automatic
+            // JWT -> WS-Federation claims mapping used by the JWT middleware:
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                Authority = "http://localhost:59999/",
+                Audience = "http://localhost:59999/",
+                //AutomaticAuthenticate = true,
+                //AutomaticChallenge = true,
+                RequireHttpsMetadata = false,
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = OpenIdConnectConstants.Claims.Subject,
+                    RoleClaimType = OpenIdConnectConstants.Claims.Role
+                }
+            });
+
+            // Alternatively, you can also use the introspection middleware.
+            // Using it is recommended if your resource server is in a
+            // different application/separated from the authorization server.
+            // app.UseOAuthIntrospection(options =>
+            // {
+            //     options.Authority = new Uri("http://localhost:59999/");
+            //     options.Audiences.Add("resource_server");
+            //     options.ClientId = "eschool.web";
+            //     options.ClientSecret = "eschool.web.P@$$w0rd";
+            //     options.RequireHttpsMetadata = false;
+
+            app.UseOpenIddict();
+
+            return app;
         }
     }
 }

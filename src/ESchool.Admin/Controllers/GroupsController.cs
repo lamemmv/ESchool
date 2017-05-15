@@ -16,7 +16,7 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<GroupDto>> Get()
+        public async Task<IList<GroupDto>> Get()
         {
             return await _groupService.GetListAsync();
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace ESchool.Domain.Entities.Systems
+namespace ESchool.Domain.Entities.Accounts
 {
     public class ApplicationUser : IdentityUser
     {

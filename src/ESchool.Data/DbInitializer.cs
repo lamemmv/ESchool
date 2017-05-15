@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ESchool.Domain.Entities.Accounts;
 using ESchool.Domain.Entities.Examinations;
+using ESchool.Domain.Entities.Messages;
 using ESchool.Domain.Entities.Systems;
 using ESchool.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +23,9 @@ namespace ESchool.Data
             dbContext.Database.EnsureCreated();
 
             // This protects from deadlocks by starting the async method on the ThreadPool.
-            Task.Run(() => SeedIdentity(roleManager, userManager)).Wait();
+            Task.Run(() => SeedIdentityAsync(roleManager, userManager)).Wait();
+
+            Task.Run(() => SeedEmailAccountsAsync(dbContext)).Wait();
 
             Task.Run(() => SeedGroupsAndQTagsAsync(dbContext)).Wait();
 
@@ -45,7 +49,7 @@ namespace ESchool.Data
             return configSettings;
         }
 
-        private async Task SeedIdentity(
+        private async Task SeedIdentityAsync(
             RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager)
         {
@@ -86,8 +90,34 @@ namespace ESchool.Data
             }
         }
 
+        private async Task SeedEmailAccountsAsync(ObjectDbContext dbContext)
+        {
+            string email = "xxx@gmail.com";
+            string password = "xxxxxx";
+
+            var emailAccountDbSet = dbContext.Set<EmailAccount>();
+
+            if (!await emailAccountDbSet.AnyAsync(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
+            {
+                await emailAccountDbSet.AddAsync(new EmailAccount
+                {
+                    Email = email,
+                    DisplayName = "No Reply",
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    UserName = email,
+                    Password = password,
+                    EnableSsl = true,
+                    UseDefaultCredentials = false,
+                    IsDefaultEmailAccount = true
+                });
+
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
         #region Groups and QTags
-        
+
         private async Task SeedGroupsAndQTagsAsync(ObjectDbContext dbContext)
         {
             var groupDbSet = dbContext.Set<Group>();

@@ -1,5 +1,5 @@
 ﻿using ESchool.Data.Mapping;
-using ESchool.Domain.Entities.Systems;
+using ESchool.Domain.Entities.Accounts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

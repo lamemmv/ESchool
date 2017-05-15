@@ -1,12 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ESchool.Domain.Entities.Examinations;
+using ESchool.Domain.Entities.Messages;
 using ESchool.Domain.ViewModels.Examinations;
+using ESchool.Domain.ViewModels.Messages;
 
 namespace ESchool.Domain.Extensions
 {
     public static class ViewModelsExtensions
     {
+        #region Messages
+
+        public static EmailAccount ToEmailAccount(this EmailAccountViewModel viewModel, int id = 0)
+        {
+            return new EmailAccount
+            {
+                Id = id,
+                Email = viewModel.Email.Trim(),
+                DisplayName = viewModel.DisplayName.TrimNull(),
+                Host = viewModel.Host.Trim(),
+                Port = viewModel.Port,
+                UserName = viewModel.UserName.Trim(),
+                Password = viewModel.Password.Trim(),
+                EnableSsl = viewModel.EnableSsl,
+                UseDefaultCredentials = viewModel.UseDefaultCredentials,
+                IsDefaultEmailAccount = viewModel.IsDefaultEmailAccount
+            };
+        }
+
+        #endregion
+
+        #region Examinations
+
         public static QTag ToQTag(this QTagViewModel viewModel, int id = 0)
         {
             return new QTag
@@ -58,5 +83,7 @@ namespace ESchool.Domain.Extensions
                 Specialized = viewModel.Specialized
             };
         }
+
+        #endregion
     }
 }

@@ -2,13 +2,14 @@
 using ESchool.Services.Files;
 using ESchool.Services.Infrastructure;
 using ESchool.Services.Infrastructure.Cache;
+using ESchool.Services.Messages;
 using ESchool.Services.Systems;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ESchool.API.Extensions
 {
-    public static class ApplicationServicesExtensions
+    public static class RegisterServicesExtensions
     {
         public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfigurationRoot configuration)
         {
@@ -32,6 +33,11 @@ namespace ESchool.API.Extensions
 
             // Files.
             services.AddScoped<IFileService, FileService>();
+
+            // Messages
+            services.AddScoped<IEmailAccountService, EmailAccountService>();
+            services.AddScoped<IQueuedEmailService, QueuedEmailService>();
+            services.AddScoped<IEmailSender, MailKitEmailSender>();
 
             // Examinations.
             services.AddScoped<IGroupService, GroupService>();

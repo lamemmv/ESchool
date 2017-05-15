@@ -6,6 +6,8 @@ namespace ESchool.Domain.Extensions
 {
     public static class EntitiesExtensions
     {
+        #region Examinations
+
         public static GroupDto ToGroupDto(this Group entity)
         {
             return new GroupDto
@@ -61,5 +63,7 @@ namespace ESchool.Domain.Extensions
                 Questions = entity.QuestionExamPapers.Select(qep => qep.Question.ToQuestionDto())
             };
         }
+
+        #endregion
     }
 }
