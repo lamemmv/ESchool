@@ -1,0 +1,23 @@
+.ui-treetable thead th {
+    padding: 0.55rem 0.55rem 0.35rem 0.45rem;
+    border-top: none;
+    border-bottom: 1px solid #eceeef;
+    border-right: none;
+    border-left: none;
+}
+
+.ui-treetable th {
+    text-align: left;
+}
+
+.tree-container {
+    border-radius: 3px;
+    color: black;
+    background: #ffffff;
+    border: 1px solid #00c0ef;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    padding: 1px;
+    z-index: 10;
+    min-width: 500px;
+    right: 16px;
+}

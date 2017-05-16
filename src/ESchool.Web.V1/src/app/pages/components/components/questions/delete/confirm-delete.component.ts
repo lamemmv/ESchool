@@ -25,7 +25,7 @@ export class ConfirmDeleteQuestionComponent implements OnInit {
 
   save() {
     const self = this;
-    this.questionsService.delete(this.modalContent.question.id)
+    this.questionsService.delete(this.modalContent.id)
       .subscribe((rowEffects: any) => {
         self.activeModal.close(true);
       },

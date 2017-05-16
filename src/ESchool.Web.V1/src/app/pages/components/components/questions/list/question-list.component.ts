@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertModule } from 'ng2-bootstrap';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 
 import { NotificationService } from './../../../../../shared/utils/notification.service';
 import { Question, PagedList } from './../question.model';
