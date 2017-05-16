@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace ESchool.API.Extensions
 {
@@ -28,10 +29,11 @@ namespace ESchool.API.Extensions
         public static IApplicationBuilder UseBackgroundTasks(this IApplicationBuilder app)
         {
             var serviceProvider = app.ApplicationServices;
+            var logger = serviceProvider.GetRequiredService<ILogger<QueuedEmailSendTask>>();
             var queuedEmailService = serviceProvider.GetRequiredService<IQueuedEmailService>();
             var emailSender = serviceProvider.GetRequiredService<IEmailSender>();
 
-            IBackgroundTask emailSenderTask = new QueuedEmailSendTask(1, 5, queuedEmailService, emailSender);
+            IBackgroundTask emailSenderTask = new QueuedEmailSendTask(1, 5, logger, queuedEmailService, emailSender);
             emailSenderTask.Start();
 
             return app;

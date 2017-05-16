@@ -12,7 +12,7 @@ namespace ESchool.Admin.Controllers
         protected const int DefaultPage = 1;
         protected const int DefaultSize = 25;
 
-        protected IActionResult BadRequestErrorDto(ErrorCode code, string message)
+        protected IActionResult BadRequestErrorDto(ErrorCode code, string message = null)
         {
             return BadRequest(new ApiError(code, message));
         }

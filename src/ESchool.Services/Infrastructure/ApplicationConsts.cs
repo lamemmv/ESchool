@@ -5,7 +5,7 @@
         // Memory Cache Keys.
         public const string AccountLockoutOnFailureKey = "cache.memory.accountlockoutonfailure";
 
-        public const string DefaultEmailAccountKey = "cache.memory.defaultemailaccount";
+        public const string DefaultEmailAccountKey = "cache.sliding.defaultemailaccount";
 
         public const string RolesKey = "cache.memory.roles";
 

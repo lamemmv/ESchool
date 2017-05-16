@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ESchool.Domain.Entities.Accounts;
 using ESchool.Domain.Entities.Examinations;
 using ESchool.Domain.Entities.Messages;
+using ESchool.Domain.ViewModels.Accounts;
 using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Domain.ViewModels.Messages;
 
@@ -25,6 +27,20 @@ namespace ESchool.Domain.Extensions
                 EnableSsl = viewModel.EnableSsl,
                 UseDefaultCredentials = viewModel.UseDefaultCredentials,
                 IsDefaultEmailAccount = viewModel.IsDefaultEmailAccount
+            };
+        }
+
+        #endregion
+
+        #region Accounts
+
+        public static ApplicationUser ToApplicationUser(this AccountViewModel viewModel, string id = null)
+        {
+            return new ApplicationUser
+            {
+                Id = id,
+                UserName = viewModel.UserName.Trim(),
+                Email = viewModel.Email.Trim()
             };
         }
 

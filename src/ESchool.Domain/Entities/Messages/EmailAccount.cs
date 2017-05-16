@@ -28,19 +28,6 @@ namespace ESchool.Domain.Entities.Messages
 
         public bool IsDefaultEmailAccount { get; set; }
 
-        //public string FriendlyName
-        //{
-        //    get
-        //    {
-        //        if (string.IsNullOrEmpty(DisplayName))
-        //        {
-        //            return Email;
-        //        }
-
-        //        return $"{DisplayName} ({Email})";
-        //    }
-        //}
-
         public virtual ICollection<QueuedEmail> QueuedEmails { get; set; }
     }
 }

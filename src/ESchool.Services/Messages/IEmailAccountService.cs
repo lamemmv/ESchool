@@ -10,6 +10,8 @@ namespace ESchool.Services.Messages
 
         Task<IList<EmailAccount>> GetListAsync();
 
+        Task<EmailAccount> GetDefaultAsync();
+
         Task<EmailAccount> CreateAsync(EmailAccount entity);
 
         Task<int> UpdateAsync(EmailAccount entity);

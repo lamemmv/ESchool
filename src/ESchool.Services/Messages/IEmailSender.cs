@@ -8,12 +8,15 @@ namespace ESchool.Services.Messages
         Task SendEmailAsync(
             EmailAccount emailAccount,
             string from,
-            string to,
+            string toCsv,
             string subject,
             string body,
             bool htmlBody = true,
             string fromAlias = null,
             string toAlias = null,
-            string replyTo = null);
+            string replyTo = null,
+            string replyToAlias = null,
+            string ccCsv = null,
+            string bccCsv = null);
     }
 }

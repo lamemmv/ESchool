@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Domain.Entities.Messages;
 using MailKit.Net.Smtp;
@@ -8,20 +9,25 @@ namespace ESchool.Services.Messages
 {
     public class MailKitEmailSender : IEmailSender
     {
+        private static readonly char[] Seperators = new char[] { ',', ';' };
+
         public async Task SendEmailAsync(
             EmailAccount emailAccount,
             string from,
-            string to,
+            string toCvs,
             string subject,
             string body,
             bool htmlBody = true,
             string fromAlias = null,
             string toAlias = null,
-            string replyTo = null)
+            string replyTo = null,
+            string replyToAlias = null,
+            string ccCsv = null,
+            string bccCsv = null)
         {
-            ValidateEmail(from, to, subject);
+            ValidateEmail(from, toCvs, subject);
 
-            MimeMessage emailMessage = BuildMimeMessage(from, fromAlias, to, toAlias, subject, body, htmlBody, replyTo);
+            var emailMessage = BuildMimeMessage(from, fromAlias, toCvs, toAlias, subject, body, htmlBody, replyTo, replyToAlias, ccCsv, bccCsv);
 
             await SendEmailAsync(emailMessage, emailAccount);
         }
@@ -45,17 +51,17 @@ namespace ESchool.Services.Messages
         {
             if (string.IsNullOrEmpty(from))
             {
-                throw new ArgumentException("Email: No From address provided.");
+                throw new ArgumentException("MailKitEmailSender: No From address provided.");
             }
 
             if (string.IsNullOrEmpty(to))
             {
-                throw new ArgumentException("Email: No To address provided.");
+                throw new ArgumentException("MailKitEmailSender: No To address provided.");
             }
 
             if (string.IsNullOrEmpty(subject))
             {
-                throw new ArgumentException("Email: No Subject provided.");
+                throw new ArgumentException("MailKitEmailSender: No Subject provided.");
             }
         }
 
@@ -67,32 +73,95 @@ namespace ESchool.Services.Messages
             string subject,
             string body,
             bool htmlBody,
-            string replyTo)
+            string replyTo,
+            string replyToAlias,
+            string ccCsv,
+            string bccCsv)
         {
             MimeMessage emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(fromAlias ?? string.Empty, from));
 
-            string[] addresses = toCsv.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            AddFrom(emailMessage, from, fromAlias);
 
-            foreach (string address in addresses)
+            var toAddresses = toCsv.Split(Seperators, StringSplitOptions.RemoveEmptyEntries);
+
+            if (toAddresses.Length == 1)
             {
-                emailMessage.To.Add(new MailboxAddress(toAlias ?? string.Empty, address));
+                AddTo(emailMessage, toCsv, toAlias);
+            }
+            else
+            {
+                AddTo(emailMessage, toAddresses);
+
+                emailMessage.Importance = MessageImportance.High;
             }
 
             if (!string.IsNullOrEmpty(replyTo))
             {
-                emailMessage.ReplyTo.Add(new MailboxAddress(string.Empty, replyTo));
+                AddReplyTo(emailMessage, replyTo, replyToAlias);
+            }
+
+            if (!string.IsNullOrEmpty(ccCsv))
+            {
+                AddCc(emailMessage, ccCsv.Split(Seperators, StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            if (!string.IsNullOrEmpty(bccCsv))
+            {
+                AddBcc(emailMessage, bccCsv.Split(Seperators, StringSplitOptions.RemoveEmptyEntries));
             }
 
             emailMessage.Subject = subject;
 
-            if (addresses.Length > 0)
-            {
-                // Send multiple emails.
-                emailMessage.Importance = MessageImportance.High;
-            }
+            AddBody(emailMessage, body, htmlBody);
 
-            BodyBuilder bodyBuilder = new BodyBuilder();
+            return emailMessage;
+        }
+
+        private MimeMessage AddFrom(MimeMessage emailMessage, string from, string fromAlias = null)
+        {
+            emailMessage.From.Add(new MailboxAddress(fromAlias ?? string.Empty, from));
+
+            return emailMessage;
+        }
+
+        private MimeMessage AddTo(MimeMessage emailMessage, string to, string toAlias = null)
+        {
+            emailMessage.To.Add(new MailboxAddress(toAlias ?? string.Empty, to));
+
+            return emailMessage;
+        }
+
+        private MimeMessage AddTo(MimeMessage emailMessage, string[] to)
+        {
+            emailMessage.To.AddRange(to.Select(addr => new MailboxAddress(addr)));
+
+            return emailMessage;
+        }
+
+        private MimeMessage AddReplyTo(MimeMessage emailMessage, string replyTo, string replyToAlias = null)
+        {
+            emailMessage.ReplyTo.Add(new MailboxAddress(replyToAlias ?? string.Empty, replyTo));
+
+            return emailMessage;
+        }
+
+        private MimeMessage AddCc(MimeMessage emailMessage, params string[] cc)
+        {
+            emailMessage.Cc.AddRange(cc.Select(addr => new MailboxAddress(addr)));
+
+            return emailMessage;
+        }
+
+        private MimeMessage AddBcc(MimeMessage emailMessage, params string[] bcc)
+        {
+            emailMessage.Bcc.AddRange(bcc.Select(addr => new MailboxAddress(addr)));
+
+            return emailMessage;
+        }
+
+        private MimeMessage AddBody(MimeMessage emailMessage, string body, bool htmlBody)
+        {
+            var bodyBuilder = new BodyBuilder();
 
             if (htmlBody)
             {
@@ -112,7 +181,7 @@ namespace ESchool.Services.Messages
         {
             using (var client = new SmtpClient())
             {
-                client.Connect(emailAccount.Host, emailAccount.Port, emailAccount.EnableSsl);
+                await client.ConnectAsync(emailAccount.Host, emailAccount.Port, emailAccount.EnableSsl);
 
                 // Note: since we don't have an OAuth2 token, disable the XOAUTH2 authentication mechanism.
                 client.AuthenticationMechanisms.Remove("XOAUTH2");

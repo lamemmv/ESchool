@@ -1,34 +1,55 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
 using ESchool.Domain.Entities.Accounts;
+using ESchool.Domain.Entities.Messages;
+using ESchool.Domain.Enums;
+using ESchool.Domain.ViewModels.Accounts;
+using ESchool.Services.Exceptions;
+using ESchool.Services.Messages;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenIddict.Core;
 
 namespace ESchool.API.Controllers
 {
+    [Route("api/[controller]")]
     public class AuthorizationController : Controller
     {
+        private readonly ILogger<AuthorizationController> _logger;
+
         private readonly IOptions<IdentityOptions> _identityOptions;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
+        private readonly IEmailAccountService _emailAccountService;
+        private readonly IQueuedEmailService _queuedEmailService;
+
         public AuthorizationController(
+            ILogger<AuthorizationController> logger,
             IOptions<IdentityOptions> identityOptions,
             SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IEmailAccountService emailAccountService,
+            IQueuedEmailService queuedEmailService)
         {
+            _logger = logger;
+
             _identityOptions = identityOptions;
             _signInManager = signInManager;
             _userManager = userManager;
+
+            _emailAccountService = emailAccountService;
+            _queuedEmailService = queuedEmailService;
         }
 
         [HttpPost("~/connect/token"), Produces("application/json")]
@@ -51,6 +72,61 @@ namespace ESchool.API.Controllers
             });
         }
 
+        [HttpPost("forgotpassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                string email = viewModel.Email.Trim();
+                var user = await _userManager.FindByNameAsync(email);
+
+                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    // Don't reveal that the user does not exist or is not confirmed.
+                    return BadRequest(ErrorCode.Undefined);
+                }
+
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
+                // Send an email with this link.
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = $"{viewModel.Url.Trim()}?userId={user.Id}&code={code}";
+
+                await SendEmailAsync(
+                    email,
+                    "Reset Password",
+                    "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
+
+                return Created("ForgotPassword", user.Id);
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        [HttpPost("resetpassword")]
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(viewModel.Email.Trim());
+
+                if (user == null)
+                {
+                    // Don't reveal that the user does not exist.
+                    return BadRequest(ErrorCode.Undefined);
+                }
+
+                var result = await _userManager.ResetPasswordAsync(user, viewModel.Code, viewModel.Password);
+
+                if (result.Succeeded)
+                {
+                    return Created("ResetPassword", user.Id);
+                }
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        [NonAction]
         private async Task<IActionResult> ProcessPasswordGrantType(OpenIdConnectRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.Username);
@@ -120,6 +196,7 @@ namespace ESchool.API.Controllers
             return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
 
+        [NonAction]
         private async Task<IActionResult> ProcessRefreshTokenGrantType(OpenIdConnectRequest request)
         {
             // Retrieve the claims principal stored in the refresh token.
@@ -158,6 +235,7 @@ namespace ESchool.API.Controllers
             return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
 
+        [NonAction]
         private async Task<AuthenticationTicket> CreateTicketAsync(
             OpenIdConnectRequest request, 
             ApplicationUser user, 
@@ -216,6 +294,32 @@ namespace ESchool.API.Controllers
             }
 
             return ticket;
+        }
+
+        [NonAction]
+        private async Task SendEmailAsync(string email, string subject, string message)
+        {
+            var emailAccount = await _emailAccountService.GetDefaultAsync();
+
+            if (emailAccount == null)
+            {
+                _logger.LogWarning(new EventId(2), $"[AuthorizationController » SendEmailAsync] Default Email Account is null.");
+                return;
+            }
+
+            var queuedEmail = new QueuedEmail
+            {
+                From = emailAccount.Email,
+                FromName = emailAccount.DisplayName,
+                To = email,
+                Subject = subject,
+                Body = message,
+                CreatedOnUtc = DateTime.UtcNow,
+                Priority = (int)QueuedEmailPriority.High,
+                EmailAccountId = emailAccount.Id
+            };
+
+            await _queuedEmailService.CreateAsync(queuedEmail);
         }
     }
 }

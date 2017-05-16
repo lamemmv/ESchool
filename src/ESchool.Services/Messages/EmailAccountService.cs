@@ -3,15 +3,22 @@ using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Domain.Entities.Messages;
 using ESchool.Services.Exceptions;
+using ESchool.Services.Infrastructure;
+using ESchool.Services.Infrastructure.Cache;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Messages
 {
     public class EmailAccountService : BaseService, IEmailAccountService
     {
-        public EmailAccountService(ObjectDbContext dbContext)
+        private readonly IMemoryCacheService _memoryCacheService;
+
+        public EmailAccountService(
+            ObjectDbContext dbContext,
+            IMemoryCacheService memoryCacheService)
             : base(dbContext)
         {
+            _memoryCacheService = memoryCacheService;
         }
 
         public async Task<EmailAccount> GetAsync(int id)
@@ -23,6 +30,17 @@ namespace ESchool.Services.Messages
         {
             return await EmailAccounts.AsNoTracking()
                 .ToListAsync();
+        }
+
+        public async Task<EmailAccount> GetDefaultAsync()
+        {
+            return await _memoryCacheService.GetSlidingExpiration(
+                ApplicationConsts.DefaultEmailAccountKey,
+                () =>
+                {
+                    return EmailAccounts.AsNoTracking()
+                        .SingleOrDefaultAsync(ea => ea.IsDefaultEmailAccount);
+                });
         }
 
         public async Task<EmailAccount> CreateAsync(EmailAccount entity)
