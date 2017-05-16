@@ -19,6 +19,7 @@ import { QuestionsService } from './components/questions/questions.service';
 import { QuestionsComponent } from './components/questions/questions.component';
 import { EditQuestionComponent } from './components/questions/edit/question-edit.component';
 import { QuestionListComponent } from './components/questions/list/question-list.component';
+import { ConfirmDeleteQuestionComponent } from './components/questions/delete/confirm-delete.component';
 
 @NgModule({
   imports: [
@@ -40,10 +41,12 @@ import { QuestionListComponent } from './components/questions/list/question-list
     EditQuestionTagComponent,
     QuestionsComponent,
     EditQuestionComponent,
-    QuestionListComponent
+    QuestionListComponent,
+    ConfirmDeleteQuestionComponent
   ],
   entryComponents: [
-    EditQuestionTagComponent
+    EditQuestionTagComponent,
+    ConfirmDeleteQuestionComponent
   ],
   providers: [
       QuestionTagsService,

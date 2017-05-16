@@ -1,5 +1,13 @@
-.modal-content{
+.modal-content {
   background-color: #446CAA;
+}
+
+.modal-content.warning {
+  background-color: $body-bg;
+}
+
+.modal-body.warning .card.with-scroll {
+  background-color: $warning;
 }
 
 .modal-header {
