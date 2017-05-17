@@ -7,7 +7,7 @@
 
         public const string DefaultEmailAccountKey = "cache.sliding.defaultemailaccount";
 
-        public const string RolesKey = "cache.memory.roles";
+        public const string RolesKey = "cache.sliding.roles";
 
         // Settings Names.
         public const string AccountLockoutOnFailureSettingName = "account.lockoutonfailure";

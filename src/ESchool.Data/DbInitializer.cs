@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Domain.Entities.Accounts;
 using ESchool.Domain.Entities.Examinations;
@@ -10,24 +11,28 @@ using ESchool.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using OpenIddict.Core;
+using OpenIddict.Models;
 
 namespace ESchool.Data
 {
     public sealed class DbInitializer
     {
-        public void Initialize(
+        public async Task Initialize(
             ObjectDbContext dbContext,
             RoleManager<IdentityRole> roleManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            OpenIddictApplicationManager<OpenIddictApplication> applicationManager)
         {
-            dbContext.Database.EnsureCreated();
+            await dbContext.Database.EnsureCreatedAsync();
 
-            // This protects from deadlocks by starting the async method on the ThreadPool.
-            Task.Run(() => SeedIdentityAsync(roleManager, userManager)).Wait();
+            await SeedIdentityAsync(roleManager, userManager);
 
-            Task.Run(() => SeedEmailAccountsAsync(dbContext)).Wait();
+            await SeedOpenIddict(applicationManager);
 
-            Task.Run(() => SeedGroupsAndQTagsAsync(dbContext)).Wait();
+            await SeedEmailAccountsAsync(dbContext);
+
+            await SeedGroupsAndQTagsAsync(dbContext);
 
             //SeedScheduleTasks(dbContext);
 
@@ -87,6 +92,25 @@ namespace ESchool.Data
                 {
                     await userManager.AddToRolesAsync(user, roles);
                 }
+            }
+        }
+
+        private static async Task SeedOpenIddict(OpenIddictApplicationManager<OpenIddictApplication> applicationManager)
+        {
+            string clientId = "ESchool.Web";
+            string clientPassword = clientId.ToLowerInvariant() + ".secret";
+
+            if (await applicationManager.FindByClientIdAsync(clientId, CancellationToken.None) == null)
+            {
+                var application = new OpenIddictApplication
+                {
+                    ClientId = clientId,
+                    DisplayName = clientId,
+                    LogoutRedirectUri = "http://localhost:59999/",
+                    RedirectUri = "http://localhost:59999/signin-oidc"
+                };
+
+                await applicationManager.CreateAsync(application, clientPassword, CancellationToken.None);
             }
         }
 

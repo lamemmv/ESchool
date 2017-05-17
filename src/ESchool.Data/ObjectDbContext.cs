@@ -2,6 +2,7 @@
 using ESchool.Domain.Entities.Accounts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using OpenIddict.Models;
 
 namespace ESchool.Data
 {
@@ -10,6 +11,14 @@ namespace ESchool.Data
         public ObjectDbContext(DbContextOptions<ObjectDbContext> options)
             : base(options)
         {
+        }
+
+        public DbSet<OpenIddictApplication> OpenIddictApplications
+        {
+            get
+            {
+                return Set<OpenIddictApplication>();
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

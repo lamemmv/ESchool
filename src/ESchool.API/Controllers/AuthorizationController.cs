@@ -72,7 +72,7 @@ namespace ESchool.API.Controllers
             });
         }
 
-        [HttpPost("forgotpassword")]
+        [HttpPut("forgotpassword")]
         public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -96,13 +96,13 @@ namespace ESchool.API.Controllers
                     "Reset Password",
                     "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
 
-                return Created("ForgotPassword", user.Id);
+                return NoContent();
             }
 
             return BadRequest(ModelState);
         }
 
-        [HttpPost("resetpassword")]
+        [HttpPut("resetpassword")]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -119,8 +119,10 @@ namespace ESchool.API.Controllers
 
                 if (result.Succeeded)
                 {
-                    return Created("ResetPassword", user.Id);
+                    return NoContent();
                 }
+
+                return BadRequest(result.Errors);
             }
 
             return BadRequest(ModelState);

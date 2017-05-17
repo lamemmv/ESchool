@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.1" />
+    <PackageReference Include="OpenIddict.Core" Version="1.0.0-beta2-0614" />
+    <PackageReference Include="OpenIddict.Models" Version="1.0.0-beta2-0614" />
   </ItemGroup>
 
   <ItemGroup>

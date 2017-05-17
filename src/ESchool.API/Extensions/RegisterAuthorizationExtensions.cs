@@ -94,8 +94,18 @@ namespace ESchool.API.Extensions
                 opts.EnableTokenEndpoint("/connect/token");
 
                 // Enable the password flow.
-                opts.AllowPasswordFlow();
-                    //.AllowRefreshTokenFlow();
+                opts.AllowPasswordFlow()
+                    .AllowRefreshTokenFlow();
+
+                // Make the "client_id" parameter mandatory when sending a token request.
+                opts.RequireClientIdentification();
+
+                // When request caching is enabled, authorization and logout requests
+                // are stored in the distributed cache by OpenIddict and the user agent
+                // is redirected to the same page with a single parameter (request_id).
+                // This allows flowing large OpenID Connect requests even when using
+                // an external authentication provider like Google, Facebook or Twitter.
+                //opts.EnableRequestCaching();
 
                 // During development, you can disable the HTTPS requirement.
                 opts.DisableHttpsRequirement();
@@ -104,13 +114,6 @@ namespace ESchool.API.Extensions
                 // encrypted format, the following lines are required:
                 opts.UseJsonWebTokens();
                 opts.AddEphemeralSigningKey();
-
-                // When request caching is enabled, authorization and logout requests
-                // are stored in the distributed cache by OpenIddict and the user agent
-                // is redirected to the same page with a single parameter (request_id).
-                // This allows flowing large OpenID Connect requests even when using
-                // an external authentication provider like Google, Facebook or Twitter.
-                //opts.EnableRequestCaching();
             });
 
             return services;
@@ -130,7 +133,7 @@ namespace ESchool.API.Extensions
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
                 Authority = "http://localhost:59999/",
-                Audience = "http://localhost:59999/",
+                Audience = "resource_server", //"http://localhost:59999/"
                 //AutomaticAuthenticate = true,
                 //AutomaticChallenge = true,
                 RequireHttpsMetadata = false,
