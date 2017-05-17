@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 import { TreeModule } from 'ng2-tree';
-import { AlertModule, ModalModule } from 'ng2-bootstrap';
+import { AlertModule, ModalModule, DatepickerModule } from 'ng2-bootstrap';
 import { TreeTableModule } from 'primeng/primeng';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { CKEditorModule } from 'ng2-ckeditor';
+import { RatingModule } from 'ngx-rating';
 
 import { AppTranslationModule } from '../../app.translation.module';
 import { routing } from './components.routing';
@@ -19,6 +21,8 @@ import { QuestionsService } from './components/questions/questions.service';
 import { QuestionsComponent } from './components/questions/questions.component';
 import { EditQuestionComponent } from './components/questions/edit/question-edit.component';
 import { QuestionListComponent } from './components/questions/list/question-list.component';
+import { ConfirmDeleteQuestionComponent } from './components/questions/delete/confirm-delete.component';
+import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePicker';
 
 @NgModule({
   imports: [
@@ -28,22 +32,29 @@ import { QuestionListComponent } from './components/questions/list/question-list
     TreeModule,
     AlertModule.forRoot(),
     ModalModule.forRoot(),
+    DatepickerModule.forRoot(),
+    ClickOutsideModule,
     TreeTableModule,
     NgbModalModule,
+    CKEditorModule,
+    RatingModule,
     AppTranslationModule,
     routing
   ],
   declarations: [
+    DatepickerComponent,
     Components,
     TreeView,
     QuestionTagsComponent,
     EditQuestionTagComponent,
     QuestionsComponent,
     EditQuestionComponent,
-    QuestionListComponent
+    QuestionListComponent,
+    ConfirmDeleteQuestionComponent
   ],
   entryComponents: [
-    EditQuestionTagComponent
+    EditQuestionTagComponent,
+    ConfirmDeleteQuestionComponent
   ],
   providers: [
       QuestionTagsService,

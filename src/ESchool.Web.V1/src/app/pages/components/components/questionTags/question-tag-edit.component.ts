@@ -17,7 +17,7 @@ import { NotificationService } from './../../../../shared/utils/notification.ser
 export class EditQuestionTagComponent implements OnInit {
 
   modalHeader: string;
-  modalContent: QuestionTag;  
+  modalContent: QuestionTag;
   private selectedQTag = new QuestionTag();
   private showTree: boolean = false;
   private dataGrid: TreeNode[];
@@ -29,15 +29,15 @@ export class EditQuestionTagComponent implements OnInit {
 
   ngOnInit() {
     this.getQuestionTags();
-    if (this.modalContent.id && this.modalContent.parentQTags){
+    if (this.modalContent.id && this.modalContent.parentQTags) {
       this.selectedQTag.path = this.getPath(this.modalContent);
     }
   }
 
   save() {
-    if (this.modalContent.id){
+    if (this.modalContent.id) {
       this.updateQuestionTag();
-    }else{
+    } else {
       this.addQuestionTag();
     }
   }

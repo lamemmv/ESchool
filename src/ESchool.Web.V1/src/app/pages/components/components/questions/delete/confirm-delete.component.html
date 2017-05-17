@@ -1,0 +1,24 @@
+<div class="modal-content warning">
+    <div class="modal-header">
+        <h4 class="modal-title">{{'QUESTIONS' | translate }}</h4>
+        <button class="close" aria-label="Close" (click)="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body warning">
+        <ba-card title="{{modalHeader}}" baCardClass="with-scroll">
+            <form>
+                <div>
+                    <button class="btn btn-warning btn-icon" type="button">
+                        <i class="ion-android-warning"></i>
+                    </button>
+                    <span>{{ 'MSG_CONFIRM_DELETING_QUESTION_TAGS' | translate }}</span>
+                </div>
+            </form>
+        </ba-card>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success btn-raised" (click)="save()">{{'OK' | translate}}</button>
+        <button class="btn btn-danger btn-raised" type="button" (click)="cancel()">{{'CANCEL' | translate }}</button>
+    </div>
+</div>

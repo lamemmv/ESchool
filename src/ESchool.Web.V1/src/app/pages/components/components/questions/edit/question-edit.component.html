@@ -1,0 +1,96 @@
+<div class="row">
+    <div class="col-md-12">
+        <ba-card title="{{view.title}}" baCardClass="with-scroll">
+            <div class="form-group">
+                <label for="questionContent" class="control-label"> {{ 'CONTENT' | translate }} </label>
+                <ckeditor id="questionContent" 
+                    name="questionContent" 
+                    [(ngModel)]="question.content" 
+                    (change)="onChange($event)" 
+                    (ready)="onReady($event)"
+                    (focus)="onFocus($event)" 
+                    (blur)="onBlur($event)" 
+                    debounce="200"></ckeditor>
+            </div>
+            <div class="form-group">
+                    <label for="qtagPath"> {{ 'QUESTION_TAG_BELONG_TO' | translate }} </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control"
+                            [(ngModel)]="selectedQTag.path"
+                            name="qtagPath"/>
+                        <span class="input-group-btn">
+                            <button type="button" 
+                                (click)="toggleTree($event)" 
+                                class="btn btn-primary">{{'SELECT_GROUP' | translate}}</button>
+                        </span>
+                    </div>
+                    <div *ngIf="showTree" class="tree-container">
+                        <p-treeTable [value]="dataGrid" 
+                            selectionMode="single" 
+                            (onNodeSelect)="handleSelected($event)"
+                            (onNodeExpand)="onNodeExpand($event)"
+                            (onNodeCollapse)="onNodeCollapse($event)">
+                            <p-column field="name" header="{{'NAME' | translate }}"></p-column>
+                            <p-column field="description" header="{{'DESCRIPTION' | translate }}"></p-column>
+                        </p-treeTable>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="questionTypes"> {{ 'QUESTION_TYPE' | translate }} </label>
+                    <select id="questionTypes" 
+                        name="questionTypes" 
+                        class="form-control"
+                        [(ngModel)]="question.type"> 
+                        <option *ngFor="let type of questionTypes" [value]="type.id">{{type.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="answers" class="control-label"> {{ 'QUESTION_ANSWERS' | translate }} </label>
+                    <button type="submit" 
+                        class="btn btn-primary pull-right" 
+                        (click)="addAnswer()"><i class="fa fa-plus"></i> 
+                        {{ 'ADD_ANSWERS' | translate }}
+                    </button>
+                </div>
+                <div class="input-group" 
+                    [ngClass]="{'has-success': answer.dss}" 
+                    *ngFor="let answer of question.answers; let ia = index;">
+                    <span class="input-group-addon">
+                          <input type="checkbox" 
+                            name="{{answer.dss}}-{{ia}}" 
+                            [(ngModel)]="answer.dss" />
+                    </span>
+                    <span class="input-group-addon">
+                          {{answer.answerName}}
+                    </span>
+                    <input #answers id="answer{{answer.answerName}}"
+                        name="{{answer.body}}{{ia}}"
+                        class="form-control" 
+                        type="text" 
+                        [(ngModel)]="answer.body" />
+                    <span class="input-group-addon remove-answer">
+                        <i class="fa fa-times" title="{{'REMOVE_ANSWER' | translate}}"
+                        (click)="removeAnswer(answer)"></i>
+                    </span>
+                </div>
+                <div class="row">
+                    <div class="form-group mt5 col-md-4">
+                        <label>{{ 'DIFFICULT_LEVEL' | translate }}</label>
+                        <rating class="row" [(ngModel)]="question.difficultLevel">
+                        </rating>
+                    </div>
+                    <div class="checkbox mt5 col-md-4">
+                        <label>
+                            <input type="checkbox" 
+                                [(ngModel)]="question.specialized"> {{ 'SPECIALIZED' | translate }}
+                        </label>
+                    </div>
+                    <div class="col-md-4 mt5">
+                        <es-datepicker [id]="'month-datepicker'" 
+                            [value]="question.month"
+                            (dateModelChange)="dateModelChange($event)"></es-datepicker>
+                    </div>
+                </div>  
+        </ba-card>
+    </div>
+</div>
