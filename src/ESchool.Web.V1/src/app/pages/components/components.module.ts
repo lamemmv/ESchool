@@ -17,10 +17,9 @@ import { QuestionTagsService } from './components/questionTags/question-tags.ser
 import { QuestionTagsComponent } from './components/questionTags/question-tags.component';
 import { EditQuestionTagComponent } from './components/questionTags/question-tag-edit.component';
 import { QuestionsService } from './components/questions/questions.service';
-import { QuestionsComponent } from './components/questions/questions.component';
-import { EditQuestionComponent } from './components/questions/edit/question-edit.component';
-import { QuestionListComponent } from './components/questions/list/question-list.component';
-import { ConfirmDeleteQuestionComponent } from './components/questions/delete/confirm-delete.component';
+import { QuestionsComponent, EditQuestionComponent, 
+  ConfirmDeleteQuestionComponent, QuestionListComponent,
+  QUploadFileComponent } from './components/questions';
 import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePicker';
 
 @NgModule({
@@ -50,11 +49,13 @@ import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePick
     QuestionsComponent,
     EditQuestionComponent,
     QuestionListComponent,
-    ConfirmDeleteQuestionComponent
+    ConfirmDeleteQuestionComponent,
+    QUploadFileComponent
   ],
   entryComponents: [
     EditQuestionTagComponent,
-    ConfirmDeleteQuestionComponent
+    ConfirmDeleteQuestionComponent,
+    QUploadFileComponent
   ],
   providers: [
       QuestionTagsService,

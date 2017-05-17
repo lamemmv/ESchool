@@ -21,6 +21,7 @@ import {
 import { QuestionTag } from './../../questionTags/question-tags.models';
 import { QuestionsService } from './../questions.service';
 import { QuestionTagsService } from './../../questionTags/question-tags.service';
+import { QUploadFileComponent } from './upload/upload-file.component';
 
 declare var CKEDITOR: any;
 @Component({
@@ -59,7 +60,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     private questionTagsService: QuestionTagsService,
     private questionService: QuestionsService,
     private utilitiesService: UtilitiesService,
-    private rd: Renderer) {
+    private rd: Renderer,
+    private modalService: NgbModal) {
     this.registerCKEditorCommands = this.registerCKEditorCommands.bind(this);
   }
 
@@ -239,6 +241,27 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   }
 
   onUploadImage(editor: any) {
+    this.openUploadDialog(editor);
+  }
+
+  openUploadDialog(editor: any) {
+    const self = this;
+    const activeModal = this.modalService.open(QUploadFileComponent, {
+      size: 'sm',
+      backdrop: 'static',
+    });
+    activeModal.componentInstance.modalContent = editor;
+    activeModal.result.then((result) => {
+      self.handleDialogClose(result);
+    }, (reason) => {
+      self.handleDialogClose(null);
+    });
+  }
+
+  handleDialogClose(result: any) {
+    if (result) {
+
+    }
   }
 
   onFileChange(event: any) {
