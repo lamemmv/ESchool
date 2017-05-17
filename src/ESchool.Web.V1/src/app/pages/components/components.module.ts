@@ -5,9 +5,8 @@ import { NgaModule } from '../../theme/nga.module';
 import { TreeModule } from 'ng2-tree';
 import { AlertModule, ModalModule, DatepickerModule } from 'ng2-bootstrap';
 import { TreeTableModule } from 'primeng/primeng';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbRatingModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
-import { RatingModule } from 'ngx-rating';
 
 import { AppTranslationModule } from '../../app.translation.module';
 import { routing } from './components.routing';
@@ -37,7 +36,8 @@ import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePick
     TreeTableModule,
     NgbModalModule,
     CKEditorModule,
-    RatingModule,
+    NgbRatingModule,
+    NgbPaginationModule,
     AppTranslationModule,
     routing
   ],

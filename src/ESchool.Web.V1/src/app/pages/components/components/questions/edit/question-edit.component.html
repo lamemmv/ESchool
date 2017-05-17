@@ -74,15 +74,19 @@
                     </span>
                 </div>
                 <div class="row">
-                    <div class="form-group mt5 col-md-4">
+                    <div class="form-group col-md-4">
                         <label>{{ 'DIFFICULT_LEVEL' | translate }}</label>
-                        <rating class="row" [(ngModel)]="question.difficultLevel">
-                        </rating>
+                        <ngb-rating [(ngModel)]="question.difficultLevel" max="5" class="rating">
+                            <ng-template let-fill="fill">
+                                <i *ngIf="fill === 100" class="ion-android-star"></i>
+                                <i *ngIf="fill === 0" class="ion-android-star-outline"></i>
+                            </ng-template>
+                        </ngb-rating>
                     </div>
-                    <div class="checkbox mt5 col-md-4">
-                        <label>
-                            <input type="checkbox" 
-                                [(ngModel)]="question.specialized"> {{ 'SPECIALIZED' | translate }}
+                    <div class="col-md-4">
+                        <label class="checkbox-inline custom-checkbox nowrap">
+                            <input type="checkbox" [(ngModel)]="question.specialized" />
+                            <span>{{ 'SPECIALIZED' | translate }}</span>
                         </label>
                     </div>
                     <div class="col-md-4 mt5">
@@ -91,6 +95,25 @@
                             (dateModelChange)="dateModelChange($event)"></es-datepicker>
                     </div>
                 </div>  
+                <div class="form-group">
+                    <ul class="btn-list clearfix">
+                        <li>
+                            <button class="btn btn-success btn-with-icon" 
+                                type="submit"                                
+                                [disabled]="!isValid()"
+                                (click)="save()">
+                                <i class="ion-android-checkmark-circle"></i>{{view.okText}}
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn btn-default btn-with-icon" 
+                                type="button"
+                                (click)="cancel()">
+                                <i class="ion-android-cancel"></i>{{'CANCEL' | translate }}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
         </ba-card>
     </div>
 </div>

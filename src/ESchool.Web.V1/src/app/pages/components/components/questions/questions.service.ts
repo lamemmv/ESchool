@@ -20,8 +20,8 @@ export class QuestionsService {
         return this._baseUrl + 'files';
     };
 
-    get() {
-        let self = this, request = { page: 1, size: 5 };
+    get(page: number, size: number) {
+        let self = this, request = { page: page, size: size };
         return self.http.get(self._baseUrl + 'questions', { params: request })
             .map((res: Response) => {
                 return res.json();

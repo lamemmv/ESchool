@@ -9,7 +9,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let qt of questions" 
+            <tr *ngFor="let qt of question.data" 
                 class="no-top-border">
                 <td>{{qt.id}}</td>
                 <td [innerHTML]="qt.content"></td>
@@ -33,4 +33,10 @@
             </tr>
         </tbody>
     </table>
+    <ngb-pagination [collectionSize]="question.totalItems" 
+        [(page)]="question.page" 
+        [maxSize]="question.size" 
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="onPageChange($event)"></ngb-pagination>
 </div>

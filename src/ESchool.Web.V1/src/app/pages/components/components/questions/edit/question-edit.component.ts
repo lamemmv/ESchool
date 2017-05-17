@@ -9,7 +9,6 @@ import { AlertModule } from 'ng2-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/primeng';
-import { RatingModule } from "ngx-rating";
 
 import { NotificationService } from './../../../../../shared/utils/notification.service';
 import { AlertModel } from './../../../../../shared/models/alert';
@@ -177,13 +176,13 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     return '';
   }
 
-  onReady(): void { };
+  onReady(): void { }
 
-  onChange(): void { };
+  onChange(): void { }
 
-  onFocus(): void { };
+  onFocus(): void { }
 
-  onBlur(): void { };
+  onBlur(): void { }
 
   isValid(): boolean {
     if (!this.question.content) {
@@ -199,9 +198,9 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     }
 
     return true;
-  };
+  }
 
-  cancel(): void { this.router.navigate(['/admin/questions']); };
+  cancel(): void { this.router.navigate(['/pages/components/questions']); }
 
   save(): void {
     let self = this, promise = null;
@@ -219,12 +218,12 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
       self.alert.type = 'success';
       self.alert.message = self._translate.instant('SAVED');
-      this.router.navigate(['/admin/questions']);
+      this.router.navigate(['/pages/components/questions']);
     },
       error => {
         self.notificationService.printErrorMessage('Failed to create question. ' + error);
       });
-  };
+  }
 
   addAnswer(): void {
     if (this.question.answers.length > 0) {
@@ -232,23 +231,15 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     }
     this.question.answers.push({ body: '', dss: false, answerName: this.answerName });
     this.hasJustAddedAnswer = true;
-  };
+  }
 
   removeAnswer(answer: Answer): void {
     let index = this.question.answers.indexOf(answer);
     this.question.answers.splice(index, 1);
-  };
-
-  onClickRating(event: any) {
-    console.log('onClickRating: ' + event);
-  };
-
-  onRatingChange(event: any) {
-    console.log('onRatingChange: ' + event);
-  };
+  }
 
   onUploadImage(editor: any) {
-  };
+  }
 
   onFileChange(event: any) {
     let self = this;
@@ -258,7 +249,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
       self.file.type = fileToUpload.type;
       self.file.size = fileToUpload.size;
     }
-  };
+  }
 
   uploadFile() {
     let fi = this.fileInput.nativeElement, self = this;
@@ -318,7 +309,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
             qtag.subQTags.forEach((subTag) => {
               let children: any[] = [];
               let treeNode = {
-                data: subTag, children: children, leaf: false
+                data: subTag, children: children, leaf: subTag.subQTagsCount > 0 ? false : true
               };
               nodes.push(treeNode);
             });

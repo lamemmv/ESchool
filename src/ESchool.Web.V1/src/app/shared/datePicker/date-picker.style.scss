@@ -1,0 +1,12 @@
+@import "../../theme/sass/conf/conf";
+
+.dp-popup {
+    position: absolute;
+    padding:10px;   
+    z-index:2;
+    background-color: $linkedin-color;
+}
+
+.fa.fa-calendar.hand{
+    cursor: pointer;
+}

@@ -1,6 +1,7 @@
 import {
     NgModule, Component, Input, Output,
-    EventEmitter, AfterViewInit, OnChanges, SimpleChange
+    EventEmitter, AfterViewInit, OnChanges, SimpleChange,
+    ViewEncapsulation
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
@@ -8,16 +9,8 @@ import { DatePipe } from '@angular/common';
     selector: 'es-datepicker',
     providers: [DatePipe],
     templateUrl: './date-picker.component.html',
-    styles: [`
-    .dp-popup {
-        position: absolute;
-        padding:10px;
-        background-color: #fff;
-        border: 1px solid #ccc;      
-        z-index:2;
-    }
-    .input-group.date { width:200px;}
-  `]
+    styleUrls: [('./date-picker.style.scss')],
+    encapsulation: ViewEncapsulation.None
 })
 export class DatepickerComponent implements AfterViewInit, OnChanges {
     public dt: Date = new Date();
@@ -49,7 +42,7 @@ export class DatepickerComponent implements AfterViewInit, OnChanges {
     }
 
     open() {
-        this.showDatepicker = true;
+        this.showDatepicker = !this.showDatepicker;
     }
 
     close() {
