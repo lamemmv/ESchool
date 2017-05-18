@@ -8,19 +8,20 @@ import { TreeTableModule } from 'primeng/primeng';
 import { NgbModalModule, NgbRatingModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
 
+import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePicker';
 import { AppTranslationModule } from '../../app.translation.module';
 import { routing } from './components.routing';
 import { Components } from './components.component';
 import { TreeView } from './components/treeView/treeView.component';
 import { GroupsService } from './components/groups/groups.service';
-import { QuestionTagsService } from './components/questionTags/question-tags.service';
-import { QuestionTagsComponent } from './components/questionTags/question-tags.component';
-import { EditQuestionTagComponent } from './components/questionTags/question-tag-edit.component';
-import { QuestionsService } from './components/questions/questions.service';
-import { QuestionsComponent, EditQuestionComponent, 
+import { QuestionTagsService, QuestionTagsComponent,
+  EditQuestionTagComponent } from './components/questionTags';
+import { QuestionsService, QuestionsComponent, EditQuestionComponent, 
   ConfirmDeleteQuestionComponent, QuestionListComponent,
   QUploadFileComponent } from './components/questions';
-import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePicker';
+import { ExamPapersService, ExamPapersComponent, 
+  EditExamPaperComponent, ExamPaperListComponent } from './components/examPapers';
+
 
 @NgModule({
   imports: [
@@ -38,7 +39,7 @@ import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePick
     NgbRatingModule,
     NgbPaginationModule,
     AppTranslationModule,
-    routing
+    routing,
   ],
   declarations: [
     DatepickerComponent,
@@ -50,7 +51,10 @@ import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePick
     EditQuestionComponent,
     QuestionListComponent,
     ConfirmDeleteQuestionComponent,
-    QUploadFileComponent
+    QUploadFileComponent,
+    ExamPapersComponent,
+    ExamPaperListComponent,
+    EditExamPaperComponent,
   ],
   entryComponents: [
     EditQuestionTagComponent,
@@ -58,9 +62,10 @@ import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePick
     QUploadFileComponent
   ],
   providers: [
-      QuestionTagsService,
       GroupsService,
-      QuestionsService
+      QuestionTagsService,      
+      QuestionsService,
+      ExamPapersService
   ]
 })
 export class ComponentsModule { }

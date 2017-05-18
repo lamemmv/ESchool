@@ -2,11 +2,11 @@ import { Routes, RouterModule }  from '@angular/router';
 
 import { Components } from './components.component';
 import { TreeView } from './components/treeView/treeView.component';
-import { QuestionTagsComponent } from './components/questionTags/question-tags.component';
-import { QuestionsComponent } from './components/questions/questions.component';
-import { EditQuestionComponent } from './components/questions/edit/question-edit.component';
-import { QuestionListComponent } from './components/questions/list/question-list.component';
-
+import { QuestionTagsComponent } from './components/questionTags';
+import { QuestionsComponent, EditQuestionComponent,
+  QuestionListComponent } from './components/questions';
+import { ExamPapersComponent, EditExamPaperComponent,
+  ExamPaperListComponent } from './components/examPapers';
 // noinspection TypeScriptValidateTypes
 const routes: Routes = [
   {
@@ -28,10 +28,26 @@ const routes: Routes = [
           {
             path: 'create',
             component: EditQuestionComponent
-          }
-        ] 
-      }
-    ]
+          },
+        ], 
+      },
+      { path: 'examPapers', component: ExamPapersComponent,
+        children: [
+          {
+            path: '',
+            component: ExamPaperListComponent
+          },
+          {
+            path: 'edit/:id',
+            component: ExamPaperListComponent
+          },
+          {
+            path: 'create',
+            component: ExamPaperListComponent
+          },
+        ], 
+      },
+    ],
   }
 ];
 

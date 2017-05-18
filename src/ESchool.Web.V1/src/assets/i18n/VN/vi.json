@@ -51,7 +51,8 @@
       "menu_level_1_2_1": "Menu Level 1.2.1",
       "external_link": "External Link",
       "questionTags": "Nhóm câu hỏi",
-      "questions": "Câu hỏi"
+      "questions": "Câu hỏi",
+      "examPapers": "Đề thi"
     },
     "created_with": "Created with"
   },
@@ -108,7 +109,9 @@
   },
   "ADD": "Thêm",
   "ADD_ANSWERS": "Thêm câu trả lời",
+  "ADD_EXAM_PAPER": "Tạo đề thi",
   "ADD_QUESTION_TAG_HEADER": "Thêm nhóm câu hỏi",
+  "BROWSE": "Chọn file",
   "CANCEL": "Hủy",
   "CONTENT": "Nội dung",
   "CREATE_QUESTION_TITLE": "Tạo câu hỏi",
@@ -135,6 +138,7 @@
   "SAVE": "Lưu",
   "SEARCH": "Tìm",
   "SELECT_GROUP": "Chọn nhóm",
-  "SPECIALIZED":"Lớp chuyên",
-  "UPDATE": "Cập nhật"
+  "SPECIALIZED": "Lớp chuyên",
+  "UPDATE": "Cập nhật",
+  "UPLOAD_IMAGE": "Chèn hình ảnh"
 }

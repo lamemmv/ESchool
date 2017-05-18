@@ -51,7 +51,8 @@
       "menu_level_1_2_1": "Menu Level 1.2.1",
       "external_link": "External Link",
       "questionTags": "Question tags",
-      "questions": "Questions"
+      "questions": "Questions",
+      "examPapers": "Exam papers"
     },
     "created_with": "Created with"
   },
@@ -108,7 +109,9 @@
   },
   "ADD": "Add",
   "ADD_ANSWERS": "Add answers",
+  "ADD_EXAM_PAPER": "Tạo đề thi",
   "ADD_QUESTION_TAG_HEADER": "Add question tag",
+  "BROWSE": "Browse",
   "CANCEL": "Cancel",
   "CONTENT": "Content",
   "CREATE_QUESTION_TITLE": "Create new question",
@@ -136,5 +139,6 @@
   "SEARCH": "Search",
   "SELECT_GROUP": "Select group",
   "SPECIALIZED":"Specialized",
-  "UPDATE": "Cập nhật"
+  "UPDATE": "Cập nhật",
+  "UPLOAD_IMAGE": "Upload image"
 }

@@ -1,7 +1,7 @@
 import {
   Component, OnInit, ViewChild, ViewChildren, AfterViewChecked,
   AfterViewInit, Renderer, QueryList, ViewEncapsulation,
-  ElementRef
+  ElementRef, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -30,9 +30,6 @@ declare var CKEDITOR: any;
   styleUrls: [
     ('./question-edit.style.scss')
   ],
-  host: {
-    '(document:click)': 'onDocumentClick($event)',
-  }
 })
 
 export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterViewInit {
@@ -247,7 +244,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
   openUploadDialog(editor: any) {
     const self = this;
     const activeModal = this.modalService.open(QUploadFileComponent, {
-      size: 'sm',
+      size: 'lg',
       backdrop: 'static',
     });
     activeModal.componentInstance.modalContent = editor;
@@ -318,6 +315,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     event.stopPropagation();
   }
 
+  @HostListener('click', ['$event'])
   onDocumentClick(event: any) {
     this.showTree = false;
   }

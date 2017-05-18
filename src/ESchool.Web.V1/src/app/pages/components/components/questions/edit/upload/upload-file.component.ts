@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, 
+  ViewChild, Renderer, ElementRef, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { NotificationService } from './../../../../../../shared/utils/notification.service';
@@ -14,6 +15,7 @@ export class QUploadFileComponent implements OnInit {
 
   @ViewChild('fileUpload') public _fileUpload: ElementRef;
   @ViewChild('inputText') public _inputText: ElementRef;
+  @Input() defaultValue: string = '';
   private file = new FormFile();
   modalHeader: string;
   modalContent: any;

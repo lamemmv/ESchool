@@ -71,6 +71,14 @@ export const PAGES_MENU = [
                 title: 'general.menu.questions',
               }
             }
+          },
+          {
+            path: 'examPapers',
+            data: {
+              menu: {
+                title: 'general.menu.examPapers',
+              }
+            }
           }
         ]
       },
