@@ -59,7 +59,8 @@ import { ExamPapersService, ExamPapersComponent,
   entryComponents: [
     EditQuestionTagComponent,
     ConfirmDeleteQuestionComponent,
-    QUploadFileComponent
+    QUploadFileComponent,
+    EditExamPaperComponent,
   ],
   providers: [
       GroupsService,
