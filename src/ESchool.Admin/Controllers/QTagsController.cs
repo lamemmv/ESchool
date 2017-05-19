@@ -4,7 +4,6 @@ using ESchool.Admin.ViewModels;
 using ESchool.Admin.ViewModels.Examinations;
 using ESchool.Data.DTOs.Examinations;
 using ESchool.Services.Examinations;
-using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -58,7 +57,7 @@ namespace ESchool.Admin.Controllers
                 return NoContent();
             }
 
-            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid QTag Id.");
+            return BadRequestApiError("QTagId", "'QTag Id' should not be empty.");
         }
     }
 }

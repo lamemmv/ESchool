@@ -1,15 +1,9 @@
-﻿namespace ESchool.Services.Infrastructure
+﻿namespace ESchool.Services.Constants
 {
-    public static class ApplicationConsts
+    public static class MemoryCacheKeys
     {
-        // Memory Cache Keys.
         public const string AccountLockoutOnFailureKey = "cache.memory.accountlockoutonfailure";
-
         public const string DefaultEmailAccountKey = "cache.sliding.defaultemailaccount";
-
         public const string RolesKey = "cache.sliding.roles";
-
-        // Settings Names.
-        public const string AccountLockoutOnFailureSettingName = "account.lockoutonfailure";
     }
 }

@@ -81,7 +81,7 @@ namespace ESchool.API.Controllers
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
                 // Don't reveal that the user does not exist or is not confirmed.
-                return BadRequest(ErrorCode.Undefined);
+                return BadRequest(ApiErrorCode.Undefined);
             }
 
             // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
@@ -105,7 +105,7 @@ namespace ESchool.API.Controllers
             if (user == null)
             {
                 // Don't reveal that the user does not exist.
-                return BadRequest(ErrorCode.Undefined);
+                return BadRequest(ApiErrorCode.Undefined);
             }
 
             var result = await _userManager.ResetPasswordAsync(user, viewModel.Code, viewModel.Password);

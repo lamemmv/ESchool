@@ -1,4 +1,5 @@
 ﻿using ESchool.Admin.ViewModels.Accounts;
+using ESchool.Services.Constants;
 using FluentValidation;
 
 namespace ESchool.Admin.Validators.Accounts
@@ -11,7 +12,8 @@ namespace ESchool.Admin.Validators.Accounts
                 .NotEmpty();
 
             RuleFor(p => p.NewPassword)
-                .NotEmpty();
+                .NotEmpty()
+                .Must(p => p.Length >= ValidationRules.MinPasswordLength);
 
             RuleFor(p => p.ConfirmPassword)
                 .NotEmpty()

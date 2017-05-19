@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using ESchool.Admin.ViewModels;
 using ESchool.Admin.ViewModels.Messages;
 using ESchool.Data.Entities.Messages;
-using ESchool.Services.Exceptions;
 using ESchool.Services.Messages;
 using Microsoft.AspNetCore.Mvc;
 
@@ -58,7 +57,7 @@ namespace ESchool.Admin.Controllers
                 return NoContent();
             }
 
-            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Email Account Id.");
+            return BadRequestApiError("EmailAccountId", "'Email Account Id' should not be empty.");
         }
     }
 }

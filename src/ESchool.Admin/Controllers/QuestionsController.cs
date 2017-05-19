@@ -5,7 +5,6 @@ using ESchool.Data.DTOs.Examinations;
 using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
 using ESchool.Services.Examinations;
-using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -68,7 +67,7 @@ namespace ESchool.Admin.Controllers
                 return NoContent();
             }
 
-            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Question Id.");
+            return BadRequestApiError("QuestionId", "'Question Id' should not be empty.");
         }
     }
 }

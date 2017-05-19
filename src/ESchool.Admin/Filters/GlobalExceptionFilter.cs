@@ -26,7 +26,7 @@ namespace ESchool.Admin.Filters
             WriteLog(context.HttpContext, apiError);
 
             var response = context.HttpContext.Response;
-            response.StatusCode = (int)apiError.GetStatusCode();
+            response.StatusCode = (int)apiError.StatusCode;
             response.ContentType = "application/json";
 
             context.ExceptionHandled = true;
@@ -35,18 +35,18 @@ namespace ESchool.Admin.Filters
 
         private void WriteLog(HttpContext httpContext, ApiError apiError)
         {
-            if (apiError.GetStatusCode() == HttpStatusCode.InternalServerError)
+            if (apiError.StatusCode == HttpStatusCode.InternalServerError)
             {
                 var sb = new StringBuilder();
 
                 try
                 {
                     sb = LogHttpContext(httpContext)
-                        .Append(apiError.GetExceptionDetail() ?? string.Empty);
+                        .Append(apiError.ExceptionDetail ?? string.Empty);
                 }
                 catch (Exception)
                 {
-                    sb.Append(apiError.GetExceptionDetail() ?? string.Empty);
+                    sb.Append(apiError.ExceptionDetail ?? string.Empty);
                 }
 
                 _logger.LogError(new EventId(0), sb.ToString()/*, exception*/);

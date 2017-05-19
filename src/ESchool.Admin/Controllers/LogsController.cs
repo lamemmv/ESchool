@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Data.Entities.Systems;
 using ESchool.Data.Paginations;
-using ESchool.Services.Exceptions;
 using ESchool.Services.Systems;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,7 +54,7 @@ namespace ESchool.Admin.Controllers
                 return NoContent();
             }
 
-            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Log Id.");
+            return BadRequestApiError("LogId", "'Log Id' should not be empty.");
         }
 
         [HttpDelete]
@@ -68,7 +67,7 @@ namespace ESchool.Admin.Controllers
                 return NoContent();
             }
 
-            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Log Ids.");
+            return BadRequestApiError("LogId", "'Log Ids' should not be empty.");
         }
     }
 }

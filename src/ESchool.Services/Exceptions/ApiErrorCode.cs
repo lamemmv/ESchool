@@ -2,7 +2,7 @@
 
 namespace ESchool.Services.Exceptions
 {
-    public enum ErrorCode
+    public enum ApiErrorCode
     {
         Undefined = 0,
 
@@ -10,7 +10,6 @@ namespace ESchool.Services.Exceptions
         NotFound = HttpStatusCode.NotFound,
         InternalServerError = HttpStatusCode.InternalServerError,
 
-        DuplicateEntity = 1001,
-        InvalidEntityId = 1002
+        DuplicateEntity = 1001
     }
 }

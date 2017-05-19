@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using ESchool.Admin.ViewModels;
 using ESchool.Admin.ViewModels.Accounts;
 using ESchool.Data.Entities.Accounts;
-using ESchool.Services.Exceptions;
-using ESchool.Services.Infrastructure;
+using ESchool.Services.Constants;
 using ESchool.Services.Infrastructure.Cache;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -102,7 +101,7 @@ namespace ESchool.Admin.Controllers
 
                 if (rolesNotExists.Any())
                 {
-                    return BadRequestErrorDto(ErrorCode.Undefined, $"Roles '{string.Join(",", rolesNotExists)}' does not exist in the system.");
+                    return BadRequestApiError("Roles", $"Roles '{string.Join(",", rolesNotExists)}' does not exist in the system.");
                 }
 
                 result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
@@ -143,7 +142,7 @@ namespace ESchool.Admin.Controllers
                 return NoContent();
             }
 
-            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Application User Id.");
+            return BadRequestApiError("ApplicationUserId", "'Application User Id' should not be empty.");
         }
 
         [HttpPut("changepassword")]
@@ -170,7 +169,7 @@ namespace ESchool.Admin.Controllers
         private async Task<IEnumerable<IdentityRole>> GetRoles()
         {
             return await _memoryCacheService.GetSlidingExpiration(
-                ApplicationConsts.RolesKey,
+                MemoryCacheKeys.RolesKey,
                 () =>
                 {
                     return _roleManager.Roles.ToListAsync();

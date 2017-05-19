@@ -80,7 +80,7 @@ namespace ESchool.Services.Examinations
 
             if (duplicateEntity != null)
             {
-                throw new EntityDuplicateException("QTag Name is duplicated.");
+                throw new EntityDuplicateException("'QTag Name' is duplicated.");
             }
 
             await QTags.AddAsync(entity);
@@ -104,7 +104,7 @@ namespace ESchool.Services.Examinations
 
             if (duplicateEntity != null && duplicateEntity.Id != entity.Id)
             {
-                throw new EntityDuplicateException("QTag Name is duplicated.");
+                throw new EntityDuplicateException("'QTag Name' is duplicated.");
             }
 
             updatedEntity.ParentId = entity.ParentId;

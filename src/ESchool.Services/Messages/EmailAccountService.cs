@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Entities.Messages;
+using ESchool.Services.Constants;
 using ESchool.Services.Exceptions;
-using ESchool.Services.Infrastructure;
 using ESchool.Services.Infrastructure.Cache;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +35,7 @@ namespace ESchool.Services.Messages
         public async Task<EmailAccount> GetDefaultAsync()
         {
             return await _memoryCacheService.GetSlidingExpiration(
-                ApplicationConsts.DefaultEmailAccountKey,
+                MemoryCacheKeys.DefaultEmailAccountKey,
                 () =>
                 {
                     return EmailAccounts.AsNoTracking()

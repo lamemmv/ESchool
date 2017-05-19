@@ -1,5 +1,5 @@
-﻿using System;
-using ESchool.Admin.ViewModels.Examinations;
+﻿using ESchool.Admin.ViewModels.Examinations;
+using ESchool.Services.Constants;
 using FluentValidation;
 
 namespace ESchool.Admin.Validators.Examinations
@@ -17,14 +17,12 @@ namespace ESchool.Admin.Validators.Examinations
             RuleFor(p => p.Duration)
                 .GreaterThan(0);
 
-            var fromDate = new DateTime(2015, 1, 1);
-            var toDate = fromDate.AddYears(100);
             RuleFor(p => p.FromDate)
-                .InclusiveBetween(fromDate, toDate)
+                .InclusiveBetween(ValidationRules.MinDate, ValidationRules.MaxDate)
                 .LessThanOrEqualTo(p => p.ToDate);
 
             RuleFor(p => p.ToDate)
-                .InclusiveBetween(fromDate, toDate);
+                .InclusiveBetween(ValidationRules.MinDate, ValidationRules.MaxDate);
         }
     }
 

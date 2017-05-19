@@ -5,7 +5,6 @@ using ESchool.Admin.ViewModels.Examinations;
 using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
 using ESchool.Services.Examinations;
-using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -54,7 +53,7 @@ namespace ESchool.Admin.Controllers
                 return NoContent();
             }
 
-            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid ExamPaper Id.");
+            return BadRequestApiError("ExamPaperId", "'ExamPaper Id' should not be empty.");
         }
 
         private IList<QuestionExamPaper> GetQuestionExamPapers(QuestionExamPaperViewModel[] parts)

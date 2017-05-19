@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Net;
 using System.Text;
+using ESchool.Services.Constants;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace ESchool.Services.Exceptions
 {
     public sealed class ApiError
     {
-        private string _exceptionDetail;
-        private HttpStatusCode _httpStatusCode;
-
         private readonly Exception _exception;
 
         public ApiError(Exception exception)
@@ -17,65 +16,76 @@ namespace ESchool.Services.Exceptions
             _exception = exception;
         }
 
-        public ApiError(ErrorCode code, string message)
+        public ApiError(string type, string source, string message)
         {
-            Code = (int)code;
-            Message = message;
+            ErrorType = type;
+            Source = source;
+            ErrorMessage = message;
         }
 
-        public int Code { get; private set; }
+        public string ErrorType { get; private set; }
 
-        public string Message { get; private set; }
+        public int? ErrorCode { get; private set; }
 
-        public HttpStatusCode GetStatusCode()
-        {
-            return _httpStatusCode;
-        }
+        public string Source { get; }
 
-        public string GetExceptionDetail()
-        {
-            return _exceptionDetail;
-        }
+        public string ErrorMessage { get; private set; }
+
+        [JsonIgnore]
+        public HttpStatusCode StatusCode { get; private set; }
+
+        [JsonIgnore]
+        public string ExceptionDetail { get; private set; }
 
         public void AssignErrorCodeAndMessage()
         {
-            ErrorCode errorCode;
-            string message;
+            ErrorType = ApiErrorTypes.Business;
+            ApiErrorCode errorCode;
 
             if (_exception is EntityDuplicateException)
             {
-                errorCode = ErrorCode.DuplicateEntity;
-                message = ((EntityDuplicateException)_exception).Message;
-                _httpStatusCode = HttpStatusCode.BadRequest;
+                errorCode = ApiErrorCode.DuplicateEntity;
+                ErrorMessage = ((EntityDuplicateException)_exception).Message;
+                StatusCode = HttpStatusCode.BadRequest;
             }
             else if (_exception is EntityNotFoundException)
             {
-                errorCode = ErrorCode.NotFound;
-                message = ((EntityNotFoundException)_exception).Message;
-                _httpStatusCode = HttpStatusCode.NotFound;
+                errorCode = ApiErrorCode.NotFound;
+                ErrorMessage = ((EntityNotFoundException)_exception).Message;
+                StatusCode = HttpStatusCode.NotFound;
             }
             else if (_exception is UnauthorizedAccessException)
             {
-                errorCode = ErrorCode.Unauthorized;
-                message = "Unauthorized Access.";
-                _httpStatusCode = HttpStatusCode.Unauthorized;
+                errorCode = ApiErrorCode.Unauthorized;
+                ErrorMessage = "Unauthorized Access.";
+                StatusCode = HttpStatusCode.Unauthorized;
             }
             else
             {
-                var innerException = _exception is DbUpdateException ? _exception.InnerException : _exception;
+                Exception innerException;
 
-                errorCode = ErrorCode.InternalServerError;
+                if (_exception is DbUpdateException)
+                {
+                    ErrorType = ApiErrorTypes.Database;
+                    innerException = _exception.InnerException;
+                }
+                else
+                {
+                    ErrorType = ApiErrorTypes.InternalServerError;
+                    innerException = _exception;
+                }
+
+                errorCode = ApiErrorCode.InternalServerError;
 #if !DEBUG
                 message = "An unhandled error occurred.";                
 #else
-                message = innerException.Message;
+                ErrorMessage = innerException.Message;
 #endif
-                _httpStatusCode = HttpStatusCode.InternalServerError;
-                _exceptionDetail = GetExceptionDetail(innerException).ToString();
+                StatusCode = HttpStatusCode.InternalServerError;
+                ExceptionDetail = GetExceptionDetail(innerException).ToString();
             }
 
-            Code = (int)errorCode;
-            Message = message;
+            ErrorCode = (int)errorCode;
         }
 
         private StringBuilder GetExceptionDetail(Exception exception)

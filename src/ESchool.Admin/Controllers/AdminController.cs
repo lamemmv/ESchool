@@ -1,5 +1,5 @@
-﻿using ESchool.Services.Exceptions;
-using Microsoft.AspNetCore.Authorization;
+﻿using ESchool.Services.Constants;
+using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -12,9 +12,9 @@ namespace ESchool.Admin.Controllers
         protected const int DefaultPage = 1;
         protected const int DefaultSize = 25;
 
-        protected IActionResult BadRequestErrorDto(ErrorCode code, string message = null)
+        protected IActionResult BadRequestApiError(string source, string message)
         {
-            return BadRequest(new ApiError(code, message));
+            return BadRequest(new ApiError(ApiErrorTypes.ViewModel, source, message));
         }
     }
 }

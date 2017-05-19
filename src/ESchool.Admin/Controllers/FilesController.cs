@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using ESchool.Data.Entities.Files;
-using ESchool.Services.Exceptions;
 using ESchool.Services.Files;
 using ESchool.Services.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
@@ -63,7 +62,7 @@ namespace ESchool.Admin.Controllers
                 return Created("Post", fileDto);
             }
 
-            return BadRequest();
+            return BadRequestApiError("File", "'File' should not be empty.");
         }
 
         [HttpDelete]
@@ -76,7 +75,7 @@ namespace ESchool.Admin.Controllers
                 return NoContent();
             }
 
-            return BadRequestErrorDto(ErrorCode.InvalidEntityId, "Invalid Blob Id.");
+            return BadRequestApiError("BlobId", "'Blob Id' should not be empty.");
         }
 
         private void CreateServerUploadPathDirectory()
