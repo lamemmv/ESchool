@@ -5,24 +5,23 @@ import { NgaModule } from '../../theme/nga.module';
 import { TreeModule } from 'ng2-tree';
 import { AlertModule, ModalModule, DatepickerModule } from 'ng2-bootstrap';
 import { TreeTableModule } from 'primeng/primeng';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbRatingModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { CKEditorModule } from 'ng2-ckeditor';
-import { RatingModule } from 'ngx-rating';
 
+import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePicker';
 import { AppTranslationModule } from '../../app.translation.module';
 import { routing } from './components.routing';
 import { Components } from './components.component';
 import { TreeView } from './components/treeView/treeView.component';
 import { GroupsService } from './components/groups/groups.service';
-import { QuestionTagsService } from './components/questionTags/question-tags.service';
-import { QuestionTagsComponent } from './components/questionTags/question-tags.component';
-import { EditQuestionTagComponent } from './components/questionTags/question-tag-edit.component';
-import { QuestionsService } from './components/questions/questions.service';
-import { QuestionsComponent } from './components/questions/questions.component';
-import { EditQuestionComponent } from './components/questions/edit/question-edit.component';
-import { QuestionListComponent } from './components/questions/list/question-list.component';
-import { ConfirmDeleteQuestionComponent } from './components/questions/delete/confirm-delete.component';
-import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePicker';
+import { QuestionTagsService, QuestionTagsComponent,
+  EditQuestionTagComponent } from './components/questionTags';
+import { QuestionsService, QuestionsComponent, EditQuestionComponent, 
+  ConfirmDeleteQuestionComponent, QuestionListComponent,
+  QUploadFileComponent } from './components/questions';
+import { ExamPapersService, ExamPapersComponent, 
+  EditExamPaperComponent, ExamPaperListComponent } from './components/examPapers';
+
 
 @NgModule({
   imports: [
@@ -37,9 +36,10 @@ import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePick
     TreeTableModule,
     NgbModalModule,
     CKEditorModule,
-    RatingModule,
+    NgbRatingModule,
+    NgbPaginationModule,
     AppTranslationModule,
-    routing
+    routing,
   ],
   declarations: [
     DatepickerComponent,
@@ -50,16 +50,23 @@ import { ClickOutsideModule, DatepickerComponent } from './../../shared/datePick
     QuestionsComponent,
     EditQuestionComponent,
     QuestionListComponent,
-    ConfirmDeleteQuestionComponent
+    ConfirmDeleteQuestionComponent,
+    QUploadFileComponent,
+    ExamPapersComponent,
+    ExamPaperListComponent,
+    EditExamPaperComponent,
   ],
   entryComponents: [
     EditQuestionTagComponent,
-    ConfirmDeleteQuestionComponent
+    ConfirmDeleteQuestionComponent,
+    QUploadFileComponent,
+    EditExamPaperComponent,
   ],
   providers: [
-      QuestionTagsService,
       GroupsService,
-      QuestionsService
+      QuestionTagsService,      
+      QuestionsService,
+      ExamPapersService
   ]
 })
 export class ComponentsModule { }

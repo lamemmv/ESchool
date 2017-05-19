@@ -1,7 +1,7 @@
 import {
   Component, OnInit, ViewChild, ViewChildren, AfterViewChecked,
   AfterViewInit, Renderer, QueryList, ViewEncapsulation,
-  ElementRef
+  ElementRef, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -9,7 +9,6 @@ import { AlertModule } from 'ng2-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TreeNode } from 'primeng/primeng';
-import { RatingModule } from "ngx-rating";
 
 import { NotificationService } from './../../../../../shared/utils/notification.service';
 import { AlertModel } from './../../../../../shared/models/alert';
@@ -22,6 +21,7 @@ import {
 import { QuestionTag } from './../../questionTags/question-tags.models';
 import { QuestionsService } from './../questions.service';
 import { QuestionTagsService } from './../../questionTags/question-tags.service';
+import { QUploadFileComponent } from './upload/upload-file.component';
 
 declare var CKEDITOR: any;
 @Component({
@@ -30,9 +30,6 @@ declare var CKEDITOR: any;
   styleUrls: [
     ('./question-edit.style.scss')
   ],
-  host: {
-    '(document:click)': 'onDocumentClick($event)',
-  }
 })
 
 export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterViewInit {
@@ -60,7 +57,8 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     private questionTagsService: QuestionTagsService,
     private questionService: QuestionsService,
     private utilitiesService: UtilitiesService,
-    private rd: Renderer) {
+    private rd: Renderer,
+    private modalService: NgbModal) {
     this.registerCKEditorCommands = this.registerCKEditorCommands.bind(this);
   }
 
@@ -177,13 +175,13 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     return '';
   }
 
-  onReady(): void { };
+  onReady(): void { }
 
-  onChange(): void { };
+  onChange(): void { }
 
-  onFocus(): void { };
+  onFocus(): void { }
 
-  onBlur(): void { };
+  onBlur(): void { }
 
   isValid(): boolean {
     if (!this.question.content) {
@@ -199,9 +197,9 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     }
 
     return true;
-  };
+  }
 
-  cancel(): void { this.router.navigate(['/admin/questions']); };
+  cancel(): void { this.router.navigate(['/pages/components/questions']); }
 
   save(): void {
     let self = this, promise = null;
@@ -219,12 +217,12 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
 
       self.alert.type = 'success';
       self.alert.message = self._translate.instant('SAVED');
-      this.router.navigate(['/admin/questions']);
+      this.router.navigate(['/pages/components/questions']);
     },
       error => {
         self.notificationService.printErrorMessage('Failed to create question. ' + error);
       });
-  };
+  }
 
   addAnswer(): void {
     if (this.question.answers.length > 0) {
@@ -232,23 +230,36 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     }
     this.question.answers.push({ body: '', dss: false, answerName: this.answerName });
     this.hasJustAddedAnswer = true;
-  };
+  }
 
   removeAnswer(answer: Answer): void {
     let index = this.question.answers.indexOf(answer);
     this.question.answers.splice(index, 1);
-  };
-
-  onClickRating(event: any) {
-    console.log('onClickRating: ' + event);
-  };
-
-  onRatingChange(event: any) {
-    console.log('onRatingChange: ' + event);
-  };
+  }
 
   onUploadImage(editor: any) {
-  };
+    this.openUploadDialog(editor);
+  }
+
+  openUploadDialog(editor: any) {
+    const self = this;
+    const activeModal = this.modalService.open(QUploadFileComponent, {
+      size: 'lg',
+      backdrop: 'static',
+    });
+    activeModal.componentInstance.modalContent = editor;
+    activeModal.result.then((result) => {
+      self.handleDialogClose(result);
+    }, (reason) => {
+      self.handleDialogClose(null);
+    });
+  }
+
+  handleDialogClose(result: any) {
+    if (result) {
+
+    }
+  }
 
   onFileChange(event: any) {
     let self = this;
@@ -258,7 +269,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
       self.file.type = fileToUpload.type;
       self.file.size = fileToUpload.size;
     }
-  };
+  }
 
   uploadFile() {
     let fi = this.fileInput.nativeElement, self = this;
@@ -304,6 +315,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
     event.stopPropagation();
   }
 
+  @HostListener('click', ['$event'])
   onDocumentClick(event: any) {
     this.showTree = false;
   }
@@ -318,7 +330,7 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
             qtag.subQTags.forEach((subTag) => {
               let children: any[] = [];
               let treeNode = {
-                data: subTag, children: children, leaf: false
+                data: subTag, children: children, leaf: subTag.subQTagsCount > 0 ? false : true
               };
               nodes.push(treeNode);
             });

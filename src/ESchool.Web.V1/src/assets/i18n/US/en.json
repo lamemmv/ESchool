@@ -51,7 +51,8 @@
       "menu_level_1_2_1": "Menu Level 1.2.1",
       "external_link": "External Link",
       "questionTags": "Question tags",
-      "questions": "Questions"
+      "questions": "Questions",
+      "examPapers": "Exam papers"
     },
     "created_with": "Created with"
   },
@@ -108,17 +109,22 @@
   },
   "ADD": "Add",
   "ADD_ANSWERS": "Add answers",
+  "ADD_EXAM_PAPER": "Tạo đề thi",
   "ADD_QUESTION_TAG_HEADER": "Add question tag",
+  "BROWSE": "Browse",
   "CANCEL": "Cancel",
   "CONTENT": "Content",
   "CREATE_QUESTION_TITLE": "Create new question",
   "DATE": "Date",
   "DESCRIPTION": "Description",
   "DIFFICULT_LEVEL": "Difficult level",
+  "DURATION": "Duration",
+  "EDIT_EXAM_PAPER": "Edit exam paper",
   "EDIT_QUESTION_TAG_HEADER": "Edit question tag",
   "EDIT_QUESTION_TITLE": "Edit question",
   "ENUM_QUESTION_TYPES_MULTIPLE_CHOICES": "Multiple choices",
   "ENUM_QUESTION_TYPES_SINGLE_CHOICE": "Single choice",
+  "EXAM_PAPER": "Exam paper",
   "GROUP": "Group of class",
   "MSG_CONFIRM_DELETING_QUESTION_TAGS": "Are you sure want to delete question tags(s)?",
   "NAME": "Name",
@@ -136,5 +142,6 @@
   "SEARCH": "Search",
   "SELECT_GROUP": "Select group",
   "SPECIALIZED":"Specialized",
-  "UPDATE": "Cập nhật"
+  "UPDATE": "Cập nhật",
+  "UPLOAD_IMAGE": "Upload image"
 }

@@ -1,0 +1,25 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title">{{'UPLOAD_IMAGE' | translate }}</h4>
+        <button class="close" aria-label="Close" (click)="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <ba-card title="{{modalHeader}}" baCardClass="with-scroll">
+            <form>
+                <input #fileUpload type="file" (change)="onFileChange($event)" hidden="true" />
+                <div class="input-group" [ngClass]="{uploading: uploadFileInProgress}">
+                    <input #inputText type="text" [value]="defaultValue" class="form-control" readonly>
+                    <span class="input-group-btn">
+                      <button class="btn btn-success" type="button" (click)="bringFileSelector();">{{'BROWSE' | translate}}</button>
+                  </span>
+                </div>
+            </form>
+        </ba-card>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success btn-raised" (click)="save()">{{'OK' | translate}}</button>
+        <button class="btn btn-default btn-raised" type="button" (click)="cancel()">{{'CANCEL' | translate }}</button>
+    </div>
+</div>

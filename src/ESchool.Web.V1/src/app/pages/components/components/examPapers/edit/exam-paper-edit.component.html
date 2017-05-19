@@ -1,0 +1,42 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title">{{ 'EXAM_PAPER' | translate }}</h4>
+        <button class="close" aria-label="Close" (click)="cancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        <ba-card title="{{view.title}}" baCardClass="with-scroll">
+            <form>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="groups" translate>{{ 'GROUP' }}</label>
+                        <select id="groups" name="groups" class="form-control" [(ngModel)]="selectedGroup"> 
+                            <option *ngFor="let group of groups" [ngValue]="group">{{group.name}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="duration">{{ 'DURATION' | translate }}</label>
+                        <input type="number" id="duration" name="duration" class="form-control" [(ngModel)]="modalContent.duration" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="checkbox-inline custom-checkbox nowrap">
+                            <input type="checkbox" name="specialized" [(ngModel)]="modalContent.specialized"  />
+                            <span>{{'SPECIALIZED'|translate}}</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="qtagName">{{'NAME' | translate}}</label>
+                    <input type="text" class="form-control" id="qtagName" name="qtagName" placeholder="{{'PLACEHOLDER_NAME_QUESTION_TAG' | translate}}"
+                        [(ngModel)]="modalContent.name" />
+                </div>
+            </form>
+        </ba-card>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary confirm-btn" (click)="save()">{{view.okText}}</button>
+        <button class="btn btn-default" type="button" (click)="cancel()">{{'CANCEL' | translate }}</button>
+    </div>
+</div>

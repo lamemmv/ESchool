@@ -8,6 +8,7 @@ import { Question, PagedList } from './../question.model';
 import { QuestionsService } from './../questions.service';
 import { AlertModel } from './../../../../../shared/models/alert';
 import { ConfirmDeleteQuestionComponent } from './../delete/confirm-delete.component';
+import { ConfigService } from './../../../../../shared/utils/config.service';
 
 @Component({
   selector: 'question-list',
@@ -19,13 +20,16 @@ import { ConfirmDeleteQuestionComponent } from './../delete/confirm-delete.compo
 
 export class QuestionListComponent implements OnInit {
 
-  private questions: Question[] = [];
+  private question = new PagedList();
   private alert: AlertModel;
 
   constructor(private router: Router,
     private questionsService: QuestionsService,
     private notificationService: NotificationService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    configService: ConfigService) {
+    this.question.page = 1;
+    this.question.size = configService.getPageSize();
   }
 
   ngOnInit() {
@@ -33,13 +37,13 @@ export class QuestionListComponent implements OnInit {
       type: '',
       message: '',
     };
-    this.getQuestions();
+    this.getQuestions(this.question.page);
   }
 
-  getQuestions() {
+  getQuestions(page: number) {
     const self = this;
-    this.questionsService.get().subscribe((response: PagedList) => {
-      this.questions = response.data;
+    this.questionsService.get(self.question.page, self.question.size).subscribe((response: PagedList) => {
+      this.question = response;
     },
       error => {
         self.notificationService.printErrorMessage('Failed to load question tags. ' + error);
@@ -74,8 +78,12 @@ export class QuestionListComponent implements OnInit {
   }
 
   handleDialogClose(result) {
-    if (result){
-      this.getQuestions();
+    if (result) {
+      this.getQuestions(this.question.page);
     }
+  }
+
+  onPageChange(page: number) {
+    this.getQuestions(page);
   }
 }

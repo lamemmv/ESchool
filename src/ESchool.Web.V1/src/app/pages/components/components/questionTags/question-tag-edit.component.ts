@@ -112,7 +112,7 @@ export class EditQuestionTagComponent implements OnInit {
             qtag.subQTags.forEach((subTag) => {
               let children: any[] = [];
               let treeNode = {
-                data: subTag, children: children, leaf: false
+                data: subTag, children: children, leaf: subTag.subQTagsCount > 0 ? false : true
               };
               nodes.push(treeNode);
             });
