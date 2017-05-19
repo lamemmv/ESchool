@@ -2,7 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using ESchool.Domain.Entities.Files;
+using ESchool.Data.Entities.Files;
 using ESchool.Services.Exceptions;
 using ESchool.Services.Files;
 using ESchool.Services.Infrastructure;

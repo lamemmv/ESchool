@@ -3,8 +3,8 @@
 //using System.Linq;
 //using System.Threading.Tasks;
 //using ESchool.Data;
-//using ESchool.Domain.DTOs.Examinations;
-//using ESchool.Domain.Entities.Examinations;
+//using ESchool.Data.DTOs.Examinations;
+//using ESchool.Data.Entities.Examinations;
 //using Microsoft.EntityFrameworkCore;
 
 //namespace ESchool.Services.Examinations

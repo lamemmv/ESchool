@@ -1,4 +1,4 @@
-﻿using ESchool.Domain.Entities.Messages;
+﻿using ESchool.Data.Entities.Messages;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Data.Mapping.Messages

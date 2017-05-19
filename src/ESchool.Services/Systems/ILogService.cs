@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ESchool.Data.Paginations;
-using ESchool.Domain.Entities.Systems;
+using ESchool.Data.Entities.Systems;
 
 namespace ESchool.Services.Systems
 {

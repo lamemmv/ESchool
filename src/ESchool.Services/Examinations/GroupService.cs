@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
-using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Extensions;
+using ESchool.Data.Entities.Examinations;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
@@ -16,10 +13,9 @@ namespace ESchool.Services.Examinations
         {
         }
 
-        public async Task<IList<GroupDto>> GetListAsync()
+        public async Task<IList<Group>> GetListAsync()
         {
             return await Groups.AsNoTracking()
-                .Select(g => g.ToGroupDto())
                 .ToListAsync();
         }
 

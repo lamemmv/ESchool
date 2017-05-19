@@ -6,6 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="1.16.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
+    <PackageReference Include="OpenIddict" Version="1.0.0-beta2-0614" />
+    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="1.0.0-beta2-0614" />
+    <PackageReference Include="OpenIddict.Mvc" Version="1.0.0-beta2-0614" />
   </ItemGroup>
 
   <ItemGroup>

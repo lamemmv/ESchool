@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Data;
-using ESchool.Domain.Entities.Messages;
+using ESchool.Data.Entities.Messages;
 using ESchool.Services.Exceptions;
 using ESchool.Services.Infrastructure;
 using ESchool.Services.Infrastructure.Cache;

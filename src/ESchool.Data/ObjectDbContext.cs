@@ -1,5 +1,5 @@
-﻿using ESchool.Data.Mapping;
-using ESchool.Domain.Entities.Accounts;
+﻿using ESchool.Data.Entities.Accounts;
+using ESchool.Data.Mapping;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Models;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using ESchool.Domain.Entities.Messages;
+using ESchool.Data.Entities.Messages;
 using MailKit.Net.Smtp;
 using MimeKit;
 

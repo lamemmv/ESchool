@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Extensions;
-using ESchool.Domain.ViewModels.Examinations;
+using ESchool.Admin.ViewModels;
+using ESchool.Admin.ViewModels.Examinations;
+using ESchool.Data.DTOs.Examinations;
 using ESchool.Services.Examinations;
 using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -33,29 +33,19 @@ namespace ESchool.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]QTagViewModel viewModel)
         {
-            if (ModelState.IsValid)
-            {
-                var entity = viewModel.ToQTag();
-                await _qtagService.CreateAsync(entity);
+            var entity = viewModel.ToQTag();
+            await _qtagService.CreateAsync(entity);
 
-                return Created("Post", entity.Id);
-            }
-
-            return BadRequest(ModelState);
+            return Created("Post", entity.Id);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]QTagViewModel viewModel)
         {
-            if (ModelState.IsValid)
-            {
-                var entity = viewModel.ToQTag(id);
-                await _qtagService.UpdateAsync(entity);
+            var entity = viewModel.ToQTag(id);
+            await _qtagService.UpdateAsync(entity);
 
-                return NoContent();
-            }
-
-            return BadRequest(ModelState);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

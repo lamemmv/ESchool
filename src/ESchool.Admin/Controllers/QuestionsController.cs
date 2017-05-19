@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
+using ESchool.Admin.ViewModels;
+using ESchool.Admin.ViewModels.Examinations;
+using ESchool.Data.DTOs.Examinations;
+using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
-using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Extensions;
-using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Examinations;
 using ESchool.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,7 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IPagedList<QuestionDto>> Get(int? page, int? size)
+        public async Task<IPagedList<Question>> Get(int? page, int? size)
         {
             return await _questionService.GetListAsync(page ?? DefaultPage, size ?? DefaultSize);
         }
@@ -42,29 +43,19 @@ namespace ESchool.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]QuestionViewModel viewModel)
         {
-            if (ModelState.IsValid)
-            {
-                var entity = viewModel.ToQuestion();
-                await _questionService.CreateAsync(entity);
+            var entity = viewModel.ToQuestion();
+            await _questionService.CreateAsync(entity);
 
-                return Created("Post", entity.Id);
-            }
-
-            return BadRequest(ModelState);
+            return Created("Post", entity.Id);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]QuestionViewModel viewModel)
         {
-            if (ModelState.IsValid)
-            {
-                var entity = viewModel.ToQuestion(id);
-                await _questionService.UpdateAsync(entity);
+            var entity = viewModel.ToQuestion(id);
+            await _questionService.UpdateAsync(entity);
 
-                return NoContent();
-            }
-
-            return BadRequest(ModelState);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

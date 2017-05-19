@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using ESchool.Domain.Entities.Systems;
+using ESchool.Data.Entities.Systems;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -26,9 +27,24 @@ namespace ESchool.Data.Configurations
                 var settings = dbContext.Set<Setting>();
 
                 Data = !settings.Any()
-                    ? new DbInitializer().SeedSettings(dbContext)
+                    ? SeedSettings(dbContext)
                     : settings.ToDictionary(s => s.Name, s => s.Value);
             }
+        }
+
+        private IDictionary<string, string> SeedSettings(ObjectDbContext dbContext)
+        {
+            var configSettings = new Dictionary<string, string>
+            {
+                { "account.lockoutonfailure", "true" }
+            };
+
+            dbContext.Set<Setting>().AddRange(
+                configSettings.Select(kvp => new Setting { Name = kvp.Key, Value = kvp.Value }));
+
+            dbContext.SaveChanges();
+
+            return configSettings;
         }
     }
 }

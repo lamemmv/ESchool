@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ESchool.Domain.Entities.Messages;
-using ESchool.Domain.Extensions;
-using ESchool.Domain.ViewModels.Messages;
+using ESchool.Admin.ViewModels;
+using ESchool.Admin.ViewModels.Messages;
+using ESchool.Data.Entities.Messages;
 using ESchool.Services.Exceptions;
 using ESchool.Services.Messages;
 using Microsoft.AspNetCore.Mvc;
@@ -33,29 +33,19 @@ namespace ESchool.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]EmailAccountViewModel viewModel)
         {
-            if (ModelState.IsValid)
-            {
-                var entity = viewModel.ToEmailAccount();
-                await _emailAccountService.CreateAsync(entity);
+            var entity = viewModel.ToEmailAccount();
+            await _emailAccountService.CreateAsync(entity);
 
-                return Created("Post", entity.Id);
-            }
-
-            return BadRequest(ModelState);
+            return Created("Post", entity.Id);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]EmailAccountViewModel viewModel)
         {
-            if (ModelState.IsValid)
-            {
-                var entity = viewModel.ToEmailAccount(id);
-                await _emailAccountService.UpdateAsync(entity);
+            var entity = viewModel.ToEmailAccount(id);
+            await _emailAccountService.UpdateAsync(entity);
 
-                return NoContent();
-            }
-
-            return BadRequest(ModelState);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

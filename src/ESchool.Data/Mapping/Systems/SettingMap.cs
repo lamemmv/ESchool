@@ -1,4 +1,4 @@
-﻿using ESchool.Domain.Entities.Systems;
+﻿using ESchool.Data.Entities.Systems;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Data.Mapping.Systems

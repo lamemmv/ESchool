@@ -1,6 +1,8 @@
-﻿using ESchool.Admin.Attributes;
-using ESchool.API.Extensions;
+﻿using ESchool.Admin.Controllers;
+using ESchool.Admin.Filters;
 using ESchool.Data.Configurations;
+using ESchool.Services;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
@@ -62,7 +64,10 @@ namespace ESchool.API
             services
                 .AddMvc(opts =>
                 {
-                    opts.Filters.Add(typeof(GlobalExceptionFilterAttribute));
+                    var filters = opts.Filters;
+
+                    filters.Add(typeof(ValidateViewModelFilter));
+                    filters.Add(typeof(GlobalExceptionFilter));
                 })
                 .AddJsonOptions(opts =>
                 {
@@ -72,7 +77,8 @@ namespace ESchool.API
                     serializerSettings.Formatting = Formatting.None;
                     serializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     serializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                });
+                })
+                .AddFluentValidation(opts => opts.RegisterValidatorsFromAssemblyContaining<AdminController>());
 
             services.AddApplicationService(Configuration);
         }
@@ -103,8 +109,7 @@ namespace ESchool.API
 
             app.UseMvcWithDefaultRoute();
 
-            app.UseDefaultData()
-                .UseBackgroundTasks();
+            app.UseStartupTasks();
         }
     }
 }

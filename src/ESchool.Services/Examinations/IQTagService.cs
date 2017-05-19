@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Entities.Examinations;
+using ESchool.Data.DTOs.Examinations;
+using ESchool.Data.Entities.Examinations;
 
 namespace ESchool.Services.Examinations
 {

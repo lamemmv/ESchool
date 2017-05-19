@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using ESchool.Domain.DTOs.Files;
-using ESchool.Domain.Entities.Files;
+using ESchool.Data.DTOs.Files;
+using ESchool.Data.Entities.Files;
 using Microsoft.AspNetCore.Http;
 
 namespace ESchool.Services.Files

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
+using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
-using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Extensions;
-using ESchool.Domain.ViewModels.Examinations;
 using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,28 +15,20 @@ namespace ESchool.Services.Examinations
         {
         }
 
-        public async Task<ExamPaperDto> GetAsync(int id)
+        public async Task<ExamPaper> GetAsync(int id)
         {
-            var entity = await ExamPapers.AsNoTracking()
+            return await ExamPapers.AsNoTracking()
                 .Include(ep => ep.QuestionExamPapers)
                     .ThenInclude(qep => qep.Question)
                 .SingleOrDefaultAsync(ep => ep.Id == id);
-
-            if (entity == null)
-            {
-                return null;
-            }
-
-            return entity.ToExamPaperDto();
         }
 
-        public async Task<IPagedList<ExamPaperDto>> GetListAsync(int page, int size)
+        public async Task<IPagedList<ExamPaper>> GetListAsync(int page, int size)
         {
             return await ExamPapers.AsNoTracking()
                 .Include(ep => ep.QuestionExamPapers)
                     .ThenInclude(qep => qep.Question)
                 .OrderBy(ep => ep.GroupId)
-                .Select(ep => ep.ToExamPaperDto())
                 .GetListAsync(page, size);
         }
 
@@ -69,33 +57,33 @@ namespace ESchool.Services.Examinations
             return await CommitAsync();
         }
 
-        public async Task AAA(QuestionExamPaperViewModel[] parts)
-        {
-            var parentQTagIds = parts.Select(p => p.QTagId).ToList();
+        //public async Task AAA(QuestionExamPaperViewModel[] parts)
+        //{
+        //    var parentQTagIds = parts.Select(p => p.QTagId).ToList();
 
-            var qtagIds = await QTags.AsNoTracking()
-                .Where(t => parentQTagIds.Contains(t.ParentId))
-                .Select(t => t.Id)
-                .ToListAsync();
+        //    var qtagIds = await QTags.AsNoTracking()
+        //        .Where(t => parentQTagIds.Contains(t.ParentId))
+        //        .Select(t => t.Id)
+        //        .ToListAsync();
 
-            var questions = Questions.AsNoTracking()
-                .Include(q => q.QTag)
-                .Where(q => qtagIds.Contains(q.QTagId))
-                .GroupBy(q => q.QTag.ParentId);
+        //    var questions = Questions.AsNoTracking()
+        //        .Include(q => q.QTag)
+        //        .Where(q => qtagIds.Contains(q.QTagId))
+        //        .GroupBy(q => q.QTag.ParentId);
 
-            //var random = new Random();
+        //    //var random = new Random();
 
-            //foreach (var part in parts)
-            //{
-            //    var aaa = qtags[part.QTagId].ToList();
+        //    //foreach (var part in parts)
+        //    //{
+        //    //    var aaa = qtags[part.QTagId].ToList();
 
-            //    do
-            //    {
-            //        var index = random.Next(aaa.Count);
+        //    //    do
+        //    //    {
+        //    //        var index = random.Next(aaa.Count);
 
-            //    } while (true);
-            //}
-        }
+        //    //    } while (true);
+        //    //}
+        //}
 
         private DbSet<ExamPaper> ExamPapers
         {

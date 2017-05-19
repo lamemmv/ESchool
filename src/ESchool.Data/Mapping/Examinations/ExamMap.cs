@@ -1,4 +1,4 @@
-﻿using ESchool.Domain.Entities.Examinations;
+﻿using ESchool.Data.Entities.Examinations;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Data.Mapping.Examinations

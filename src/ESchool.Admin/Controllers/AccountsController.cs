@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ESchool.Domain.Entities.Accounts;
-using ESchool.Domain.Extensions;
-using ESchool.Domain.ViewModels.Accounts;
+using ESchool.Admin.ViewModels;
+using ESchool.Admin.ViewModels.Accounts;
+using ESchool.Data.Entities.Accounts;
 using ESchool.Services.Exceptions;
 using ESchool.Services.Infrastructure;
 using ESchool.Services.Infrastructure.Cache;
@@ -51,84 +51,74 @@ namespace ESchool.Admin.Controllers
         //}
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]AccountViewModel viewModel)
+        public async Task<IActionResult> Post([FromBody]CreateAccountViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            var user = viewModel.ToApplicationUser();
+            var result = await _userManager.CreateAsync(user, viewModel.Password);
+
+            if (result.Succeeded)
             {
-                var user = viewModel.ToApplicationUser();
-                var result = await _userManager.CreateAsync(user, viewModel.Password);
-
-                if (result.Succeeded)
+                if (viewModel.Roles != null && viewModel.Roles.Length > 0)
                 {
-                    if (viewModel.Roles != null && viewModel.Roles.Length > 0)
+                    result = await _userManager.AddToRolesAsync(user, viewModel.Roles);
+
+                    if (!result.Succeeded)
                     {
-                        result = await _userManager.AddToRolesAsync(user, viewModel.Roles);
-
-                        if (!result.Succeeded)
-                        {
-                            return BadRequest(result.Errors);
-                        }
+                        return BadRequest(result.Errors);
                     }
+                }
 
-                    return Created("Post", user.Id);
-                }
-                else
-                {
-                    return BadRequest(result.Errors);
-                }
+                return Created("Post", user.Id);
             }
-
-            return BadRequest(ModelState);
+            else
+            {
+                return BadRequest(result.Errors);
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]AccountViewModel viewModel)
+        public async Task<IActionResult> Put(string id, [FromBody]CreateAccountViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
             {
-                var user = await _userManager.FindByIdAsync(id);
+                return NotFound();
+            }
 
-                if (user == null)
+            // Assign Roles.
+            IdentityResult result;
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            if (viewModel.Roles == null || viewModel.Roles.Length == 0)
+            {
+                result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            }
+            else
+            {
+                var roles = await GetRoles();
+
+                var rolesNotExists = viewModel.Roles.Except(roles.Select(r => r.Name));
+
+                if (rolesNotExists.Any())
                 {
-                    return NotFound();
+                    return BadRequestErrorDto(ErrorCode.Undefined, $"Roles '{string.Join(",", rolesNotExists)}' does not exist in the system.");
                 }
 
-                // Assign Roles.
-                IdentityResult result;
-                var currentRoles = await _userManager.GetRolesAsync(user);
+                result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
-                if (viewModel.Roles == null || viewModel.Roles.Length == 0)
+                if (result.Succeeded)
                 {
-                    result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
-                }
-                else
-                {
-                    var roles = await GetRoles();
-
-                    var rolesNotExists = viewModel.Roles.Except(roles.Select(r => r.Name));
-
-                    if (rolesNotExists.Any())
-                    {
-                        return BadRequestErrorDto(ErrorCode.Undefined, $"Roles '{string.Join(",", rolesNotExists)}' does not exist in the system.");
-                    }
-
-                    result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                    result = await _userManager.AddToRolesAsync(user, viewModel.Roles);
 
                     if (result.Succeeded)
                     {
-                        result = await _userManager.AddToRolesAsync(user, viewModel.Roles);
-
-                        if (result.Succeeded)
-                        {
-                            return NoContent();
-                        }
+                        return NoContent();
                     }
                 }
-
-                return BadRequest(result.Errors);
             }
 
-            return BadRequest(ModelState);
+            return BadRequest(result.Errors);
         }
 
         [HttpDelete("{id}")]
@@ -159,26 +149,21 @@ namespace ESchool.Admin.Controllers
         [HttpPut("changepassword")]
         public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (user == null)
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-
-                if (user == null)
-                {
-                    return NotFound();
-                }
-
-                var result = await _userManager.ChangePasswordAsync(user, viewModel.OldPassword, viewModel.NewPassword);
-
-                if (result.Succeeded)
-                {
-                    return NoContent();
-                }
-
-                return BadRequest(result.Errors);
+                return NotFound();
             }
 
-            return BadRequest(ModelState);
+            var result = await _userManager.ChangePasswordAsync(user, viewModel.OldPassword, viewModel.NewPassword);
+
+            if (result.Succeeded)
+            {
+                return NoContent();
+            }
+
+            return BadRequest(result.Errors);
         }
 
         [NonAction]

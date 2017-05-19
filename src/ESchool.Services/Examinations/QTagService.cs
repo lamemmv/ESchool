@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
-using ESchool.Domain.DTOs;
-using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Extensions;
+using ESchool.Data.DTOs.Examinations;
+using ESchool.Data.Entities.Examinations;
 using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,10 +28,10 @@ namespace ESchool.Services.Examinations
 
             var qtags = await QTags.AsNoTracking()
                 .Where(t => t.GroupId == entity.GroupId)
-                .Select(t => t.ToQTagDto())
+                .Select(t => ToQTagDto(t))
                 .ToListAsync();
 
-            var qtagDto = entity.ToQTagDto();
+            var qtagDto = ToQTagDto(entity);
 
             if (qtagDto.ParentId != 0)
             {
@@ -61,7 +59,7 @@ namespace ESchool.Services.Examinations
 
             var qtags = await QTags.AsNoTracking()
                 .Where(t => t.GroupId == groupId)
-                .Select(t => t.ToQTagDto())
+                .Select(t => ToQTagDto(t))
                 .ToListAsync();
 
             foreach (var qtag in qtags)
@@ -148,10 +146,10 @@ namespace ESchool.Services.Examinations
                     t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
-        private IList<IdNameDto> GetParentQTags(IList<QTagDto> qtags, int parentId)
+        private IList<QTagDto> GetParentQTags(IList<QTagDto> qtags, int parentId)
         {
             QTagDto qtag;
-            IList<IdNameDto> parentQTags = new List<IdNameDto>();
+            IList<QTagDto> parentQTags = new List<QTagDto>();
 
             while (parentId != 0)
             {
@@ -163,10 +161,21 @@ namespace ESchool.Services.Examinations
                 }
 
                 parentId = qtag.ParentId;
-                parentQTags.Insert(0, new IdNameDto(qtag.Id, qtag.Name));
+                parentQTags.Insert(0, new QTagDto { ParentId = qtag.ParentId, Id = qtag.Id, Name = qtag.Name });
             }
 
             return parentQTags;
+        }
+
+        private QTagDto ToQTagDto(QTag entity)
+        {
+            return new QTagDto
+            {
+                ParentId = entity.ParentId,
+                Id = entity.Id,
+                Name = entity.Name,
+                Description = entity.Description
+            };
         }
     }
 }

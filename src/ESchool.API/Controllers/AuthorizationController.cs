@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
-using ESchool.Domain.Entities.Accounts;
-using ESchool.Domain.Entities.Messages;
-using ESchool.Domain.Enums;
-using ESchool.Domain.ViewModels.Accounts;
+using ESchool.Admin.ViewModels.Accounts;
+using ESchool.Data.Entities.Accounts;
+using ESchool.Data.Entities.Messages;
+using ESchool.Data.Enums;
 using ESchool.Services.Exceptions;
 using ESchool.Services.Messages;
 using Microsoft.AspNetCore.Authentication;
@@ -75,57 +75,47 @@ namespace ESchool.API.Controllers
         [HttpPut("forgotpassword")]
         public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            string email = viewModel.Email.Trim();
+            var user = await _userManager.FindByNameAsync(email);
+
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
-                string email = viewModel.Email.Trim();
-                var user = await _userManager.FindByNameAsync(email);
-
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                {
-                    // Don't reveal that the user does not exist or is not confirmed.
-                    return BadRequest(ErrorCode.Undefined);
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                // Send an email with this link.
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = $"{viewModel.Url.Trim()}?userId={user.Id}&code={code}";
-
-                await SendEmailAsync(
-                    email,
-                    "Reset Password",
-                    "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
-
-                return NoContent();
+                // Don't reveal that the user does not exist or is not confirmed.
+                return BadRequest(ErrorCode.Undefined);
             }
 
-            return BadRequest(ModelState);
+            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
+            // Send an email with this link.
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callbackUrl = $"{viewModel.Url.Trim()}?userId={user.Id}&code={code}";
+
+            await SendEmailAsync(
+                email,
+                "Reset Password",
+                "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
+
+            return NoContent();
         }
 
         [HttpPut("resetpassword")]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.FindByEmailAsync(viewModel.Email.Trim());
+
+            if (user == null)
             {
-                var user = await _userManager.FindByEmailAsync(viewModel.Email.Trim());
-
-                if (user == null)
-                {
-                    // Don't reveal that the user does not exist.
-                    return BadRequest(ErrorCode.Undefined);
-                }
-
-                var result = await _userManager.ResetPasswordAsync(user, viewModel.Code, viewModel.Password);
-
-                if (result.Succeeded)
-                {
-                    return NoContent();
-                }
-
-                return BadRequest(result.Errors);
+                // Don't reveal that the user does not exist.
+                return BadRequest(ErrorCode.Undefined);
             }
 
-            return BadRequest(ModelState);
+            var result = await _userManager.ResetPasswordAsync(user, viewModel.Code, viewModel.Password);
+
+            if (result.Succeeded)
+            {
+                return NoContent();
+            }
+
+            return BadRequest(result.Errors);
         }
 
         [NonAction]
@@ -239,8 +229,8 @@ namespace ESchool.API.Controllers
 
         [NonAction]
         private async Task<AuthenticationTicket> CreateTicketAsync(
-            OpenIdConnectRequest request, 
-            ApplicationUser user, 
+            OpenIdConnectRequest request,
+            ApplicationUser user,
             AuthenticationProperties properties = null)
         {
             // Create a new ClaimsPrincipal containing the claims that

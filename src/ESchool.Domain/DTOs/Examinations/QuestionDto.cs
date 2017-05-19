@@ -15,7 +15,7 @@ namespace ESchool.Domain.DTOs.Examinations
 
         public int DifficultLevel { get; set; }
 
-        public bool Specialized{ get; set; }
+        public bool Specialized { get; set; }
 
         public DateTime Month { get; set; }
 

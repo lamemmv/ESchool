@@ -1,4 +1,4 @@
-﻿using ESchool.Domain.Entities.Files;
+﻿using ESchool.Data.Entities.Files;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Data.Mapping.Files

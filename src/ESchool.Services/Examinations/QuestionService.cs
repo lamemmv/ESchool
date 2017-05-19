@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
+using ESchool.Data.DTOs.Examinations;
+using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
-using ESchool.Domain.DTOs.Examinations;
-using ESchool.Domain.Entities.Examinations;
-using ESchool.Domain.Extensions;
 using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,15 +61,14 @@ namespace ESchool.Services.Examinations
                 return null;
             }
 
-            return entity.ToQuestionDto();
+            return ToQuestionDto(entity);
         }
 
-        public async Task<IPagedList<QuestionDto>> GetListAsync(int page, int size)
+        public async Task<IPagedList<Question>> GetListAsync(int page, int size)
         {
             return await Questions.AsNoTracking()
                 .Include(q => q.Answers)
                 .OrderBy(q => q.Id)
-                .Select(q => q.ToQuestionDto())
                 .GetListAsync(page, size);
         }
 
@@ -124,14 +122,6 @@ namespace ESchool.Services.Examinations
             return await CommitAsync();
         }
 
-        private DbSet<QTag> QTags
-        {
-            get
-            {
-                return _dbContext.Set<QTag>();
-            }
-        }
-
         private DbSet<Question> Questions
         {
             get
@@ -149,6 +139,22 @@ namespace ESchool.Services.Examinations
             {
                 dbSet.RemoveRange(answers);
             }
+        }
+
+        private QuestionDto ToQuestionDto(Question entity)
+        {
+            return new QuestionDto
+            {
+                Id = entity.Id,
+                Content = entity.Content,
+                Description = entity.Description,
+                Type = entity.Type,
+                DifficultLevel = entity.DifficultLevel,
+                Specialized = entity.Specialized,
+                Month = entity.Month,
+                QTagId = entity.QTagId,
+                Answers = entity.Answers
+            };
         }
     }
 }

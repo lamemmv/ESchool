@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESchool.Data;
-using ESchool.Domain.DTOs.Files;
-using ESchool.Domain.Entities.Files;
+using ESchool.Data.DTOs.Files;
+using ESchool.Data.Entities.Files;
 using ESchool.Services.Exceptions;
 using ESchool.Services.Infrastructure;
 using Microsoft.AspNetCore.Http;

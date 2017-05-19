@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ESchool.Data.Entities.Systems;
 using ESchool.Data.Paginations;
-using ESchool.Domain.Entities.Systems;
 using ESchool.Services.Exceptions;
 using ESchool.Services.Systems;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ESchool.Domain.DTOs.Examinations;
+using ESchool.Data.Entities.Examinations;
 using ESchool.Services.Examinations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +16,7 @@ namespace ESchool.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IList<GroupDto>> Get()
+        public async Task<IList<Group>> Get()
         {
             return await _groupService.GetListAsync();
         }

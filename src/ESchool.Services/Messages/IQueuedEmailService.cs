@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Data.Paginations;
-using ESchool.Domain.Entities.Messages;
+using ESchool.Data.Entities.Messages;
 
 namespace ESchool.Services.Messages
 {
