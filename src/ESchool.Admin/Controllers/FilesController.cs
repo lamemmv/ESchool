@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ESchool.Data.Entities.Files;
 using ESchool.Services.Files;
-using ESchool.Services.Infrastructure;
+using ESchool.Services.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

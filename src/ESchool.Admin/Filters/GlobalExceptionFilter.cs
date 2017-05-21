@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Text;
-using ESchool.Services.Exceptions;
+using ESchool.Services.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

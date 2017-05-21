@@ -1,6 +1,6 @@
-﻿namespace ESchool.Services.Infrastructure
+﻿namespace ESchool.Services.Models
 {
-    public class AppSettings
+    public sealed class AppSettings
     {
         public int MemoryCacheInMinutes { get; set; }
 

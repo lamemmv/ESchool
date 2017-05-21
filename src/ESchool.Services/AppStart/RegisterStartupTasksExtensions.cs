@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Entities.Accounts;
 using ESchool.Services.Infrastructure.Tasks;
@@ -18,33 +17,35 @@ namespace ESchool.Services.AppStart
     {
         public static IApplicationBuilder UseStartupTasks(this IApplicationBuilder app)
         {
-            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var serviceProvider = scope.ServiceProvider;
+            InitDefaultData(app);
 
-                InitDefaultData(serviceProvider);
-
-                InitBackgroundTasks(serviceProvider);
-            }
+            InitBackgroundTasks(app);
 
             return app;
         }
 
-        private static void InitDefaultData(IServiceProvider serviceProvider)
+        private static void InitDefaultData(IApplicationBuilder app)
         {
-            var dbContext = serviceProvider.GetRequiredService<ObjectDbContext>();
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var applicationManager = serviceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictApplication>>();
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
 
-            var dbInitializer = new DbInitializer();
+                var dbContext = serviceProvider.GetRequiredService<ObjectDbContext>();
+                var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var applicationManager = serviceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictApplication>>();
 
-            // This protects from deadlocks by starting the async method on the ThreadPool.
-            Task.Run(() => dbInitializer.Initialize(dbContext, roleManager, userManager, applicationManager)).Wait();
+                var dbInitializer = new DbInitializer();
+
+                // This protects from deadlocks by starting the async method on the ThreadPool.
+                Task.Run(() => dbInitializer.Initialize(dbContext, roleManager, userManager, applicationManager)).Wait();
+            }
         }
 
-        private static void InitBackgroundTasks(IServiceProvider serviceProvider)
+        private static void InitBackgroundTasks(IApplicationBuilder app)
         {
+            var serviceProvider = app.ApplicationServices;
+
             var logger = serviceProvider.GetRequiredService<ILogger<QueuedEmailSendTask>>();
             var queuedEmailService = serviceProvider.GetRequiredService<IQueuedEmailService>();
             var emailSender = serviceProvider.GetRequiredService<IEmailSender>();

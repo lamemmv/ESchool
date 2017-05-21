@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESchool.Services.Infrastructure.Extensions
+namespace ESchool.Services.Extensions
 {
     public static class DateTimeExtensions
     {

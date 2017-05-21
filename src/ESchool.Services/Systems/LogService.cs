@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
-using ESchool.Data.Paginations;
 using ESchool.Data.Entities.Systems;
+using ESchool.Data.Paginations;
 using ESchool.Services.Exceptions;
-using ESchool.Services.Infrastructure.Extensions;
+using ESchool.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Systems

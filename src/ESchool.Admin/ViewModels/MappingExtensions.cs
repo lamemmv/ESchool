@@ -6,7 +6,7 @@ using ESchool.Admin.ViewModels.Messages;
 using ESchool.Data.Entities.Accounts;
 using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Entities.Messages;
-using ESchool.Services.Infrastructure.Extensions;
+using ESchool.Services.Extensions;
 
 namespace ESchool.Admin.ViewModels
 {

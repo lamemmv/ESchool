@@ -2,10 +2,11 @@
 using System.Net;
 using System.Text;
 using ESchool.Services.Constants;
+using ESchool.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace ESchool.Services.Exceptions
+namespace ESchool.Services.Models
 {
     public sealed class ApiError
     {

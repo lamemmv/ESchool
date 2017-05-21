@@ -5,7 +5,7 @@ using ESchool.Data;
 using ESchool.Data.DTOs.Files;
 using ESchool.Data.Entities.Files;
 using ESchool.Services.Exceptions;
-using ESchool.Services.Infrastructure;
+using ESchool.Services.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 

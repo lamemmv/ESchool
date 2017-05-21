@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESchool.Services.Infrastructure
+namespace ESchool.Services.Utilities
 {
     public static class RandomUtils
     {

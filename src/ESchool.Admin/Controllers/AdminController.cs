@@ -1,5 +1,5 @@
 ﻿using ESchool.Services.Constants;
-using ESchool.Services.Exceptions;
+using ESchool.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers

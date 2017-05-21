@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace ESchool.Services.Exceptions
+namespace ESchool.Services.Models
 {
     public enum ApiErrorCode
     {
