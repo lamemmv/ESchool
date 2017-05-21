@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ESchool.Data.Entities.Messages;
 using ESchool.Services.Infrastructure.Tasks;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,7 @@ namespace ESchool.Services.Messages
         }
 
         public QueuedEmailSendTask(
-            int taskId, 
+            int taskId,
             int loopInSeconds,
             ILogger<QueuedEmailSendTask> logger,
             IQueuedEmailService queuedEmailService,
@@ -43,35 +44,49 @@ namespace ESchool.Services.Messages
 
             foreach (var queuedEmail in pagedQueuedEmail.Data)
             {
-                try
-                {
-                    var emailAccount = queuedEmail.EmailAccount;
+                await SendEmailAsync(queuedEmail);
+                await UpdateSentTriesAsync(queuedEmail);
+            }
+        }
 
-                    await _emailSender.SendEmailAsync(
-                        emailAccount,
-                        queuedEmail.From,
-                        queuedEmail.To,
-                        queuedEmail.Subject,
-                        queuedEmail.Body,
-                        true,
-                        queuedEmail.FromName,
-                        queuedEmail.ToName,
-                        queuedEmail.ReplyTo,
-                        queuedEmail.CC,
-                        queuedEmail.BCC);
+        private async Task SendEmailAsync(QueuedEmail queuedEmail)
+        {
+            try
+            {
+                var emailAccount = queuedEmail.EmailAccount;
 
-                    queuedEmail.SentOnUtc = DateTime.UtcNow;
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(new EventId(0), $"[QueuedEmailSendTask » SendEmailAsync]: {ex.Message}", ex);
-                }
-                finally
-                {
-                    queuedEmail.SentTries = queuedEmail.SentTries + 1;
+                await _emailSender.SendEmailAsync(
+                    emailAccount,
+                    queuedEmail.From,
+                    queuedEmail.To,
+                    queuedEmail.Subject,
+                    queuedEmail.Body,
+                    true,
+                    queuedEmail.FromName,
+                    queuedEmail.ToName,
+                    queuedEmail.ReplyTo,
+                    queuedEmail.CC,
+                    queuedEmail.BCC);
 
-                    await _queuedEmailService.UpdateAsync(queuedEmail);
-                }
+                queuedEmail.SentOnUtc = DateTime.UtcNow;
+            }
+            catch (Exception ex)
+            {
+                queuedEmail.FailedReason = ex.ToString();
+            }
+        }
+
+        private async Task UpdateSentTriesAsync(QueuedEmail queuedEmail)
+        {
+            try
+            {
+                queuedEmail.SentTries = queuedEmail.SentTries + 1;
+
+                await _queuedEmailService.UpdateAsync(queuedEmail);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(new EventId(0), $"[{nameof(QueuedEmailSendTask)} » {nameof(UpdateSentTriesAsync)}]: {ex.Message}", ex);
             }
         }
     }

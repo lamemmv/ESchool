@@ -1,7 +1,7 @@
 ﻿using ESchool.Admin.Controllers;
 using ESchool.Admin.Filters;
 using ESchool.Data.Configurations;
-using ESchool.Services;
+using ESchool.Services.AppStart;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;

@@ -7,7 +7,7 @@ using ESchool.Services.Systems;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ESchool.Services
+namespace ESchool.Services.AppStart
 {
     public static class RegisterServicesExtensions
     {
@@ -43,6 +43,7 @@ namespace ESchool.Services
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IQTagService, QTagService>();
             services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IExamPaperService, ExamPaperService>();
 
             return services;
         }

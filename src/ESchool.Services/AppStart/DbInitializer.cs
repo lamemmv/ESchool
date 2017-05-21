@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using OpenIddict.Core;
 using OpenIddict.Models;
 
-namespace ESchool.Services
+namespace ESchool.Services.AppStart
 {
     public sealed class DbInitializer
     {

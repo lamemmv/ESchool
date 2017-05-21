@@ -51,17 +51,17 @@ namespace ESchool.Services.Messages
         {
             if (string.IsNullOrEmpty(from))
             {
-                throw new ArgumentException("MailKitEmailSender: No From address provided.");
+                throw new ArgumentException($"{nameof(MailKitEmailSender)}: No From address provided.");
             }
 
             if (string.IsNullOrEmpty(to))
             {
-                throw new ArgumentException("MailKitEmailSender: No To address provided.");
+                throw new ArgumentException($"{nameof(MailKitEmailSender)} No To address provided.");
             }
 
             if (string.IsNullOrEmpty(subject))
             {
-                throw new ArgumentException("MailKitEmailSender: No Subject provided.");
+                throw new ArgumentException($"{nameof(MailKitEmailSender)} No Subject provided.");
             }
         }
 
@@ -181,7 +181,8 @@ namespace ESchool.Services.Messages
         {
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync(emailAccount.Host, emailAccount.Port, emailAccount.EnableSsl);
+                await client.ConnectAsync(emailAccount.Host, emailAccount.Port, MailKit.Security.SecureSocketOptions.StartTls);
+                    //emailAccount.EnableSsl);
 
                 // Note: since we don't have an OAuth2 token, disable the XOAUTH2 authentication mechanism.
                 client.AuthenticationMechanisms.Remove("XOAUTH2");

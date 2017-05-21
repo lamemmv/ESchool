@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ESchool.Services
+namespace ESchool.Services.AppStart
 {
     public static class RegisterAuthorizationExtensions
     {

@@ -295,7 +295,7 @@ namespace ESchool.API.Controllers
 
             if (emailAccount == null)
             {
-                _logger.LogWarning(new EventId(2), $"[AuthorizationController » SendEmailAsync] Default Email Account is null.");
+                _logger.LogWarning(new EventId(2), $"[{nameof(AuthorizationController)} » SendEmailAsync] Default Email Account is null.");
                 return;
             }
 

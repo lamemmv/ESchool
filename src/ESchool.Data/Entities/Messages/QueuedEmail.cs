@@ -36,6 +36,8 @@ namespace ESchool.Data.Entities.Messages
 
         public bool SendManually { get; set; }
 
+        public string FailedReason { get; set; }
+
         public int EmailAccountId { get; set; }
 
         public virtual EmailAccount EmailAccount { get; set; }

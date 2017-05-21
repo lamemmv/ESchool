@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using OpenIddict.Core;
 using OpenIddict.Models;
 
-namespace ESchool.Services
+namespace ESchool.Services.AppStart
 {
     public static class RegisterStartupTasksExtensions
     {
