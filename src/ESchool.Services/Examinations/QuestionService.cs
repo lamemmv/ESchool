@@ -7,6 +7,7 @@ using ESchool.Data.DTOs.Examinations;
 using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
 using ESchool.Services.Exceptions;
+using ESchool.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
@@ -18,41 +19,44 @@ namespace ESchool.Services.Examinations
         {
         }
 
-        public async Task<IList<int>> GetRandomQuestionsAsync(int qtagId, int numberOfRandomQuestion, int difficultLevel)
+        public async Task<IList<QuestionExamPaper>> GetRandomQuestionsAsync(
+            int qtagId, 
+            bool specialized, 
+            DateTime 
+            fromDate, 
+            DateTime toDate, 
+            IList<int> exceptList,
+            float totalGrade,
+            int totalQuestion)
         {
-            throw new NotImplementedException();
-            //var dbQuery = Questions.AsNoTracking()
-            //    .Include(q => q.QuestionTags)
-            //    .Where(q => q.DifficultLevel == difficultLevel)
-            //    .Select(question => new
-            //    {
-            //        question,
-            //        QuestionTags = question.QuestionTags.Where(qt => qt.QTagId == qtagId)
-            //    });
+            float grade = totalGrade / totalQuestion;
+            DateTime startDate = fromDate.StartOfDay();
+            DateTime endDate = toDate.EndOfDay();
 
-            //var questions = await dbQuery.Select(q => q.question).ToListAsync();
-            //IList<int> randomQuestions = new List<int>();
+            var query = Questions.AsNoTracking()
+                .Where(q => q.QTagId == qtagId &&
+                    q.Specialized == specialized &&
+                    q.Month >= startDate && q.Month <= endDate);
 
-            //if (questions.Count >= numberOfRandomQuestion)
-            //{
-            //    int randomIndex;
-            //    Random random = new Random();
+            if (exceptList != null && exceptList.Count > 0)
+            {
+                query = query.Where(q => !exceptList.Contains(q.Id));
+            }
 
-            //    while (randomQuestions.Count <= numberOfRandomQuestion)
-            //    {
-            //        randomIndex = random.Next(questions.Count);
-            //        randomQuestions.Add(questions[randomIndex].Id);
-
-            //        questions.RemoveAt(randomIndex);
-            //    }
-            //}
-
-            //return randomQuestions;
+            return await query
+                .OrderBy(q => Guid.NewGuid())
+                .Take(totalQuestion)
+                .Select(q => new QuestionExamPaper
+                {
+                    Grade = grade,
+                    QuestionId = q.Id
+                })
+                .ToListAsync();
         }
 
         public async Task<QuestionDto> GetAsync(int id)
         {
-            var entity = await Questions.AsNoTracking()
+            Question entity = await Questions.AsNoTracking()
                 .Include(q => q.Answers)
                 .SingleOrDefaultAsync(q => q.Id == id);
 
@@ -82,7 +86,7 @@ namespace ESchool.Services.Examinations
 
         public async Task<int> UpdateAsync(Question entity)
         {
-            var updatedEntity = await Questions.FindAsync(entity.Id);
+            Question updatedEntity = await Questions.FindAsync(entity.Id);
 
             if (updatedEntity == null)
             {
@@ -107,8 +111,8 @@ namespace ESchool.Services.Examinations
 
         public async Task<int> DeleteAsync(int id)
         {
-            var dbSet = Questions;
-            var entity = await dbSet
+            DbSet<Question> dbSet = Questions;
+            Question entity = await dbSet
                 .Include(q => q.Answers)
                 .SingleOrDefaultAsync(q => q.Id == id);
 

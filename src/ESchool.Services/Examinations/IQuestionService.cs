@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ESchool.Data.DTOs.Examinations;
 using ESchool.Data.Entities.Examinations;
@@ -8,7 +9,14 @@ namespace ESchool.Services.Examinations
 {
     public interface IQuestionService : IService
     {
-        Task<IList<int>> GetRandomQuestionsAsync(int qtagId, int numberOfRandomQuestion, int difficultLevel);
+        Task<IList<QuestionExamPaper>> GetRandomQuestionsAsync(
+            int qtagId, 
+            bool specialized, 
+            DateTime fromDate, 
+            DateTime toDate, 
+            IList<int> exceptList,
+            float totalGrade,
+            int totalQuestion);
 
         Task<QuestionDto> GetAsync(int id);
 

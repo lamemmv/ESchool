@@ -36,7 +36,7 @@ namespace ESchool.Admin.Controllers
         public async Task<IActionResult> Post([FromBody]ExamPaperViewModel viewModel)
         {
             var entity = viewModel.ToExamPaper();
-            entity.QuestionExamPapers = GetQuestionExamPapers(viewModel.Parts);
+            entity.QuestionExamPapers = await GetQuestionExamPapers(viewModel);
 
             await _examPaperService.CreateAsync(entity);
 
@@ -56,34 +56,31 @@ namespace ESchool.Admin.Controllers
             return BadRequestApiError("ExamPaperId", "'ExamPaper Id' should not be empty.");
         }
 
-        private IList<QuestionExamPaper> GetQuestionExamPapers(QuestionExamPaperViewModel[] parts)
+        private async Task<IList<QuestionExamPaper>> GetQuestionExamPapers(ExamPaperViewModel viewModel)
         {
-            throw new System.NotImplementedException();
-            //List<int> questionIds = new List<int>();
+            List<QuestionExamPaper> questionExamPapers = new List<QuestionExamPaper>();
 
-            //int qtagsLength = qtags != null ? qtags.Length : 0;
+            foreach (var part in viewModel.Parts)
+            {
+                questionExamPapers.AddRange(await _questionService.GetRandomQuestionsAsync(
+                    part.QTagId,
+                    viewModel.Specialized,
+                    viewModel.FromDate,
+                    viewModel.ToDate,
+                    viewModel.ExceptList,
+                    part.TotalGrade,
+                    part.TotalQuestion
+                ));
+            }
 
-            //if (qtagsLength > 0)
-            //{
-            //    ExamPaperQTagViewModel qtag;
-            //    var randomQuestionTasks = new Task<IList<int>>[qtagsLength];
+            int orderNumber = 0;
 
-            //    for (int i = 0; i < qtagsLength; i++)
-            //    {
-            //        qtag = qtags[i];
+            foreach (var item in questionExamPapers)
+            {
+                item.Order = ++orderNumber;
+            }
 
-            //        randomQuestionTasks[i] = _questionService.GetRandomQuestionsAsync(qtag.Id, qtag.NumberOfQuestion, qtag.DifficultLevel);
-            //    }
-
-            //    var randomQuestionResults = await Task.WhenAll(randomQuestionTasks);
-
-            //    foreach (var item in randomQuestionResults)
-            //    {
-            //        questionIds.AddRange(item);
-            //    }
-            //}
-
-            //return questionIds;
+            return questionExamPapers;
         }
     }
 }
