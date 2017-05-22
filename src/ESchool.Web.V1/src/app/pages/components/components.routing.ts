@@ -39,11 +39,11 @@ const routes: Routes = [
           },
           {
             path: 'edit/:id',
-            component: ExamPaperListComponent
+            component: EditExamPaperComponent
           },
           {
             path: 'create',
-            component: ExamPaperListComponent
+            component: EditExamPaperComponent
           },
         ], 
       },

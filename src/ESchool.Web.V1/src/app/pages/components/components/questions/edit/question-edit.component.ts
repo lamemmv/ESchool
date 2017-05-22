@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+
 import { AlertModule } from 'ng2-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -214,9 +215,6 @@ export class EditQuestionComponent implements OnInit, AfterViewChecked, AfterVie
       if (!self.questionId) {
         self.question.id = id;
       }
-
-      self.alert.type = 'success';
-      self.alert.message = self._translate.instant('SAVED');
       this.router.navigate(['/pages/components/questions']);
     },
       error => {

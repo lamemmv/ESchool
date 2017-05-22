@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 import { NotificationService } from './../../../../../shared/utils/notification.service';
 import { ExamPaper, ModalView } from './../exam-papers.model';
@@ -23,10 +23,10 @@ export class EditExamPaperComponent implements OnInit {
         saveText: '',
         updateText: '',
     };
-    modalContent: ExamPaper;
+    examPaper = new ExamPaper();
     groups: Group[] = [];
     selectedGroup = new Group();
-    constructor(private activeModal: NgbActiveModal,
+    constructor(private router: Router,
         private translate: TranslateService,
         private groupService: GroupsService,
         private notificationService: NotificationService,
@@ -39,18 +39,18 @@ export class EditExamPaperComponent implements OnInit {
                 this.examPaperTranslation.addExamPaper = res.ADD_EXAM_PAPER;
                 this.examPaperTranslation.updateText = res.UPDATE;
                 this.examPaperTranslation.saveText = res.SAVE;
-            });
-        if (this.modalContent.id) {
-            this.view.title = this.examPaperTranslation.editExamPaper;
-            this.view.okText = this.examPaperTranslation.updateText;
-        } else {
-            this.view.title = this.examPaperTranslation.addExamPaper;
-            this.view.okText = this.examPaperTranslation.saveText;
-            this.modalContent = new ExamPaper();
-            this.modalContent.fromDate = new Date();
-            this.modalContent.toDate = new Date();
-        }
 
+                if (this.examPaper.id) {
+                    this.view.title = this.examPaperTranslation.editExamPaper;
+                    this.view.okText = this.examPaperTranslation.updateText;
+                } else {
+                    this.view.title = this.examPaperTranslation.addExamPaper;
+                    this.view.okText = this.examPaperTranslation.saveText;
+                    this.examPaper = new ExamPaper();
+                    this.examPaper.fromDate = new Date();
+                    this.examPaper.toDate = new Date();
+                }
+            });
         this.getGroups();
     }
 
@@ -67,27 +67,47 @@ export class EditExamPaperComponent implements OnInit {
     }
 
     cancel() {
-        this.activeModal.dismiss();
+        this.router.navigate(['/pages/components/examPapers']);
     }
 
     save(): void {
-        let self = this, promise = null;
+        let self = this, observable = null;
 
-        if (self.modalContent.id) {
-            promise = self.examPaperService.update(self.modalContent);
+        if (self.examPaper.id) {
+            observable = self.examPaperService.update(self.examPaper);
         } else {
-            promise = self.examPaperService.create(self.modalContent);
+            observable = self.examPaperService.create(self.examPaper);
         }
 
-        promise.subscribe((id: any) => {
-            if (!self.modalContent.id) {
-                self.modalContent.id = id;
+        observable.subscribe((id: any) => {
+            if (!self.examPaper.id) {
+                self.examPaper.id = id;
             }
 
-            self.activeModal.close(self.modalContent);
+            this.router.navigate(['/pages/components/examPapers']);
         },
-        error => {
-            self.notificationService.printErrorMessage('Failed to create question. ' + error);
-        });
+            error => {
+                self.notificationService.printErrorMessage('Failed to create question. ' + error);
+            });
+    }
+
+    isValid(): boolean {
+        if (!this.examPaper.name) {
+            return false;
+        }
+
+        if (this.examPaper.parts.length == 0) {
+            return false;
+        }
+
+        if (this.examPaper.duration <= 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    addPart() {
+
     }
 }
