@@ -6,8 +6,8 @@ export class ExamPaper {
     specialized: boolean;
     fromDate: Date;
     toDate: Date;
-    exceptList: any[] = [];
-    parts: any[] = [];
+    exceptList: number[] = [];
+    parts: ExamPaperPart[] = [];
 }
 
 export class PagedList {
@@ -21,4 +21,12 @@ export class PagedList {
 export class ModalView {
     title: string;
     okText: string;
+}
+
+export class ExamPaperPart {
+    partName: string;
+    qTagPath: string;
+    qTagId: number;
+    totalQuestion: number;
+    totalGrade: number;
 }

@@ -44,8 +44,24 @@
                 <button class="btn btn-primary btn-with-icon" 
                     type="button"
                     (click)="addPart()">
-                    <i class="ion-ios-plus-outline"></i>{{'ADD_EXAM_PAPER' | translate }}
+                    <i class="ion-ios-plus-outline"></i>{{'ADD_PART' | translate }}
                 </button>
+            </div>
+            <div class="form-group">
+                <div *ngFor="let part of examPaper.parts">
+                    <label class="col-sm-2">{{'NAME' | translate}}
+                        <input class="form-control" [ngModel]="part.partName" readonly />
+                    </label>
+                    <label class="col-sm-4">{{'QUESTION_TAGS' | translate}}
+                        <input class="form-control" [ngModel]="part.qTagPath" readonly />
+                    </label>    
+                    <label class="col-sm-2">{{'TOTAL_QUESTION' | translate}}
+                        <input class="form-control" [ngModel]="part.totalQuestion" readonly />
+                    </label>    
+                    <label class="col-sm-2">{{'TOTAL_GRADE' | translate}}
+                        <input class="form-control" [ngModel]="part.totalGrade" readonly />
+                    </label>              
+                </div>
             </div>
             <div class="form-group">
                 <ul class="btn-list clearfix">

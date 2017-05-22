@@ -20,7 +20,8 @@ import { QuestionsService, QuestionsComponent, EditQuestionComponent,
   ConfirmDeleteQuestionComponent, QuestionListComponent,
   QUploadFileComponent } from './components/questions';
 import { ExamPapersService, ExamPapersComponent, 
-  EditExamPaperComponent, ExamPaperListComponent } from './components/examPapers';
+  EditExamPaperComponent, ExamPaperListComponent,
+  ExamPaperPartComponent } from './components/examPapers';
 
 
 @NgModule({
@@ -55,12 +56,13 @@ import { ExamPapersService, ExamPapersComponent,
     ExamPapersComponent,
     ExamPaperListComponent,
     EditExamPaperComponent,
+    ExamPaperPartComponent,
   ],
   entryComponents: [
     EditQuestionTagComponent,
     ConfirmDeleteQuestionComponent,
     QUploadFileComponent,
-    EditExamPaperComponent,
+    ExamPaperPartComponent,
   ],
   providers: [
       GroupsService,

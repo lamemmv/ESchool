@@ -64,7 +64,9 @@ export class DatepickerComponent implements AfterViewInit, OnChanges {
 
     ngAfterViewInit() {
         this.dt = new Date(this.value);
-        this.value = this.transformDate(this.dt);
+        if (this.value) {
+            this.value = this.transformDate(this.dt);
+        }
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
