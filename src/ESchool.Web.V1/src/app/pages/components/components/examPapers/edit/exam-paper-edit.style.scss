@@ -1,3 +1,8 @@
+@import "../../../../../theme/sass/conf/conf";
+.btn.btn-default {
+  color: $input-text
+}
+
 .dp-popup{
   position: fixed;
 }

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from "@angular/common";
 
 import { NotificationService } from './../../../../../shared/utils/notification.service';
+import { AppService } from './../../../../../shared/app.service';
 import { ExamPaper, ModalView, ExamPaperPart } from './../exam-papers.model';
 import { ExamPapersService } from './../exam-papers.service';
 import { Group } from './../../groups/groups.model';
@@ -20,6 +22,7 @@ import { ExamPaperPartComponent } from './../part/exam-paper-part.component';
 export class EditExamPaperComponent implements OnInit {
     view = new ModalView();
     examPaperTranslation = {
+        examPaper: '',
         editExamPaper: '',
         addExamPaper: '',
         saveText: '',
@@ -30,30 +33,38 @@ export class EditExamPaperComponent implements OnInit {
     groups: Group[] = [];
     selectedGroup = new Group();
     constructor(private router: Router,
+        private route: ActivatedRoute,
         private translate: TranslateService,
         private groupService: GroupsService,
         private notificationService: NotificationService,
-        private examPaperService: ExamPapersService,
-        private modalService: NgbModal) { }
+        private examPapersService: ExamPapersService,
+        private modalService: NgbModal,
+        private appService: AppService) { }
 
     ngOnInit() {
-        this.translate.get(['EDIT_EXAM_PAPER',
+        const id = +this.route.snapshot.params['id'];
+        this.translate.get(['EDIT_EXAM_PAPER', 'EXAM_PAPER',
             'ADD_EXAM_PAPER', 'UPDATE', 'SAVE', 'PART']).subscribe((res: any) => {
                 this.examPaperTranslation.editExamPaper = res.EDIT_EXAM_PAPER;
+                this.examPaperTranslation.examPaper = res.EXAM_PAPER;
                 this.examPaperTranslation.addExamPaper = res.ADD_EXAM_PAPER;
                 this.examPaperTranslation.updateText = res.UPDATE;
                 this.examPaperTranslation.saveText = res.SAVE;
                 this.examPaperTranslation.part = res.PART;
 
-                if (this.examPaper.id) {
+                if (id) {
                     this.view.title = this.examPaperTranslation.editExamPaper;
                     this.view.okText = this.examPaperTranslation.updateText;
+                    this.getExamPaper(id);
                 } else {
                     this.view.title = this.examPaperTranslation.addExamPaper;
                     this.view.okText = this.examPaperTranslation.saveText;
                     this.examPaper = new ExamPaper();
                     this.examPaper.fromDate = new Date();
                     this.examPaper.toDate = new Date();
+                    this.examPaper.name = String.format('{0} - {1}', this.examPaperTranslation.examPaper,
+                        new DatePipe('pt-PT').transform(new Date(), 'yyyy/MM/dd'));
+                    this.examPaper.duration = 90;
                 }
             });
         this.getGroups();
@@ -71,17 +82,27 @@ export class EditExamPaperComponent implements OnInit {
             });
     }
 
+    getExamPaper(id: any) {
+        this.examPapersService.getById(id)
+            .subscribe((examPaper) => {
+                this.examPaper = examPaper;
+            },
+            error => {
+                this.notificationService.printErrorMessage('Failed to load exam paper. ' + error);
+            });
+    }
+
     cancel() {
         this.router.navigate(['/pages/components/examPapers']);
     }
 
     save(): void {
         let self = this, observable = null;
-
+        self.examPaper.groupId = this.selectedGroup.id;
         if (self.examPaper.id) {
-            observable = self.examPaperService.update(self.examPaper);
+            observable = self.examPapersService.update(self.examPaper);
         } else {
-            observable = self.examPaperService.create(self.examPaper);
+            observable = self.examPapersService.create(self.examPaper);
         }
 
         observable.subscribe((id: any) => {
@@ -91,9 +112,12 @@ export class EditExamPaperComponent implements OnInit {
 
             this.router.navigate(['/pages/components/examPapers']);
         },
-            error => {
-                self.notificationService.printErrorMessage('Failed to create question. ' + error);
+        error => {
+            const errMsg = this.appService.getErrorMessage(JSON.parse(error._body).errorCode);
+            this.translate.get(errMsg).subscribe((res: any) => {
+                self.notificationService.printErrorMessage(res);
             });
+        });
     }
 
     isValid(): boolean {
@@ -138,5 +162,18 @@ export class EditExamPaperComponent implements OnInit {
             }
             this.examPaper.parts.push(result);
         }
+    }
+
+    changeFromDate(dt: Date) {
+        this.examPaper.fromDate = dt;
+    }
+
+    changeToDate(dt: Date) {
+        this.examPaper.toDate = dt;
+    }
+
+    removePart(part: ExamPaperPart) {
+        let index = this.examPaper.parts.indexOf(part);
+        this.examPaper.parts.splice(index, 1);
     }
 }

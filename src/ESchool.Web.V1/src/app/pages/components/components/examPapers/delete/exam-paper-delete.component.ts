@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { QuestionsService } from './../questions.service';
+import { ExamPapersService } from './../exam-papers.service';
 import { NotificationService } from './../../../../../shared/utils/notification.service';
 @Component({
-  selector: 'question-confirm-delete',
-  styleUrls: [('./confirm-delete.style.scss')],
-  templateUrl: './confirm-delete.component.html'
+  selector: 'exam-paper-delete',
+  styleUrls: [('./exam-paper-delete.style.scss')],
+  templateUrl: './exam-paper-delete.component.html'
 })
 
-export class ConfirmDeleteQuestionComponent implements OnInit {
+export class ConfirmDeleteExamPaperComponent implements OnInit {
 
   modalHeader: string;
   modalContent: any;
 
   constructor(private activeModal: NgbActiveModal,
-    private questionsService: QuestionsService,
+    private examPapersService: ExamPapersService,
     private notificationService: NotificationService) {
   }
 
@@ -25,12 +25,12 @@ export class ConfirmDeleteQuestionComponent implements OnInit {
 
   save() {
     const self = this;
-    this.questionsService.delete(this.modalContent.id)
+    this.examPapersService.delete(this.modalContent.id)
       .subscribe((rowEffects: any) => {
         self.activeModal.close(true);
       },
       error => {
-        self.notificationService.printErrorMessage('Failed to delete questions. ' + error);
+        self.notificationService.printErrorMessage('Failed to delete exam paper. ' + error);
       });
   }
 

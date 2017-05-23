@@ -14,31 +14,22 @@
                         <tr class="black-muted-bg">
                             <th>#</th>
                             <th>{{'NAME'|translate}}</th>
-                            <th>{{'DATE'|translate}}</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let qt of examPaper.data" 
+                        <tr *ngFor="let ep of examPaper.data" 
                             class="no-top-border">
-                            <td>{{qt.id}}</td>
-                            <td [innerHTML]="qt.content"></td>
-                            <td [innerHTML]="qt.month"></td>
+                            <td>{{ep.id}}</td>
+                            <td [innerHTML]="ep.name"></td>
                             <td class="ng2-smart-actions">
                                 <a class="ng2-smart-action ng2-smart-action-delete-delete" 
                                     href="void:javascript(0)">
                                     <i class="fa fa-times remove pull-right" 
-                                        (click)="removeExamPaper(qt)" 
+                                        (click)="removeExamPaper(ep)" 
                                         title="{{'REMOVE_EXAM_PAPER_TITLE' | translate}}">
                                     </i>
-                                </a>                    
-                                <a class="ng2-smart-action ng2-smart-action-edit-edit" 
-                                    href="void:javascript(0)">
-                                    <i class="fa fa-pencil-square-o edit pull-right" 
-                                        (click)="editExamPaper(qt)" 
-                                        title="{{'EDIT_EXAM_PAPER_TITLE' | translate}}">
-                                    </i>   
-                                </a>                
+                                </a>           
                             </td>
                         </tr>
                     </tbody>

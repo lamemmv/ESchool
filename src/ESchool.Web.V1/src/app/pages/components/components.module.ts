@@ -14,14 +14,20 @@ import { routing } from './components.routing';
 import { Components } from './components.component';
 import { TreeView } from './components/treeView/treeView.component';
 import { GroupsService } from './components/groups/groups.service';
-import { QuestionTagsService, QuestionTagsComponent,
-  EditQuestionTagComponent } from './components/questionTags';
-import { QuestionsService, QuestionsComponent, EditQuestionComponent, 
+import {
+  QuestionTagsService,
+  EditQuestionTagComponent, QuestionTagsComponent
+} from './components/questionTags';
+import {
+  QuestionsService, QuestionsComponent,
+  QUploadFileComponent, EditQuestionComponent,
   ConfirmDeleteQuestionComponent, QuestionListComponent,
-  QUploadFileComponent } from './components/questions';
-import { ExamPapersService, ExamPapersComponent, 
-  EditExamPaperComponent, ExamPaperListComponent,
-  ExamPaperPartComponent } from './components/examPapers';
+} from './components/questions';
+import {
+  ExamPapersService, ExamPapersComponent,
+  EditExamPaperComponent, ConfirmDeleteExamPaperComponent,
+  ExamPaperListComponent, ExamPaperPartComponent
+} from './components/examPapers';
 
 
 @NgModule({
@@ -46,29 +52,31 @@ import { ExamPapersService, ExamPapersComponent,
     DatepickerComponent,
     Components,
     TreeView,
-    QuestionTagsComponent,
     EditQuestionTagComponent,
+    QuestionTagsComponent,
     QuestionsComponent,
     EditQuestionComponent,
     QuestionListComponent,
     ConfirmDeleteQuestionComponent,
     QUploadFileComponent,
     ExamPapersComponent,
-    ExamPaperListComponent,
-    EditExamPaperComponent,
+    ConfirmDeleteExamPaperComponent,
     ExamPaperPartComponent,
+    EditExamPaperComponent,
+    ExamPaperListComponent,
   ],
   entryComponents: [
     EditQuestionTagComponent,
     ConfirmDeleteQuestionComponent,
     QUploadFileComponent,
     ExamPaperPartComponent,
+    ConfirmDeleteExamPaperComponent,
   ],
   providers: [
-      GroupsService,
-      QuestionTagsService,      
-      QuestionsService,
-      ExamPapersService
+    GroupsService,
+    QuestionTagsService,
+    QuestionsService,
+    ExamPapersService,
   ]
 })
 export class ComponentsModule { }
