@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationService } from './../../../../../shared/utils/notification.service';
@@ -16,7 +17,7 @@ import { ConfigService } from './../../../../../shared/utils/config.service';
 
 export class ExamPaperListComponent implements OnInit {
     private examPaper = new PagedList();
-    constructor(private modalService: NgbModal,
+    constructor(private router: Router,
         private examPapersService: ExamPapersService,
         configService: ConfigService,
         private notificationService: NotificationService) {
@@ -42,23 +43,9 @@ export class ExamPaperListComponent implements OnInit {
     }
 
     add() {
-        this.openDialog(new ExamPaper());
+        this.router.navigate(['/pages/components/examPapers/create']);
     }
-
-    openDialog(content: ExamPaper) {
-        const self = this;
-        const activeModal = this.modalService.open(EditExamPaperComponent, {
-            size: 'lg',
-            backdrop: 'static',
-        });
-        activeModal.componentInstance.modalContent = content;
-        activeModal.result.then((result) => {
-            self.handleDialogClose(result);
-        }, (reason) => {
-            self.handleDialogClose(null);
-        });
-    }
-
+    
     handleDialogClose(result: any) {
 
     }

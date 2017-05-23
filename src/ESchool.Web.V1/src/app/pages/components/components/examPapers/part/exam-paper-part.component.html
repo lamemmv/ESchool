@@ -1,0 +1,55 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title">{{'ADD_PART' | translate }}</h4>
+        <button class="close" aria-label="Close" (click)="cancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        <ba-card title="{{modalHeader}}" baCardClass="with-scroll">
+            <form>
+                <div class="form-group">
+                    <label for="qtagPath"> {{ 'QUESTION_TAG_BELONG_TO' | translate }} </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control"
+                            [(ngModel)]="selectedQTag.path"
+                            name="qtagPath"/>
+                        <span class="input-group-btn">
+                            <button type="button" 
+                                (click)="toggleTree($event)" 
+                                class="btn btn-primary">{{'SELECT_GROUP' | translate}}</button>
+                        </span>
+                    </div>
+                    <div *ngIf="showTree" class="tree-container">
+                        <p-treeTable [value]="dataGrid" 
+                            selectionMode="single" 
+                            (onNodeSelect)="handleSelected($event)"
+                            (onNodeExpand)="onNodeExpand($event)"
+                            (onNodeCollapse)="onNodeCollapse($event)">
+                            <p-column field="name" header="{{'NAME' | translate }}"></p-column>
+                            <p-column field="description" header="{{'DESCRIPTION' | translate }}"></p-column>
+                        </p-treeTable>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="totalQuestion">{{ 'TOTAL_QUESTION' | translate }}</label>
+                    <input type="number" id="totalQuestion" 
+                        name="totalQuestion" 
+                        class="form-control" 
+                        [(ngModel)]="part.totalQuestion" />
+                </div>
+                <div class="form-group">
+                    <label for="totalGrade">{{ 'TOTAL_GRADE' | translate }}</label>
+                    <input type="number" id="totalGrade" 
+                        name="totalGrade" 
+                        class="form-control" 
+                        [(ngModel)]="part.totalGrade" />
+                </div>
+            </form>
+        </ba-card>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary confirm-btn" (click)="save()">{{'SAVE' | translate}}</button>
+        <button class="btn btn-default" type="button" (click)="cancel()">{{'CANCEL' | translate }}</button>
+    </div>
+</div>

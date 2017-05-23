@@ -31,6 +31,7 @@ export class DatepickerComponent implements AfterViewInit, OnChanges {
         this.apply();
         this.close();
     }
+
     clear(): void {
         this.dt = this.value = void 0;
         this.close();
@@ -56,18 +57,24 @@ export class DatepickerComponent implements AfterViewInit, OnChanges {
     }
 
     onClickedOutside(event: any) {
-        if (this.showDatepicker) this.close();
+        if (this.showDatepicker) {
+            this.close();
+        }
     }
 
     ngAfterViewInit() {
         this.dt = new Date(this.value);
+        if (this.value) {
+            this.value = this.transformDate(this.dt);
+        }
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         for (let propName in changes) {
-            let changedProp = changes[propName];            
+            let changedProp = changes[propName];
             if (!changedProp.isFirstChange()) {
                 this.dt = new Date(changedProp.currentValue);
+                this.value = this.transformDate(this.dt);
             }
         }
     }

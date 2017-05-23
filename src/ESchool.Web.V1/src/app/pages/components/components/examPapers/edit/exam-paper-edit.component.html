@@ -1,58 +1,87 @@
-<div class="modal-content">
-    <div class="modal-header">
-        <h4 class="modal-title">{{ 'EXAM_PAPER' | translate }}</h4>
-        <button class="close" aria-label="Close" (click)="cancel()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    </div>
-    <div class="modal-body">
+<div class="row">
+    <div class="col-md-12">
         <ba-card title="{{view.title}}" baCardClass="with-scroll">
-            <form>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="groups" translate>{{ 'GROUP' }}</label>
-                        <select id="groups" name="groups" class="form-control" [(ngModel)]="selectedGroup"> 
-                            <option *ngFor="let group of groups" [ngValue]="group">{{group.name}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="duration">{{ 'DURATION' | translate }}</label>
-                        <input type="number" id="duration" 
-                            name="duration" 
-                            class="form-control" 
-                            [(ngModel)]="modalContent.duration" />
-                    </div>
-                    <div class="col-md-6">
-                        <es-datepicker [id]="'fromDate-datepicker'" 
-                            [value]="modalContent.fromDate"
-                            (dateModelChange)="dateModelChange($event)"></es-datepicker>
-                    </div>
-                    <div class="col-md-6">
-                        <es-datepicker [id]="'toDate-datepicker'" 
-                            [value]="modalContent.toDate"
-                            (dateModelChange)="dateModelChange($event)"></es-datepicker>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="checkbox-inline custom-checkbox nowrap">
-                            <input type="checkbox" name="specialized" [(ngModel)]="modalContent.specialized"  />
-                            <span>{{'SPECIALIZED'|translate}}</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group">
+            <div class="row">
+                <div class="form-group col-md-4">
                     <label for="qtagName">{{'NAME' | translate}}</label>
                     <input type="text" class="form-control" 
                         id="qtagName" 
                         name="qtagName" 
                         placeholder="{{'PLACEHOLDER_NAME_EXAM_PAPER' | translate}}"
-                        [(ngModel)]="modalContent.name" />
+                        [(ngModel)]="examPaper.name" />
                 </div>
-            </form>
+                <div class="form-group col-md-4">
+                    <label for="groups" translate>{{ 'GROUP' }}</label>
+                    <select id="groups" name="groups" class="form-control" [(ngModel)]="selectedGroup"> 
+                        <option *ngFor="let group of groups" [ngValue]="group">{{group.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="duration">{{ 'DURATION' | translate }}</label>
+                    <input type="number" id="duration" 
+                        name="duration" 
+                        class="form-control" 
+                        [(ngModel)]="examPaper.duration" />
+                </div>
+                <div class="col-md-4">
+                    <es-datepicker [id]="'fromDate-datepicker'" 
+                        [value]="examPaper.fromDate"
+                        (dateModelChange)="dateModelChange($event)"></es-datepicker>
+                </div>
+                <div class="col-md-4">
+                    <es-datepicker [id]="'toDate-datepicker'" 
+                        [value]="examPaper.toDate"
+                        (dateModelChange)="dateModelChange($event)"></es-datepicker>
+                </div>
+                <div class="col-md-4">
+                    <label class="checkbox-inline custom-checkbox nowrap">
+                        <input type="checkbox" name="specialized" [(ngModel)]="examPaper.specialized"  />
+                        <span>{{'SPECIALIZED'|translate}}</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-with-icon" 
+                    type="button"
+                    (click)="addPart()">
+                    <i class="ion-ios-plus-outline"></i>{{'ADD_PART' | translate }}
+                </button>
+            </div>
+            <div class="form-group">
+                <div *ngFor="let part of examPaper.parts">
+                    <label class="col-sm-2">{{'NAME' | translate}}
+                        <input class="form-control" [ngModel]="part.partName" readonly />
+                    </label>
+                    <label class="col-sm-4">{{'QUESTION_TAGS' | translate}}
+                        <input class="form-control" [ngModel]="part.qTagPath" readonly />
+                    </label>    
+                    <label class="col-sm-2">{{'TOTAL_QUESTION' | translate}}
+                        <input class="form-control" [ngModel]="part.totalQuestion" readonly />
+                    </label>    
+                    <label class="col-sm-2">{{'TOTAL_GRADE' | translate}}
+                        <input class="form-control" [ngModel]="part.totalGrade" readonly />
+                    </label>              
+                </div>
+            </div>
+            <div class="form-group">
+                <ul class="btn-list clearfix">
+                    <li>
+                        <button class="btn btn-success btn-with-icon" 
+                            type="submit"                                
+                            [disabled]="!isValid()"
+                            (click)="save()">
+                            <i class="ion-android-checkmark-circle"></i>{{view.okText}}
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn btn-default btn-with-icon" 
+                            type="button"
+                            (click)="cancel()">
+                            <i class="ion-android-cancel"></i>{{'CANCEL' | translate }}
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </ba-card>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary confirm-btn" (click)="save()">{{view.okText}}</button>
-        <button class="btn btn-default" type="button" (click)="cancel()">{{'CANCEL' | translate }}</button>
     </div>
 </div>

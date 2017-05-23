@@ -110,6 +110,7 @@
   "ADD": "Add",
   "ADD_ANSWERS": "Add answers",
   "ADD_EXAM_PAPER": "Tạo đề thi",
+  "ADD_PART": "Add part",
   "ADD_QUESTION_TAG_HEADER": "Add question tag",
   "BROWSE": "Browse",
   "CANCEL": "Cancel",
@@ -129,6 +130,7 @@
   "MSG_CONFIRM_DELETING_QUESTION_TAGS": "Are you sure want to delete question tags(s)?",
   "NAME": "Name",
   "OK": "OK",
+  "PART": "Part",
   "PLACEHOLDER_DESCRIPTION_QUESTION_TAG": "Description of group",
   "PLACEHOLDER_NAME_QUESTION_TAG": "Name of group",
   "PLACEHOLDER_NAME_EXAM_PAPER": "Name of exam paper",
@@ -143,6 +145,8 @@
   "SEARCH": "Search",
   "SELECT_GROUP": "Select group",
   "SPECIALIZED":"Specialized",
+  "TOTAL_GRADE": "Total grade",
+  "TOTAL_QUESTION": "Total question",
   "UPDATE": "Cập nhật",
   "UPLOAD_IMAGE": "Upload image"
 }
