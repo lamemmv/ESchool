@@ -1,5 +1,4 @@
-﻿using ESchool.Services.Constants;
-using ESchool.Services.Models;
+﻿using ESchool.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
@@ -14,7 +13,9 @@ namespace ESchool.Admin.Controllers
 
         protected IActionResult BadRequestApiError(string source, string message)
         {
-            return BadRequest(new ApiError(ApiErrorTypes.ViewModel, source, message));
+            ModelState.TryAddModelError(source, message);
+
+            return BadRequest(new ApiError(ModelState));
         }
     }
 }

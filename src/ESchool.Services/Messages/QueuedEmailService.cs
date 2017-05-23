@@ -56,7 +56,7 @@ namespace ESchool.Services.Messages
 
             if (loadOnlyItemsToBeSent)
             {
-                var nowUtc = DateTime.UtcNow;
+                DateTime nowUtc = DateTime.UtcNow;
                 query = query.Where(qe => !qe.DontSendBeforeDateUtc.HasValue || qe.DontSendBeforeDateUtc.Value <= nowUtc);
             }
 
@@ -87,11 +87,11 @@ namespace ESchool.Services.Messages
 
         public async Task<int> UpdateAsync(QueuedEmail entity)
         {
-            var updatedEntity = await QueuedEmails.FindAsync(entity.Id);
+            QueuedEmail updatedEntity = await QueuedEmails.FindAsync(entity.Id);
 
             if (updatedEntity == null)
             {
-                throw new EntityNotFoundException("Queued Email not found.");
+                throw new EntityNotFoundException(entity.Id, nameof(QueuedEmail));
             }
 
             updatedEntity.EmailAccountId = entity.EmailAccountId;
@@ -113,11 +113,11 @@ namespace ESchool.Services.Messages
 
         public async Task<int> DeleteAsync(int id)
         {
-            var entity = await QueuedEmails.FindAsync(id);
+            QueuedEmail entity = await QueuedEmails.FindAsync(id);
 
             if (entity == null)
             {
-                throw new EntityNotFoundException("Queued Emails not found.");
+                throw new EntityNotFoundException(id, nameof(QueuedEmail));
             }
 
             QueuedEmails.Remove(entity);

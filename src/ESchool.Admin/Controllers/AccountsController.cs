@@ -52,8 +52,8 @@ namespace ESchool.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateAccountViewModel viewModel)
         {
-            var user = viewModel.ToApplicationUser();
-            var result = await _userManager.CreateAsync(user, viewModel.Password);
+            ApplicationUser user = viewModel.ToApplicationUser();
+            IdentityResult result = await _userManager.CreateAsync(user, viewModel.Password);
 
             if (result.Succeeded)
             {
@@ -78,7 +78,7 @@ namespace ESchool.Admin.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]CreateAccountViewModel viewModel)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
@@ -87,7 +87,7 @@ namespace ESchool.Admin.Controllers
 
             // Assign Roles.
             IdentityResult result;
-            var currentRoles = await _userManager.GetRolesAsync(user);
+            IList<string> currentRoles = await _userManager.GetRolesAsync(user);
 
             if (viewModel.Roles == null || viewModel.Roles.Length == 0)
             {
@@ -125,14 +125,14 @@ namespace ESchool.Admin.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                var user = await _userManager.FindByIdAsync(id);
+                ApplicationUser user = await _userManager.FindByIdAsync(id);
 
                 if (user == null)
                 {
                     return NotFound();
                 }
 
-                var result = await _userManager.DeleteAsync(user);
+                IdentityResult result = await _userManager.DeleteAsync(user);
 
                 if (!result.Succeeded)
                 {
@@ -148,14 +148,14 @@ namespace ESchool.Admin.Controllers
         [HttpPut("changepassword")]
         public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordViewModel viewModel)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            var result = await _userManager.ChangePasswordAsync(user, viewModel.OldPassword, viewModel.NewPassword);
+            IdentityResult result = await _userManager.ChangePasswordAsync(user, viewModel.OldPassword, viewModel.NewPassword);
 
             if (result.Succeeded)
             {

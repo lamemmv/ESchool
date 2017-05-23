@@ -10,6 +10,8 @@ namespace ESchool.Services.Models
         NotFound = HttpStatusCode.NotFound,
         InternalServerError = HttpStatusCode.InternalServerError,
 
-        DuplicateEntity = 1001
+        ValidateViewModelFail = 901,
+        DuplicateEntity = 1001,
+        RandomExamPaperError
     }
 }

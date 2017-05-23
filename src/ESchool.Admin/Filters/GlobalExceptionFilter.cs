@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Text;
 using ESchool.Services.Models;
 using Microsoft.AspNetCore.Http;
@@ -20,12 +19,11 @@ namespace ESchool.Admin.Filters
 
         public void OnException(ExceptionContext context)
         {
-            var apiError = new ApiError(context.Exception);
-            apiError.AssignErrorCodeAndMessage();
+            Exception exception = context.Exception;
+            ApiError apiError = new ApiError(exception);
+            WriteLog(context.HttpContext, exception, apiError);
 
-            WriteLog(context.HttpContext, apiError);
-
-            var response = context.HttpContext.Response;
+            HttpResponse response = context.HttpContext.Response;
             response.StatusCode = (int)apiError.StatusCode;
             response.ContentType = "application/json";
 
@@ -33,30 +31,27 @@ namespace ESchool.Admin.Filters
             context.Result = new JsonResult(apiError);
         }
 
-        private void WriteLog(HttpContext httpContext, ApiError apiError)
+        private void WriteLog(HttpContext httpContext, Exception exception, ApiError apiError)
         {
-            if (apiError.StatusCode == HttpStatusCode.InternalServerError)
+            StringBuilder sb = new StringBuilder();
+
+            try
             {
-                var sb = new StringBuilder();
-
-                try
-                {
-                    sb = LogHttpContext(httpContext)
-                        .Append(apiError.ExceptionDetail ?? string.Empty);
-                }
-                catch (Exception)
-                {
-                    sb.Append(apiError.ExceptionDetail ?? string.Empty);
-                }
-
-                _logger.LogError(new EventId(0), sb.ToString()/*, exception*/);
+                sb = LogHttpContext(httpContext)
+                    .Append(apiError.ExceptionDetail ?? string.Empty);
             }
+            catch (Exception)
+            {
+                sb.Append(apiError.ExceptionDetail ?? string.Empty);
+            }
+
+            _logger.LogError(new EventId(apiError.ErrorCode), exception, sb.ToString());
         }
 
         private StringBuilder LogHttpContext(HttpContext httpContext)
         {
             StringBuilder sb = new StringBuilder(256);
-            var request = httpContext.Request;
+            HttpRequest request = httpContext.Request;
 
             sb.Append("Url: ").Append(request.Path.Value).Append("\r\n");
             sb.Append("QueryString: ").Append(request.QueryString.ToString()).Append("\r\n");

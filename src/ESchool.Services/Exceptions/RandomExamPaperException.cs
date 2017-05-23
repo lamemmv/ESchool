@@ -2,9 +2,9 @@
 
 namespace ESchool.Services.Exceptions
 {
-    public sealed class EntityDuplicateException : Exception
+    public sealed class RandomExamPaperException : Exception
     {
-        public EntityDuplicateException(string message)
+        public RandomExamPaperException(string message)
             : base(message)
         {
         }

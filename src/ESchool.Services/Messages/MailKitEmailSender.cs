@@ -27,7 +27,7 @@ namespace ESchool.Services.Messages
         {
             ValidateEmail(from, toCvs, subject);
 
-            var emailMessage = BuildMimeMessage(from, fromAlias, toCvs, toAlias, subject, body, htmlBody, replyTo, replyToAlias, ccCsv, bccCsv);
+            MimeMessage emailMessage = BuildMimeMessage(from, fromAlias, toCvs, toAlias, subject, body, htmlBody, replyTo, replyToAlias, ccCsv, bccCsv);
 
             await SendEmailAsync(emailMessage, emailAccount);
         }
@@ -161,7 +161,7 @@ namespace ESchool.Services.Messages
 
         private MimeMessage AddBody(MimeMessage emailMessage, string body, bool htmlBody)
         {
-            var bodyBuilder = new BodyBuilder();
+            BodyBuilder bodyBuilder = new BodyBuilder();
 
             if (htmlBody)
             {

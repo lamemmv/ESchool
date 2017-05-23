@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ESchool.Data.Entities.Messages;
 using ESchool.Services.Infrastructure.Tasks;
+using ESchool.Services.Models;
 using Microsoft.Extensions.Logging;
 
 namespace ESchool.Services.Messages
@@ -53,7 +54,7 @@ namespace ESchool.Services.Messages
         {
             try
             {
-                var emailAccount = queuedEmail.EmailAccount;
+                EmailAccount emailAccount = queuedEmail.EmailAccount;
 
                 await _emailSender.SendEmailAsync(
                     emailAccount,
@@ -70,9 +71,14 @@ namespace ESchool.Services.Messages
 
                 queuedEmail.SentOnUtc = DateTime.UtcNow;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                queuedEmail.FailedReason = ex.ToString();
+                queuedEmail.FailedReason = exception.ToString();
+
+                _logger.LogError(
+                   new EventId((int)ApiErrorCode.InternalServerError),
+                   exception,
+                   $"[{nameof(QueuedEmailSendTask)} » {nameof(SendEmailAsync)}]: {exception.Message}");
             }
         }
 
@@ -84,9 +90,12 @@ namespace ESchool.Services.Messages
 
                 await _queuedEmailService.UpdateAsync(queuedEmail);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                _logger.LogError(new EventId(0), $"[{nameof(QueuedEmailSendTask)} » {nameof(UpdateSentTriesAsync)}]: {ex.Message}", ex);
+                _logger.LogError(
+                    new EventId((int)ApiErrorCode.InternalServerError),
+                    exception,
+                    $"[{nameof(QueuedEmailSendTask)} » {nameof(UpdateSentTriesAsync)}]: {exception.Message}");
             }
         }
     }

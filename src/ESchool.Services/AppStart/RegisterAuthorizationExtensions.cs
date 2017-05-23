@@ -5,6 +5,7 @@ using AspNet.Security.OpenIdConnect.Primitives;
 using ESchool.Data;
 using ESchool.Data.Entities.Accounts;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,7 @@ namespace ESchool.Services.AppStart
     {
         public static IServiceCollection AddCustomAuthorization(this IServiceCollection services, string connectionString)
         {
-            var migrationsAssembly = typeof(ObjectDbContext).GetTypeInfo().Assembly.GetName().Name;
+            string migrationsAssembly = typeof(ObjectDbContext).GetTypeInfo().Assembly.GetName().Name;
             services.AddDbContext<ObjectDbContext>(opts =>
             {
                 opts.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationsAssembly));
@@ -31,7 +32,7 @@ namespace ESchool.Services.AppStart
             services.AddIdentity<ApplicationUser, IdentityRole>(opts =>
             {
                 // Password settings.
-                var passwordOpts = opts.Password;
+                PasswordOptions passwordOpts = opts.Password;
                 passwordOpts.RequireDigit = false;
                 passwordOpts.RequiredLength = 6;
                 passwordOpts.RequireNonAlphanumeric = false;
@@ -39,7 +40,7 @@ namespace ESchool.Services.AppStart
                 passwordOpts.RequireLowercase = false;
 
                 // Lockout settings.
-                var lockoutOpts = opts.Lockout;
+                LockoutOptions lockoutOpts = opts.Lockout;
                 lockoutOpts.AllowedForNewUsers = true;
                 lockoutOpts.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                 lockoutOpts.MaxFailedAccessAttempts = 5;
@@ -61,7 +62,7 @@ namespace ESchool.Services.AppStart
                 opts.User.RequireUniqueEmail = true;
 
                 // SignIn settings.
-                var signinOpts = opts.SignIn;
+                SignInOptions signinOpts = opts.SignIn;
                 signinOpts.RequireConfirmedEmail = true;
                 signinOpts.RequireConfirmedPhoneNumber = false;
             })
@@ -73,10 +74,10 @@ namespace ESchool.Services.AppStart
             // which saves you from doing the mapping in your authorization controller.
             services.Configure<IdentityOptions>(opts =>
             {
-                var claimsIdentity = opts.ClaimsIdentity;
-                claimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
-                claimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
-                claimsIdentity.RoleClaimType = OpenIdConnectConstants.Claims.Role;
+                ClaimsIdentityOptions claimsIdentityOpts = opts.ClaimsIdentity;
+                claimsIdentityOpts.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
+                claimsIdentityOpts.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
+                claimsIdentityOpts.RoleClaimType = OpenIdConnectConstants.Claims.Role;
             });
 
             // Register the OpenIddict services.
@@ -132,10 +133,10 @@ namespace ESchool.Services.AppStart
 
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
+                Audience = "eschool.api", //"http://localhost:59999/"
                 Authority = "http://localhost:59999/",
-                Audience = "resource_server", //"http://localhost:59999/"
-                //AutomaticAuthenticate = true,
-                //AutomaticChallenge = true,
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
                 RequireHttpsMetadata = false,
                 TokenValidationParameters = new TokenValidationParameters
                 {

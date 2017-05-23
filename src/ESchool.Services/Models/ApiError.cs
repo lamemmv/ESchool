@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
-using ESchool.Services.Constants;
 using ESchool.Services.Exceptions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -10,27 +12,25 @@ namespace ESchool.Services.Models
 {
     public sealed class ApiError
     {
-        private readonly Exception _exception;
-
         public ApiError(Exception exception)
         {
-            _exception = exception;
+            AssignErrorCodeAndMessage(exception);
         }
 
-        public ApiError(string type, string source, string message)
+        public ApiError(ModelStateDictionary modelState)
         {
-            ErrorType = type;
-            Source = source;
-            ErrorMessage = message;
+            ErrorCode = (int)ApiErrorCode.ValidateViewModelFail;
+            ValidationErrors = from kvp in modelState
+                               from e in kvp.Value.Errors
+                               let k = kvp.Key
+                               select new ValidationError(k, e.ErrorMessage);
         }
 
-        public string ErrorType { get; private set; }
-
-        public int? ErrorCode { get; private set; }
-
-        public string Source { get; }
+        public int ErrorCode { get; private set; }
 
         public string ErrorMessage { get; private set; }
+
+        public IEnumerable<ValidationError> ValidationErrors { get; }
 
         [JsonIgnore]
         public HttpStatusCode StatusCode { get; private set; }
@@ -38,24 +38,16 @@ namespace ESchool.Services.Models
         [JsonIgnore]
         public string ExceptionDetail { get; private set; }
 
-        public void AssignErrorCodeAndMessage()
+        private void AssignErrorCodeAndMessage(Exception exception)
         {
-            ErrorType = ApiErrorTypes.Business;
-            ApiErrorCode errorCode;
+            Type exceptionType = exception.GetType();
+            ApiErrorCode errorCode = GetApiErrorCode(exception, exceptionType);
 
-            if (_exception is EntityDuplicateException)
+            if (errorCode != ApiErrorCode.Undefined)
             {
-                errorCode = ApiErrorCode.DuplicateEntity;
-                ErrorMessage = ((EntityDuplicateException)_exception).Message;
-                StatusCode = HttpStatusCode.BadRequest;
+                ErrorMessage = exception.Message;
             }
-            else if (_exception is EntityNotFoundException)
-            {
-                errorCode = ApiErrorCode.NotFound;
-                ErrorMessage = ((EntityNotFoundException)_exception).Message;
-                StatusCode = HttpStatusCode.NotFound;
-            }
-            else if (_exception is UnauthorizedAccessException)
+            else if (exceptionType == typeof(UnauthorizedAccessException))
             {
                 errorCode = ApiErrorCode.Unauthorized;
                 ErrorMessage = "Unauthorized Access.";
@@ -63,18 +55,9 @@ namespace ESchool.Services.Models
             }
             else
             {
-                Exception innerException;
-
-                if (_exception is DbUpdateException)
-                {
-                    ErrorType = ApiErrorTypes.Database;
-                    innerException = _exception.InnerException;
-                }
-                else
-                {
-                    ErrorType = ApiErrorTypes.InternalServerError;
-                    innerException = _exception;
-                }
+                Exception innerException = exceptionType == typeof(DbUpdateException) ?
+                    exception.InnerException :
+                    exception;
 
                 errorCode = ApiErrorCode.InternalServerError;
 #if !DEBUG
@@ -87,6 +70,29 @@ namespace ESchool.Services.Models
             }
 
             ErrorCode = (int)errorCode;
+        }
+
+        private ApiErrorCode GetApiErrorCode(Exception exception, Type exceptionType)
+        {
+            ApiErrorCode errorCode = ApiErrorCode.Undefined;
+
+            if (exceptionType == typeof(DuplicateQTagException))
+            {
+                errorCode = ApiErrorCode.DuplicateEntity;
+                StatusCode = HttpStatusCode.BadRequest;
+            }
+            else if (exceptionType == typeof(EntityNotFoundException))
+            {
+                errorCode = ApiErrorCode.NotFound;
+                StatusCode = HttpStatusCode.NotFound;
+            }
+            else if (exceptionType == typeof(RandomExamPaperException))
+            {
+                errorCode = ApiErrorCode.RandomExamPaperError;
+                StatusCode = HttpStatusCode.BadRequest;
+            }
+
+            return errorCode;
         }
 
         private StringBuilder GetExceptionDetail(Exception exception)

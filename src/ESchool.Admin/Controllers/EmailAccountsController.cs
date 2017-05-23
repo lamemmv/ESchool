@@ -32,7 +32,7 @@ namespace ESchool.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]EmailAccountViewModel viewModel)
         {
-            var entity = viewModel.ToEmailAccount();
+            EmailAccount entity = viewModel.ToEmailAccount();
             await _emailAccountService.CreateAsync(entity);
 
             return Created("Post", entity.Id);
@@ -41,7 +41,7 @@ namespace ESchool.Admin.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]EmailAccountViewModel viewModel)
         {
-            var entity = viewModel.ToEmailAccount(id);
+            EmailAccount entity = viewModel.ToEmailAccount(id);
             await _emailAccountService.UpdateAsync(entity);
 
             return NoContent();

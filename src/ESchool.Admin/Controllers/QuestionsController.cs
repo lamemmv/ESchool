@@ -23,7 +23,7 @@ namespace ESchool.Admin.Controllers
         [HttpGet("{id}")]
         public async Task<QuestionDto> Get(int id)
         {
-            var questionDto = await _questionService.GetAsync(id);
+            QuestionDto questionDto = await _questionService.GetAsync(id);
 
             if (questionDto != null)
             {
@@ -42,7 +42,7 @@ namespace ESchool.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]QuestionViewModel viewModel)
         {
-            var entity = viewModel.ToQuestion();
+            Question entity = viewModel.ToQuestion();
             await _questionService.CreateAsync(entity);
 
             return Created("Post", entity.Id);
@@ -51,7 +51,7 @@ namespace ESchool.Admin.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]QuestionViewModel viewModel)
         {
-            var entity = viewModel.ToQuestion(id);
+            Question entity = viewModel.ToQuestion(id);
             await _questionService.UpdateAsync(entity);
 
             return NoContent();

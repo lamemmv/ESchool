@@ -12,12 +12,10 @@ namespace ESchool.Admin.Controllers
     public class ExamPapersController : AdminController
     {
         private readonly IExamPaperService _examPaperService;
-        private readonly IQuestionService _questionService;
 
         public ExamPapersController(IExamPaperService examPaperService, IQuestionService questionService)
         {
             _examPaperService = examPaperService;
-            _questionService = questionService;
         }
 
         [HttpGet("{id}")]
@@ -35,7 +33,7 @@ namespace ESchool.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]ExamPaperViewModel viewModel)
         {
-            var entity = viewModel.ToExamPaper();
+            ExamPaper entity = viewModel.ToExamPaper();
             entity.QuestionExamPapers = await GetQuestionExamPapers(viewModel);
 
             await _examPaperService.CreateAsync(entity);
@@ -56,13 +54,14 @@ namespace ESchool.Admin.Controllers
             return BadRequestApiError("ExamPaperId", "'ExamPaper Id' should not be empty.");
         }
 
+        [NonAction]
         private async Task<IList<QuestionExamPaper>> GetQuestionExamPapers(ExamPaperViewModel viewModel)
         {
             List<QuestionExamPaper> questionExamPapers = new List<QuestionExamPaper>();
 
             foreach (var part in viewModel.Parts)
             {
-                questionExamPapers.AddRange(await _questionService.GetRandomQuestionsAsync(
+                questionExamPapers.AddRange(await _examPaperService.GetRandomQuestionsAsync(
                     part.QTagId,
                     viewModel.Specialized,
                     viewModel.FromDate,

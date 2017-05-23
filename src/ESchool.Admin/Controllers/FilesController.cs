@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using ESchool.Data.DTOs.Files;
 using ESchool.Data.Entities.Files;
 using ESchool.Services.Files;
 using ESchool.Services.Models;
@@ -31,7 +32,7 @@ namespace ESchool.Admin.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var entity = await _fileService.FindAsync(id);
+            Blob entity = await _fileService.FindAsync(id);
 
             if (entity != null)
             {
@@ -54,10 +55,10 @@ namespace ESchool.Admin.Controllers
 
             if (file != null && file.Length > 0)
             {
-                var entity = ToBlob(file);
+                Blob entity = ToBlob(file);
 
                 await _fileService.CreateAsync(entity);
-                var fileDto = await _fileService.UploadFileAsync(file, entity);
+                FileDto fileDto = await _fileService.UploadFileAsync(file, entity);
 
                 return Created("Post", fileDto);
             }

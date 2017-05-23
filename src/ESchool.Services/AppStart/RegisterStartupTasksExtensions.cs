@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Entities.Accounts;
 using ESchool.Services.Infrastructure.Tasks;
@@ -28,11 +29,11 @@ namespace ESchool.Services.AppStart
         {
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var serviceProvider = scope.ServiceProvider;
+                IServiceProvider serviceProvider = scope.ServiceProvider;
 
-                var dbContext = serviceProvider.GetRequiredService<ObjectDbContext>();
-                var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                ObjectDbContext dbContext = serviceProvider.GetRequiredService<ObjectDbContext>();
+                RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                UserManager<ApplicationUser> userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 var applicationManager = serviceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictApplication>>();
 
                 var dbInitializer = new DbInitializer();
@@ -44,11 +45,11 @@ namespace ESchool.Services.AppStart
 
         private static void InitBackgroundTasks(IApplicationBuilder app)
         {
-            var serviceProvider = app.ApplicationServices;
+            IServiceProvider serviceProvider = app.ApplicationServices;
 
-            var logger = serviceProvider.GetRequiredService<ILogger<QueuedEmailSendTask>>();
-            var queuedEmailService = serviceProvider.GetRequiredService<IQueuedEmailService>();
-            var emailSender = serviceProvider.GetRequiredService<IEmailSender>();
+            ILogger<QueuedEmailSendTask> logger = serviceProvider.GetRequiredService<ILogger<QueuedEmailSendTask>>();
+            IQueuedEmailService queuedEmailService = serviceProvider.GetRequiredService<IQueuedEmailService>();
+            IEmailSender emailSender = serviceProvider.GetRequiredService<IEmailSender>();
 
             IBackgroundTask emailSenderTask = new QueuedEmailSendTask(1, 5, logger, queuedEmailService, emailSender);
             emailSenderTask.Start();

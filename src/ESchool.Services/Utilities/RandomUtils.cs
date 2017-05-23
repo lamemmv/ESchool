@@ -16,7 +16,7 @@ namespace ESchool.Services.Utilities
             int length = allowChars.Length;
             char[] valueArray = new char[size];
 
-            var random = new Random();
+            Random random = new Random();
 
             for (int i = 0; i < size; i++)
             {

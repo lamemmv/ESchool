@@ -30,7 +30,7 @@ namespace ESchool.API
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            var config = builder.Build();
+            IConfigurationRoot config = builder.Build();
 
             // Load from Database.
             builder.AddEntityFrameworkConfig(opts => opts.UseSqlServer(config.GetConnectionString("DefaultConnection")));
@@ -43,7 +43,7 @@ namespace ESchool.API
         public void ConfigureServices(IServiceCollection services)
         {
             // Enable CORS.
-            var corsBuilder = new CorsPolicyBuilder()
+            CorsPolicyBuilder corsBuilder = new CorsPolicyBuilder()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowAnyOrigin()

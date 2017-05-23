@@ -33,11 +33,11 @@ namespace ESchool.Services.Files
 
         public async Task<int> DeleteAsync(int id)
         {
-            var entity = await FindAsync(id);
+            Blob entity = await FindAsync(id);
 
             if (entity == null)
             {
-                throw new EntityNotFoundException("Blob not found.");
+                throw new EntityNotFoundException(id, nameof(Blob));
             }
 
             if (File.Exists(entity.Path))

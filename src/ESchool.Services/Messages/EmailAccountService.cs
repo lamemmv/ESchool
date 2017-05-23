@@ -53,11 +53,11 @@ namespace ESchool.Services.Messages
 
         public async Task<int> UpdateAsync(EmailAccount entity)
         {
-            var updatedEntity = await EmailAccounts.FindAsync(entity.Id);
+            EmailAccount updatedEntity = await EmailAccounts.FindAsync(entity.Id);
 
             if (updatedEntity == null)
             {
-                throw new EntityNotFoundException("Email Account not found.");
+                throw new EntityNotFoundException(entity.Id, nameof(EmailAccount));
             }
 
             updatedEntity.Email = entity.Email;
@@ -75,11 +75,11 @@ namespace ESchool.Services.Messages
 
         public async Task<int> DeleteAsync(int id)
         {
-            var entity = await EmailAccounts.FindAsync(id);
+            EmailAccount entity = await EmailAccounts.FindAsync(id);
 
             if (entity == null)
             {
-                throw new EntityNotFoundException("Email Account not found.");
+                throw new EntityNotFoundException(id, nameof(EmailAccount));
             }
 
             EmailAccounts.Remove(entity);

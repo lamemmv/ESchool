@@ -24,8 +24,8 @@ namespace ESchool.Services.Systems
 
         public async Task<IPagedList<Log>> GetListAsync(DateTime fromDate, DateTime toDate, string level, int page, int size)
         {
-            var startDate = fromDate.StartOfDay();
-            var endDate = toDate.EndOfDay();
+            DateTime startDate = fromDate.StartOfDay();
+            DateTime endDate = toDate.EndOfDay();
 
             return await Logs.AsNoTracking()
                 .Where(l =>
@@ -37,11 +37,11 @@ namespace ESchool.Services.Systems
 
         public async Task<int> DeleteAsync(int id)
         {
-            var entity = await FindAsync(id);
+            Log entity = await FindAsync(id);
 
             if (entity == null)
             {
-                throw new EntityNotFoundException("Log not found.");
+                throw new EntityNotFoundException(id, nameof(Log));
             }
 
             Logs.Remove(entity);
@@ -56,7 +56,7 @@ namespace ESchool.Services.Systems
 
             if (!logs.Any())
             {
-                throw new EntityNotFoundException("Logs not found.");
+                throw new EntityNotFoundException($"Logs not found. Ids = {string.Join(",", ids)}");
             }
 
             dbSet.RemoveRange(logs);

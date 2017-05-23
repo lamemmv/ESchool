@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
 using ESchool.Services.Exceptions;
+using ESchool.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
@@ -13,6 +16,54 @@ namespace ESchool.Services.Examinations
         public ExamPaperService(ObjectDbContext dbContext) 
             : base(dbContext)
         {
+        }
+
+        public async Task<IList<QuestionExamPaper>> GetRandomQuestionsAsync(
+            int qtagId,
+            bool specialized,
+            DateTime fromDate,
+            DateTime toDate,
+            IList<int> exceptList,
+            float totalGrade,
+            int totalQuestion)
+        {
+            float grade = totalGrade / totalQuestion;
+            DateTime startDate = fromDate.StartOfDay();
+            DateTime endDate = toDate.EndOfDay();
+
+            var query = Questions.AsNoTracking()
+                .Where(q => q.QTagId == qtagId &&
+                    q.Specialized == specialized &&
+                    q.Month >= startDate && q.Month <= endDate);
+
+            if (exceptList != null && exceptList.Count > 0)
+            {
+                query = query.Where(q => !exceptList.Contains(q.Id));
+            }
+
+            if (await query.CountAsync() < totalQuestion)
+            {
+                string parameterString = RandomParametersToString(
+                    qtagId,
+                    specialized,
+                    fromDate,
+                    toDate,
+                    exceptList,
+                    totalGrade,
+                    totalQuestion);
+
+                throw new RandomExamPaperException($"[{nameof(ExamPaperService)}]: Not enough Questions for random. Parameters: {parameterString}");
+            }
+
+            return await query
+                .OrderBy(q => Guid.NewGuid())
+                .Take(totalQuestion)
+                .Select(q => new QuestionExamPaper
+                {
+                    Grade = grade,
+                    QuestionId = q.Id
+                })
+                .ToListAsync();
         }
 
         public async Task<ExamPaper> GetAsync(int id)
@@ -43,13 +94,13 @@ namespace ESchool.Services.Examinations
         public async Task<int> DeleteAsync(int id)
         {
             var dbSet = ExamPapers;
-            var entity = await dbSet
+            ExamPaper entity = await dbSet
                 .Include(ep => ep.QuestionExamPapers)
                 .SingleOrDefaultAsync(ep => ep.Id == id);
 
             if (entity == null)
             {
-                throw new EntityNotFoundException("ExamPaper not found.");
+                throw new EntityNotFoundException(id, nameof(ExamPaper));
             }
 
             dbSet.Remove(entity);
@@ -57,47 +108,11 @@ namespace ESchool.Services.Examinations
             return await CommitAsync();
         }
 
-        //public async Task AAA(QuestionExamPaperViewModel[] parts)
-        //{
-        //    var parentQTagIds = parts.Select(p => p.QTagId).ToList();
-
-        //    var qtagIds = await QTags.AsNoTracking()
-        //        .Where(t => parentQTagIds.Contains(t.ParentId))
-        //        .Select(t => t.Id)
-        //        .ToListAsync();
-
-        //    var questions = Questions.AsNoTracking()
-        //        .Include(q => q.QTag)
-        //        .Where(q => qtagIds.Contains(q.QTagId))
-        //        .GroupBy(q => q.QTag.ParentId);
-
-        //    //var random = new Random();
-
-        //    //foreach (var part in parts)
-        //    //{
-        //    //    var aaa = qtags[part.QTagId].ToList();
-
-        //    //    do
-        //    //    {
-        //    //        var index = random.Next(aaa.Count);
-
-        //    //    } while (true);
-        //    //}
-        //}
-
         private DbSet<ExamPaper> ExamPapers
         {
             get
             {
                 return _dbContext.Set<ExamPaper>();
-            }
-        }
-
-        private DbSet<QTag> QTags
-        {
-            get
-            {
-                return _dbContext.Set<QTag>();
             }
         }
 
@@ -126,6 +141,26 @@ namespace ESchool.Services.Examinations
             {
                 dbSet.RemoveRange(questionExamPapers);
             }
+        }
+
+        private string RandomParametersToString(
+            int qtagId,
+            bool specialized,
+            DateTime fromDate,
+            DateTime toDate,
+            IList<int> exceptList,
+            float totalGrade,
+            int totalQuestion)
+        {
+            return string.Format(
+                "[QTagId] = {0}, [Specialized] = {1}, [FromDate] = {2}, [ToDate] = {3}, [ExceptList] = {4}, [TotalGrade] = {5}, [TotalQuestion] = {6}",
+                qtagId,
+                specialized,
+                fromDate,
+                toDate,
+                string.Join(",", exceptList ?? new List<int>()),
+                totalGrade,
+                totalQuestion);
         }
     }
 }

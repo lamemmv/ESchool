@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.DTOs.Examinations;
 using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
 using ESchool.Services.Exceptions;
-using ESchool.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
@@ -17,41 +14,6 @@ namespace ESchool.Services.Examinations
         public QuestionService(ObjectDbContext dbContext)
             : base(dbContext)
         {
-        }
-
-        public async Task<IList<QuestionExamPaper>> GetRandomQuestionsAsync(
-            int qtagId, 
-            bool specialized, 
-            DateTime 
-            fromDate, 
-            DateTime toDate, 
-            IList<int> exceptList,
-            float totalGrade,
-            int totalQuestion)
-        {
-            float grade = totalGrade / totalQuestion;
-            DateTime startDate = fromDate.StartOfDay();
-            DateTime endDate = toDate.EndOfDay();
-
-            var query = Questions.AsNoTracking()
-                .Where(q => q.QTagId == qtagId &&
-                    q.Specialized == specialized &&
-                    q.Month >= startDate && q.Month <= endDate);
-
-            if (exceptList != null && exceptList.Count > 0)
-            {
-                query = query.Where(q => !exceptList.Contains(q.Id));
-            }
-
-            return await query
-                .OrderBy(q => Guid.NewGuid())
-                .Take(totalQuestion)
-                .Select(q => new QuestionExamPaper
-                {
-                    Grade = grade,
-                    QuestionId = q.Id
-                })
-                .ToListAsync();
         }
 
         public async Task<QuestionDto> GetAsync(int id)
@@ -90,7 +52,7 @@ namespace ESchool.Services.Examinations
 
             if (updatedEntity == null)
             {
-                throw new EntityNotFoundException("Question not found.");
+                throw new EntityNotFoundException(entity.Id, nameof(Question));
             }
 
             // Delete current QuestionTags & Answers.
@@ -118,7 +80,7 @@ namespace ESchool.Services.Examinations
 
             if (entity == null)
             {
-                throw new EntityNotFoundException("Question not found.");
+                throw new EntityNotFoundException(id, nameof(Question));
             }
 
             dbSet.Remove(entity);

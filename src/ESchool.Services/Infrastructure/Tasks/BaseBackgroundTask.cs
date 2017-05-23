@@ -47,7 +47,7 @@ namespace ESchool.Services.Infrastructure.Tasks
             }
 
             int sleepInSeconds = _loopInSeconds * 1000;
-            var token = (CancellationToken)state;
+            CancellationToken token = (CancellationToken)state;
 
             while (true)
             {

@@ -19,7 +19,7 @@ namespace ESchool.Services.Examinations
 
         public async Task<QTagDto> GetAsync(int id)
         {
-            var entity = await QTags.FindAsync(id);
+            QTag entity = await QTags.FindAsync(id);
 
             if (entity == null)
             {
@@ -31,7 +31,7 @@ namespace ESchool.Services.Examinations
                 .Select(t => ToQTagDto(t))
                 .ToListAsync();
 
-            var qtagDto = ToQTagDto(entity);
+            QTagDto qtagDto = ToQTagDto(entity);
 
             if (qtagDto.ParentId != 0)
             {
@@ -76,11 +76,11 @@ namespace ESchool.Services.Examinations
 
         public async Task<QTag> CreateAsync(QTag entity)
         {
-            var duplicateEntity = await FindAsync(entity.Name, entity.GroupId, entity.ParentId);
+            QTag duplicateEntity = await FindAsync(entity.Name, entity.GroupId, entity.ParentId);
 
             if (duplicateEntity != null)
             {
-                throw new EntityDuplicateException("'QTag Name' is duplicated.");
+                throw new DuplicateQTagException(entity);
             }
 
             await QTags.AddAsync(entity);
@@ -91,20 +91,20 @@ namespace ESchool.Services.Examinations
 
         public async Task<int> UpdateAsync(QTag entity)
         {
-            var updatedEntity = await QTags
+            QTag updatedEntity = await QTags
                 .Include(t => t.Group)
                 .SingleOrDefaultAsync(t => t.Id == entity.Id);
 
             if (updatedEntity == null)
             {
-                throw new EntityNotFoundException("QTag not found.");
+                throw new EntityNotFoundException(entity.Id, nameof(QTag));
             }
 
-            var duplicateEntity = await FindAsync(entity.Name, entity.GroupId, entity.ParentId);
+            QTag duplicateEntity = await FindAsync(entity.Name, entity.GroupId, entity.ParentId);
 
             if (duplicateEntity != null && duplicateEntity.Id != entity.Id)
             {
-                throw new EntityDuplicateException("'QTag Name' is duplicated.");
+                throw new DuplicateQTagException(entity);
             }
 
             updatedEntity.ParentId = entity.ParentId;
@@ -117,11 +117,11 @@ namespace ESchool.Services.Examinations
 
         public async Task<int> DeleteAsync(int id)
         {
-            var entity = await QTags.FindAsync(id);
+            QTag entity = await QTags.FindAsync(id);
 
             if (entity == null)
             {
-                throw new EntityNotFoundException("QTag not found.");
+                throw new EntityNotFoundException(id, nameof(QTag));
             }
 
             QTags.Remove(entity);

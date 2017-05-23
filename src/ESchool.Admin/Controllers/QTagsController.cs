@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ESchool.Admin.ViewModels;
 using ESchool.Admin.ViewModels.Examinations;
 using ESchool.Data.DTOs.Examinations;
+using ESchool.Data.Entities.Examinations;
 using ESchool.Services.Examinations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +33,7 @@ namespace ESchool.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]QTagViewModel viewModel)
         {
-            var entity = viewModel.ToQTag();
+            QTag entity = viewModel.ToQTag();
             await _qtagService.CreateAsync(entity);
 
             return Created("Post", entity.Id);
@@ -41,7 +42,7 @@ namespace ESchool.Admin.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]QTagViewModel viewModel)
         {
-            var entity = viewModel.ToQTag(id);
+            QTag entity = viewModel.ToQTag(id);
             await _qtagService.UpdateAsync(entity);
 
             return NoContent();

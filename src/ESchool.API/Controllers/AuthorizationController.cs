@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
@@ -76,7 +77,7 @@ namespace ESchool.API.Controllers
         public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordViewModel viewModel)
         {
             string email = viewModel.Email.Trim();
-            var user = await _userManager.FindByNameAsync(email);
+            ApplicationUser user = await _userManager.FindByNameAsync(email);
 
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
@@ -86,8 +87,8 @@ namespace ESchool.API.Controllers
 
             // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
             // Send an email with this link.
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var callbackUrl = $"{viewModel.Url.Trim()}?userId={user.Id}&code={code}";
+            string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            string callbackUrl = $"{viewModel.Url.Trim()}?userId={user.Id}&code={code}";
 
             await SendEmailAsync(
                 email,
@@ -100,7 +101,7 @@ namespace ESchool.API.Controllers
         [HttpPut("resetpassword")]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel viewModel)
         {
-            var user = await _userManager.FindByEmailAsync(viewModel.Email.Trim());
+            ApplicationUser user = await _userManager.FindByEmailAsync(viewModel.Email.Trim());
 
             if (user == null)
             {
@@ -108,7 +109,7 @@ namespace ESchool.API.Controllers
                 return BadRequest(ApiErrorCode.Undefined);
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, viewModel.Code, viewModel.Password);
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, viewModel.Code, viewModel.Password);
 
             if (result.Succeeded)
             {
@@ -121,7 +122,7 @@ namespace ESchool.API.Controllers
         [NonAction]
         private async Task<IActionResult> ProcessPasswordGrantType(OpenIdConnectRequest request)
         {
-            var user = await _userManager.FindByNameAsync(request.Username);
+            ApplicationUser user = await _userManager.FindByNameAsync(request.Username);
 
             if (user == null)
             {
@@ -183,7 +184,7 @@ namespace ESchool.API.Controllers
             }
 
             // Create a new authentication ticket.
-            var ticket = await CreateTicketAsync(request, user);
+            AuthenticationTicket ticket = await CreateTicketAsync(request, user);
 
             return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
@@ -192,14 +193,13 @@ namespace ESchool.API.Controllers
         private async Task<IActionResult> ProcessRefreshTokenGrantType(OpenIdConnectRequest request)
         {
             // Retrieve the claims principal stored in the refresh token.
-            var info = await HttpContext.Authentication.GetAuthenticateInfoAsync(
-                OpenIdConnectServerDefaults.AuthenticationScheme);
+            AuthenticateInfo info = await HttpContext.Authentication.GetAuthenticateInfoAsync(OpenIdConnectServerDefaults.AuthenticationScheme);
 
             // Retrieve the user profile corresponding to the refresh token.
             // Note: if you want to automatically invalidate the refresh token
             // when the user password/roles change, use the following line instead:
             // var user = _signInManager.ValidateSecurityStampAsync(info.Principal);
-            var user = await _userManager.GetUserAsync(info.Principal);
+            ApplicationUser user = await _userManager.GetUserAsync(info.Principal);
 
             if (user == null)
             {
@@ -222,7 +222,7 @@ namespace ESchool.API.Controllers
 
             // Create a new authentication ticket, but reuse the properties stored
             // in the refresh token, including the scopes originally granted.
-            var ticket = await CreateTicketAsync(request, user, info.Properties);
+            AuthenticationTicket ticket = await CreateTicketAsync(request, user, info.Properties);
 
             return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
         }
@@ -235,10 +235,10 @@ namespace ESchool.API.Controllers
         {
             // Create a new ClaimsPrincipal containing the claims that
             // will be used to create an id_token, a token or a code.
-            var principal = await _signInManager.CreateUserPrincipalAsync(user);
+            ClaimsPrincipal principal = await _signInManager.CreateUserPrincipalAsync(user);
 
             // Create a new authentication ticket holding the user identity.
-            var ticket = new AuthenticationTicket(principal, properties, OpenIdConnectServerDefaults.AuthenticationScheme);
+            AuthenticationTicket ticket = new AuthenticationTicket(principal, properties, OpenIdConnectServerDefaults.AuthenticationScheme);
 
             if (!request.IsRefreshTokenGrantType())
             {
@@ -268,7 +268,7 @@ namespace ESchool.API.Controllers
                     continue;
                 }
 
-                var destinations = new List<string>
+                IList<string> destinations = new List<string>
                 {
                     OpenIdConnectConstants.Destinations.AccessToken
                 };
@@ -291,15 +291,18 @@ namespace ESchool.API.Controllers
         [NonAction]
         private async Task SendEmailAsync(string email, string subject, string message)
         {
-            var emailAccount = await _emailAccountService.GetDefaultAsync();
+            EmailAccount emailAccount = await _emailAccountService.GetDefaultAsync();
 
             if (emailAccount == null)
             {
-                _logger.LogWarning(new EventId(2), $"[{nameof(AuthorizationController)} » SendEmailAsync] Default Email Account is null.");
+                _logger.LogWarning(
+                    new EventId((int)ApiErrorCode.Undefined), 
+                    $"[{nameof(AuthorizationController)} » {nameof(SendEmailAsync)}] Default Email Account is null.");
+
                 return;
             }
 
-            var queuedEmail = new QueuedEmail
+            QueuedEmail queuedEmail = new QueuedEmail
             {
                 From = emailAccount.Email,
                 FromName = emailAccount.DisplayName,
