@@ -1,1 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+.alertify-logs.left, .alertify-logs:not(.right){
+    position: absolute;
+    right: 0 !important;
+    left: auto;
+}

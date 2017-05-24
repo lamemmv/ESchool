@@ -3,8 +3,14 @@
   color: $input-text
 }
 
-.dp-popup{
+.dp-popup {
   position: fixed;
+}
+
+.remove {
+    margin-top: 12px;
+    padding-top: 12px;
+    color: $default-text;
 }
 
 :host /deep/ ul.btn-list {

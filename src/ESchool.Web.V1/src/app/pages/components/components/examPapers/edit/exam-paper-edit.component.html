@@ -48,7 +48,7 @@
                 </button>
             </div>
             <div class="form-group">
-                <div *ngFor="let part of examPaper.parts">
+                <div *ngFor="let part of examPaper.parts" class="row">
                     <label class="col-sm-2">{{'NAME' | translate}}
                         <input class="form-control" [ngModel]="part.partName" readonly />
                     </label>
@@ -60,16 +60,11 @@
                     </label>    
                     <label class="col-sm-2">{{'TOTAL_GRADE' | translate}}
                         <input class="form-control" [ngModel]="part.totalGrade" readonly />
-                    </label>       
-                    <label>
-                        <a class="ng2-smart-action ng2-smart-action-delete-delete" 
-                            href="void:javascript(0)">
-                            <i class="fa fa-times remove pull-right" 
-                                (click)="removePart(part)" 
-                                title="{{'REMOVE_EXAM_PART_TITLE' | translate}}">
-                            </i>
-                        </a>
-                    </label>       
+                    </label> 
+                    <a href="javascript:void(0)">
+                        <i class="fa fa-times remove pull-right" (click)="removePart(part)"
+                            title="{{'REMOVE_EXAM_PART_TITLE' | translate}}"></i>  
+                    </a>                      
                 </div>
             </div>
             <div class="form-group">
