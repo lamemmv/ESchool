@@ -5,9 +5,11 @@ import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
+import { TranslateService } from '@ngx-translate/core';
 @Injectable()
 export class AppService {
-    constructor(private http: Http) {
+    constructor(private http: Http,
+        private translateService: TranslateService) {
 
     }
 
@@ -41,5 +43,14 @@ export class AppService {
             return Observable.throw(errMsg);
         }*/
         return Observable.throw(error);
-    };
+    }
+
+    getErrorMessage(errorCode): string {
+        switch (errorCode) {
+            case 1002:
+                return 'MSG_ERROR_NOT_ENOUGH_QUESTIONS';
+        }
+
+        return '';
+    }
 }
