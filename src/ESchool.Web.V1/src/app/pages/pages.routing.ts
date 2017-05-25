@@ -4,6 +4,7 @@ import { ModuleWithProviders } from '@angular/core';
 // noinspection TypeScriptValidateTypes
 
 // export function loadChildren(path) { return System.import(path); };
+import { AuthGuard } from './../security';
 
 export const routes: Routes = [
   {
@@ -18,8 +19,10 @@ export const routes: Routes = [
     path: 'pages',
     component: Pages,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full',
+      canActivate: [AuthGuard] },
+      { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule',
+      canLoad: [AuthGuard] },
       { path: 'editors', loadChildren: './editors/editors.module#EditorsModule' },
       { path: 'components', loadChildren: './components/components.module#ComponentsModule' },
       { path: 'charts', loadChildren: './charts/charts.module#ChartsModule' },

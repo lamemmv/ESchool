@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { ConfigService } from './../../../../shared/utils/config.service';
 import { AppService } from './../../../../shared/app.service';
+import { AuthService } from './../../../../security';
 
 @Injectable()
 export class GroupsService {
@@ -12,13 +13,15 @@ export class GroupsService {
     private _uploadFileUrl: string = '';
     constructor(private http: Http,
         private configService: ConfigService,
-        private appService: AppService) {
+        private appService: AppService,
+        private authService: AuthService) {
         this._baseUrl = configService.getAdminApiURI();
     }
 
     get() {
         let self = this;
-        return self.http.get(self._baseUrl + 'groups')
+        let options = new RequestOptions({ headers: this.authService.authFormHeaders() });
+        return self.http.get(self._baseUrl + 'groups', options)
             .map((res: Response) => {
                 return res.json();
             })

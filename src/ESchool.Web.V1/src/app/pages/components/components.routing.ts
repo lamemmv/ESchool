@@ -16,7 +16,8 @@ const routes: Routes = [
     component: Components,
     children: [
       { path: 'treeview', component: TreeView },
-      { path: 'questionTags', component: QuestionTagsComponent },
+      { path: 'questionTags', component: QuestionTagsComponent,
+        canActivate: [AuthGuard] },
       { path: 'questions', component: QuestionsComponent,
         canActivate: [AuthGuard],
         children: [
@@ -35,6 +36,7 @@ const routes: Routes = [
         ], 
       },
       { path: 'examPapers', component: ExamPapersComponent,
+        canActivate: [AuthGuard],
         children: [
           {
             path: '',

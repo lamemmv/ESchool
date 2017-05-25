@@ -5,19 +5,22 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { ConfigService } from './../../../../shared/utils/config.service';
 import { AppService } from './../../../../shared/app.service';
+import { AuthService } from './../../../../security';
 
 @Injectable()
 export class ExamPapersService {
     private _baseUrl: string = '';
     constructor(private http: Http,
         private configService: ConfigService,
-        private appService: AppService) {
+        private appService: AppService,
+        private authService: AuthService) {
         this._baseUrl = configService.getAdminApiURI();
     }
 
     get(page: number, size: number) {
         let self = this, request = { page: page, size: size };
-        return self.http.get(self._baseUrl + 'examPapers', { params: request })
+        return self.http.get(self._baseUrl + 'examPapers', { params: request,
+        headers: this.authService.authFormHeaders() })
             .map((res: Response) => {
                 return res.json();
             })
@@ -26,7 +29,8 @@ export class ExamPapersService {
 
     getById(id: number) {
         let self = this;
-        return self.http.get(self._baseUrl + 'examPapers/' + id)
+        let options = new RequestOptions({ headers: this.authService.authFormHeaders() });
+        return self.http.get(self._baseUrl + 'examPapers/' + id, options)
             .map((res: Response) => {
                 return res.json();
             })
@@ -35,7 +39,8 @@ export class ExamPapersService {
 
     create(request: any) {
         let self = this;
-        return self.http.post(self._baseUrl + 'examPapers', request)
+        let options = new RequestOptions({ headers: this.authService.authFormHeaders() });
+        return self.http.post(self._baseUrl + 'examPapers', request, options)
             .map((res: Response) => {
                 return res.json();
             })
@@ -44,7 +49,6 @@ export class ExamPapersService {
 
     update(request: any) {
         let self = this;
-        let bodyString = JSON.stringify(request); // Stringify payload
         let headers = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: headers }); // Create a request option
         return self.http.put(self._baseUrl + 'examPapers/' + request.id, request, options)
@@ -56,7 +60,8 @@ export class ExamPapersService {
 
     delete(id: number) {
         let self = this;
-        return self.http.delete(self._baseUrl + 'examPapers/' + id)
+        let options = new RequestOptions({ headers: this.authService.authFormHeaders() });
+        return self.http.delete(self._baseUrl + 'examPapers/' + id, options)
             .map((res: Response) => {
                 return res.json();
             })

@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { ConfigService } from './../../../../shared/utils/config.service';
 import { AppService } from './../../../../shared/app.service';
+import { AuthService } from './../../../../security';
 
 @Injectable()
 export class QuestionTagsService {
@@ -12,31 +13,35 @@ export class QuestionTagsService {
 
     constructor(private http: Http,
         private configService: ConfigService,
-        private appService: AppService) {
+        private appService: AppService,
+        private authService: AuthService) {
         this._baseUrl = configService.getAdminApiURI();
     }
 
     get = (groupId: number) => {
         let self = this;
-        return this.http.get(this._baseUrl + 'qtags/getByGroup/' + groupId)
+        let options = new RequestOptions({ headers: this.authService.authFormHeaders() });
+        return this.http.get(this._baseUrl + 'qtags/getByGroup/' + groupId, options)
             .map((res: Response) => {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
 
     getById = (id: number) => {
         let self = this;
-        return this.http.get(this._baseUrl + 'qtags/' + id)
+        let options = new RequestOptions({ headers: this.authService.authFormHeaders() });
+        return this.http.get(this._baseUrl + 'qtags/' + id, options)
             .map((res: Response) => {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
     
     create = (qtag: any) => {
         let self = this;
-        return this.http.post(this._baseUrl + 'qtags', qtag)
+        let options = new RequestOptions({ headers: this.authService.authFormHeaders() });
+        return this.http.post(this._baseUrl + 'qtags', qtag, options)
             .map((res: Response) => {
                 if (res.status != 201 && res.status != 200){
                     self.appService.handleError(res);
@@ -44,11 +49,10 @@ export class QuestionTagsService {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
 
     update = (qtag: any) => {
         let self = this;
-        let bodyString = JSON.stringify(qtag); // Stringify payload
         let headers = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
         let options = new RequestOptions({ headers: headers }); // Create a request option
 
@@ -57,14 +61,15 @@ export class QuestionTagsService {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
 
     delete = (id: number) => {
         let self = this;
-        return this.http.delete(this._baseUrl + 'qtags/' + id)
+        let options = new RequestOptions({ headers: this.authService.authFormHeaders() });
+        return this.http.delete(this._baseUrl + 'qtags/' + id, options)
             .map((res: Response) => {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
 }
