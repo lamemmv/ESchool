@@ -5,8 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 
 import { Login } from './login.component';
-import { routing }       from './login.routing';
-
+import { LoginService } from './login.service';
+import { routing } from './login.routing';
 
 @NgModule({
   imports: [
@@ -15,10 +15,13 @@ import { routing }       from './login.routing';
     ReactiveFormsModule,
     FormsModule,
     NgaModule,
-    routing
+    routing,
   ],
   declarations: [
-    Login
-  ]
+    Login,
+  ],
+  providers: [
+    LoginService,
+  ],
 })
 export class LoginModule {}

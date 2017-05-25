@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { ConfigService } from './../../../../shared/utils/config.service';
 import { AppService } from './../../../../shared/app.service';
+import { AuthService } from './../../../../security';
 
 @Injectable()
 export class QuestionsService {
@@ -12,7 +13,8 @@ export class QuestionsService {
     private _uploadFileUrl: string = '';
     constructor(private http: Http,
         private configService: ConfigService,
-        private appService: AppService) {
+        private appService: AppService,
+        private authService: AuthService) {
         this._baseUrl = configService.getAdminApiURI();
     }
 
@@ -22,12 +24,12 @@ export class QuestionsService {
 
     get(page: number, size: number) {
         let self = this, request = { page: page, size: size };
-        return self.http.get(self._baseUrl + 'questions', { params: request })
+        return self.http.get(self._baseUrl + 'questions', { params: request, headers: this.authService.authFormHeaders() })
             .map((res: Response) => {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
 
     getById(id: number) {
         let self = this;
@@ -36,7 +38,7 @@ export class QuestionsService {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
 
     create(request: any) {
         let self = this;
@@ -45,7 +47,7 @@ export class QuestionsService {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
 
     update(request: any) {
         let self = this;
@@ -57,7 +59,7 @@ export class QuestionsService {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
 
     delete(id: number) {
         let self = this;
@@ -66,7 +68,7 @@ export class QuestionsService {
                 return res.json();
             })
             .catch(self.appService.handleError);
-    };
+    }
 
     upload(fileToUpload: any) {
         let input = new FormData(), self = this;

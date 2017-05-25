@@ -7,6 +7,8 @@ import { QuestionsComponent, EditQuestionComponent,
   QuestionListComponent } from './components/questions';
 import { ExamPapersComponent, EditExamPaperComponent,
   ExamPaperListComponent } from './components/examPapers';
+import { AuthGuard } from './../../security';
+
 // noinspection TypeScriptValidateTypes
 const routes: Routes = [
   {
@@ -16,18 +18,19 @@ const routes: Routes = [
       { path: 'treeview', component: TreeView },
       { path: 'questionTags', component: QuestionTagsComponent },
       { path: 'questions', component: QuestionsComponent,
+        canActivate: [AuthGuard],
         children: [
           {
             path: '',
-            component: QuestionListComponent
+            component: QuestionListComponent,
           },
           {
             path: 'edit/:id',
-            component: EditQuestionComponent
+            component: EditQuestionComponent,
           },
           {
             path: 'create',
-            component: EditQuestionComponent
+            component: EditQuestionComponent,
           },
         ], 
       },
@@ -35,20 +38,20 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: ExamPaperListComponent
+            component: ExamPaperListComponent,
           },
           {
             path: 'edit/:id',
-            component: EditExamPaperComponent
+            component: EditExamPaperComponent,
           },
           {
             path: 'create',
-            component: EditExamPaperComponent
+            component: EditExamPaperComponent,
           },
         ], 
       },
     ],
-  }
+  },
 ];
 
 export const routing = RouterModule.forChild(routes);

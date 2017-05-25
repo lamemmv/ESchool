@@ -16,7 +16,7 @@ import { AppState, InternalStateType } from './app.service';
 import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
-
+import { AuthService, AuthGuard } from './security';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -47,10 +47,12 @@ export type StoreType = {
     NgaModule.forRoot(),
     NgbModule.forRoot(),
     PagesModule,
-    routing
+    routing,
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    AuthService,
+    AuthGuard,
   ]
 })
 

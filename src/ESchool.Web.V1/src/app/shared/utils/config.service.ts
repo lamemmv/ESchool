@@ -8,7 +8,7 @@ export class ConfigService {
     _pageSize: number = 10;
 
     constructor() {
-        this._apiURI = 'http://localhost:59999/api/';
+        this._apiURI = 'http://localhost:59999/'; 
         this._adminApiURI = 'http://localhost:59999/admin/';
     }
 
