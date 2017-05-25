@@ -13,6 +13,7 @@ using ESchool.Data.Enums;
 using ESchool.Services.Messages;
 using ESchool.Services.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenIddict.Core;
+using OpenIddict.Models;
 
 namespace ESchool.API.Controllers
 {
@@ -28,6 +30,7 @@ namespace ESchool.API.Controllers
     {
         private readonly ILogger<AuthorizationController> _logger;
 
+        private readonly OpenIddictApplicationManager<OpenIddictApplication> _applicationManager;
         private readonly IOptions<IdentityOptions> _identityOptions;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -37,6 +40,7 @@ namespace ESchool.API.Controllers
 
         public AuthorizationController(
             ILogger<AuthorizationController> logger,
+            OpenIddictApplicationManager<OpenIddictApplication> applicationManager,
             IOptions<IdentityOptions> identityOptions,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
@@ -45,12 +49,51 @@ namespace ESchool.API.Controllers
         {
             _logger = logger;
 
+            _applicationManager = applicationManager;
             _identityOptions = identityOptions;
             _signInManager = signInManager;
             _userManager = userManager;
 
             _emailAccountService = emailAccountService;
             _queuedEmailService = queuedEmailService;
+        }
+
+        [Authorize, HttpGet("~/connect/authorize")]
+        public async Task<IActionResult> Authorize(OpenIdConnectRequest request)
+        {
+            // Retrieve the application details from the database.
+            var application = await _applicationManager.FindByClientIdAsync(request.ClientId, HttpContext.RequestAborted);
+
+            if (application == null)
+            {
+                return BadRequest(new
+                {
+                    Error = OpenIdConnectConstants.Errors.InvalidClient,
+                    ErrorDescription = "Details concerning the calling client application cannot be found in the database"
+                });
+            }
+
+            // Flow the request_id to allow OpenIddict to restore
+            // the original authorization request from the cache.
+            return Ok(new
+            {
+                ApplicationName = application.DisplayName,
+                RequestId = request.RequestId,
+                Scope = request.Scope
+            });
+        }
+
+        [Authorize, HttpPost("~/connect/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            // Ask ASP.NET Core Identity to delete the local and external cookies created
+            // when the user agent is redirected from the external identity provider
+            // after a successful authentication flow (e.g Google or Facebook).
+            await _signInManager.SignOutAsync();
+
+            // Returning a SignOutResult will ask OpenIddict to redirect the user agent
+            // to the post_logout_redirect_uri specified by the client application.
+            return SignOut(OpenIdConnectServerDefaults.AuthenticationScheme);
         }
 
         [HttpPost("~/connect/token"), Produces("application/json")]
@@ -122,6 +165,18 @@ namespace ESchool.API.Controllers
         [NonAction]
         private async Task<IActionResult> ProcessPasswordGrantType(OpenIdConnectRequest request)
         {
+            // Retrieve the application details from the database.
+            var application = await _applicationManager.FindByClientIdAsync(request.ClientId, HttpContext.RequestAborted);
+
+            if (application == null)
+            {
+                return BadRequest(new OpenIdConnectResponse
+                {
+                    Error = OpenIdConnectConstants.Errors.InvalidClient,
+                    ErrorDescription = "Details concerning the calling client application cannot be found in the database."
+                });
+            }
+
             ApplicationUser user = await _userManager.FindByNameAsync(request.Username);
 
             if (user == null)
@@ -255,7 +310,7 @@ namespace ESchool.API.Controllers
                 }.Intersect(request.GetScopes()));
             }
 
-            ticket.SetResources("http://localhost:59999/");
+            ticket.SetResources("eschool.api");
 
             // Note: by default, claims are NOT automatically included in the access and identity tokens.
             // To allow OpenIddict to serialize them, you must attach them a destination, that specifies

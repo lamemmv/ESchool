@@ -1,10 +1,11 @@
 ﻿using ESchool.Services.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers
 {
     //[Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
-    //[Authorize]
+    [Authorize]
     [Route("admin/[controller]")]
     public abstract class AdminController : Controller
     {

@@ -92,11 +92,16 @@ namespace ESchool.Services.AppStart
                 opts.AddMvcBinders();
 
                 // Enable the token endpoint.
-                opts.EnableTokenEndpoint("/connect/token");
+                opts.EnableAuthorizationEndpoint("/connect/authorize")
+                    .EnableLogoutEndpoint("/connect/logout")
+                    .EnableTokenEndpoint("/connect/token");
 
                 // Enable the password flow.
                 opts.AllowPasswordFlow()
                     .AllowRefreshTokenFlow();
+
+                opts.SetAccessTokenLifetime(TimeSpan.FromHours(1))
+                    .SetRefreshTokenLifetime(TimeSpan.FromDays(14));
 
                 // Make the "client_id" parameter mandatory when sending a token request.
                 opts.RequireClientIdentification();
