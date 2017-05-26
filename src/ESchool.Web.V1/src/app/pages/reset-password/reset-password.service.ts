@@ -6,7 +6,7 @@ import { AppService } from './../../shared/app.service';
 import { ConfigService } from './../../shared/utils/config.service';
 
 @Injectable()
-export class ForgotPasswordService {
+export class ResetPasswordService {
     private _baseUrl: string = '';
     private _uploadFileUrl: string = '';
     constructor(private http: Http,
@@ -17,7 +17,10 @@ export class ForgotPasswordService {
  
     forgotPassword(request: any) {
         const self = this;
-        return self.http.post(self._baseUrl + 'api/accounts/forgotpassword', request)
+        const headers = new Headers({ 'Content-Type': 'application/json' });
+        const options = new RequestOptions({ headers: headers });
+
+        return self.http.put(self._baseUrl + 'api/accounts/resetpassword', request)
             .map((res: Response) => {
                 return res.json();
             })

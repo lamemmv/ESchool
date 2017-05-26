@@ -9,15 +9,19 @@ import { AuthGuard } from './../security';
 export const routes: Routes = [
   {
     path: 'login',
-    loadChildren: 'app/pages/login/login.module#LoginModule'
+    loadChildren: 'app/pages/login/login.module#LoginModule',
+  },
+  {
+    path: 'resetPassword',
+    loadChildren: 'app/pages/reset-password/reset-password.module#ResetPasswordModule',
   },
   {
     path: 'forgotPassword',
-    loadChildren: 'app/pages/forgotPassword/forgot-password.module#ForgotPasswordModule'
+    loadChildren: 'app/pages/forgotPassword/forgot-password.module#ForgotPasswordModule',
   },
   {
     path: 'register',
-    loadChildren: 'app/pages/register/register.module#RegisterModule'
+    loadChildren: 'app/pages/register/register.module#RegisterModule',
   },
   {
     path: 'pages',
@@ -33,9 +37,9 @@ export const routes: Routes = [
       { path: 'ui', loadChildren: './ui/ui.module#UiModule' },
       { path: 'forms', loadChildren: './forms/forms.module#FormsModule' },
       { path: 'tables', loadChildren: './tables/tables.module#TablesModule' },
-      { path: 'maps', loadChildren: './maps/maps.module#MapsModule' }
-    ]
-  }
+      { path: 'maps', loadChildren: './maps/maps.module#MapsModule' },
+    ],
+  },
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forChild(routes);
