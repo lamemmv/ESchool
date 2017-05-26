@@ -48,7 +48,7 @@ export class QuestionListComponent implements OnInit {
   getQuestions() {
     var self = this;
     this.questionsService.get().subscribe((questions) => {
-      self.questions = questions;
+      self.questions = questions.data;
     },
       error => {
         self.notificationService.printErrorMessage('Failed to load question tags. ' + error);

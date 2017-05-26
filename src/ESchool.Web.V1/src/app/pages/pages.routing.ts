@@ -12,6 +12,10 @@ export const routes: Routes = [
     loadChildren: 'app/pages/login/login.module#LoginModule'
   },
   {
+    path: 'forgotPassword',
+    loadChildren: 'app/pages/forgotPassword/forgot-password.module#ForgotPasswordModule'
+  },
+  {
     path: 'register',
     loadChildren: 'app/pages/register/register.module#RegisterModule'
   },
