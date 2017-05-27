@@ -56,6 +56,10 @@ $danger-bg: tint($danger, 20%);
 $activelink: $primary;
 $hoverlink: $primary-dark;
 
+// modal
+$border-input: #ccc;
+$input-text: #555;
+
 @mixin body-bg() {
   background-color: $body-bg;
 }

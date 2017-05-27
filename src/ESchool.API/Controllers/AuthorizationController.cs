@@ -22,6 +22,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenIddict.Core;
 using OpenIddict.Models;
+using MimeKit;
+using MailKit.Net.Smtp;
 
 namespace ESchool.API.Controllers
 {
@@ -116,11 +118,11 @@ namespace ESchool.API.Controllers
             });
         }
 
-        [HttpPut("forgotpassword")]
+        [HttpPost("forgotpassword")]
         public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordViewModel viewModel)
         {
             string email = viewModel.Email.Trim();
-            ApplicationUser user = await _userManager.FindByNameAsync(email);
+            ApplicationUser user = await _userManager.FindByEmailAsync(email);
 
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
@@ -356,6 +358,27 @@ namespace ESchool.API.Controllers
 
                 return;
             }
+
+
+            var msg = new MimeMessage();
+            msg.From.Add(new MailboxAddress("ESchool Web", "eschoolapi@gmail.com"));
+            msg.To.Add(new MailboxAddress("Lam Mai", email));
+            msg.Subject = subject;
+            msg.Body = new TextPart("plain")
+            {
+                Text = message
+            };
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                client.Authenticate("eschoolapi@gmail.com", "1qaw3(OLP_");
+                // Note: since we don't have an OAuth2 token, disable 	// the XOAUTH2 authentication mechanism.     client.Authenticate("anuraj.p@example.com", "password");
+                client.Send(msg);
+                client.Disconnect(true);
+            }
+
 
             QueuedEmail queuedEmail = new QueuedEmail
             {
