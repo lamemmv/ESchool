@@ -116,8 +116,8 @@ namespace ESchool.Services.AppStart
                     Port = 587,
                     UserName = email,
                     Password = password,
-                    EnableSsl = true,
-                    UseDefaultCredentials = false,
+                    EnableSsl = false,
+                    UseDefaultCredentials = true,
                     IsDefaultEmailAccount = true
                 });
 
