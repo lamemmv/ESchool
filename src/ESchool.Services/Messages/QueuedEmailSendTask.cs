@@ -88,7 +88,11 @@ namespace ESchool.Services.Messages
             {
                 queuedEmail.SentTries = queuedEmail.SentTries + 1;
 
-                await _queuedEmailService.UpdateAsync(queuedEmail);
+                await _queuedEmailService.UpdateAsync(
+                    queuedEmail.Id,
+                    queuedEmail.SentTries,
+                    queuedEmail.SentOnUtc,
+                    queuedEmail.FailedReason);
             }
             catch (Exception exception)
             {
