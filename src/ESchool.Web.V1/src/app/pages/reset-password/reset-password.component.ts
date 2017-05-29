@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params} from '@angular/router';
 
 import { ResetPasswordModel } from './reset-password.model';
 import { ResetPasswordService } from './reset-password.service';
@@ -35,7 +35,10 @@ export class ResetPassword {
     this.email = this.form.controls['email'];
     this.password = this.form.controls['password'];
     this.confirmPassword = this.form.controls['confirmPassword'];
-    this.model.code = this.route.snapshot.params['code']; 
+    this.route.queryParams.subscribe((params: Params) => {
+        this.model.userId = params['userId'];
+        this.model.code = params['code'];
+      });
   }
 
   public onSubmit(values: Object): void {
