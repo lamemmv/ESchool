@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
 
 import { ResetPasswordService } from './reset-password.service';
-import { ResetPassword } from './reset-password.component';
+import { ResetPasswordComponent } from './reset-password.component';
 import { routing } from './reset-password.routing';
 
 @NgModule({
@@ -18,7 +18,7 @@ import { routing } from './reset-password.routing';
     routing,
   ],
   declarations: [
-    ResetPassword,
+    ResetPasswordComponent,
   ],
   providers: [
     ResetPasswordService,

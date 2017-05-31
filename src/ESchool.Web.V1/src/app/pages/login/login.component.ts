@@ -37,8 +37,8 @@ export class Login {
     this.submitted = true;
     if (this.form.valid) {
       const model = new LoginModel();
-      model.username = 'sa';
-      model.password = '1qazXSW@';
+      model.username = this.email.value;
+      model.password = this.password.value;
       this.loginService.login(model)
       .subscribe((token: any) => {
         const authentication = new Authentication();

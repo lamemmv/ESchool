@@ -34,7 +34,7 @@ export class ForgotPassword {
     if (this.form.valid) {
       const model = new ForgotPasswordModel();
       model.email = this.email.value;
-      model.url = 'http://localhost:4200/resetPassword';
+      model.url = 'http://localhost:4200/#/resetPassword';
       this.forgotPasswordService.forgotPassword(model)
       .subscribe((response: any) => {
         console.log(response);

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Params} from '@angular/router';
+import { ActivatedRoute, Router, Params} from '@angular/router';
 
 import { ResetPasswordModel } from './reset-password.model';
 import { ResetPasswordService } from './reset-password.service';
@@ -12,7 +12,7 @@ import { AuthService, Authentication } from './../../security';
   templateUrl: './reset-password.html',
   styleUrls: ['./reset-password.scss'],
 })
-export class ResetPassword {
+export class ResetPasswordComponent {
 
   public form: FormGroup;
   public email: AbstractControl;
@@ -25,7 +25,8 @@ export class ResetPassword {
     private resetPasswordService: ResetPasswordService,
     private notificationService: NotificationService,
     private authService: AuthService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private router: Router) {
     this.form = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
@@ -49,6 +50,8 @@ export class ResetPassword {
       this.model.confirmPassword = this.confirmPassword.value;
       this.resetPasswordService.forgotPassword(this.model)
       .subscribe((response: any) => {
+        const redirect = 'http://localhost:4200';
+        this.router.navigate([redirect]);
       },
       error => {
         this.notificationService.printErrorMessage('Failed to change your password');
