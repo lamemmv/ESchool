@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 
 import { BaMenuService } from '../theme';
 import { PAGES_MENU } from './pages.menu';
+import { PageModel } from './pages.model';
 
 @Component({
   selector: 'pages',
@@ -31,7 +32,7 @@ import { PAGES_MENU } from './pages.menu';
     `
 })
 export class Pages {
-
+  private model = new PageModel();
   constructor(private _menuService: BaMenuService,) {
   }
 

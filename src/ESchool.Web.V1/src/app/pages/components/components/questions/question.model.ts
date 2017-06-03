@@ -38,17 +38,17 @@ export class Answer {
 export class QuestionType {
     id: number;
     name: string;
-};
+}
 
 export enum QuestionTypes {
     SingleChoice = 1,
     MultipleChoice = 2
-};
+}
 
 export class QTag {
     id: number;
     name: string;
-};
+}
 
 export class FormFile {
     id: number;
@@ -56,19 +56,4 @@ export class FormFile {
     size: number;
     name: string;
     content: any[];
-};
-
-declare global {
-    interface StringConstructor {
-        format(...args: string[]): string;
-    }
-};
-
-String.format = function (...args: string[]): string {
-    var result = arguments[0];
-    for (var i = 0; i < arguments.length - 1; i++) {
-        var reg = new RegExp("\\{" + i + "\\}", "gm");
-        result = result.replace(reg, arguments[i + 1]);
-    }
-    return result;
-};
+}
