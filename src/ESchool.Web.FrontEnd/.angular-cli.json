@@ -19,9 +19,26 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "../node_modules/font-awesome/scss/font-awesome.scss",
+        "../node_modules/bootstrap/scss/bootstrap.scss",
+        "styles.css",
+        "assets/css/material-dashboard.css?v=1.2.0",
+        "assets/css/roboto.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "assets/js/tether.min.js",
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/core-js/client/shim.min.js",
+        "../node_modules/reflect-metadata/Reflect.js",        
+        "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+        "assets/js/arrive.min.js",
+        "assets/js/material.min.js",
+        "assets/js/chartist.min.js",
+        "assets/js/bootstrap-notify.js",
+        "assets/js/google-maps.js",
+        "assets/js/material-dashboard.js?v=1.2.0",
+        "assets/js/demo.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
