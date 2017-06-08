@@ -20,7 +20,7 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-		"assets/sass/material-dashboard.scss"
+        "assets/sass/material-dashboard.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
