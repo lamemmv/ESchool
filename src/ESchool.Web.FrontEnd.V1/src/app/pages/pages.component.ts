@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'pages',
-    templateUrl: './pges.html',
+    templateUrl: './pages.html',
     styleUrls: [
         ('./pages.scss'),
     ],

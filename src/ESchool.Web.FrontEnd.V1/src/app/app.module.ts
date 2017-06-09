@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { PagesModule } from './pages';
+import { SidebarModule } from './sidebar';
 import { routing } from './app.routing';
 
 @NgModule({
@@ -14,6 +16,8 @@ import { routing } from './app.routing';
     BrowserModule,
     FormsModule,
     HttpModule,
+    PagesModule,
+    SidebarModule,
     routing
   ],
   providers: [],

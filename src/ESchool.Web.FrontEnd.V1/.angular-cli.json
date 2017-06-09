@@ -19,8 +19,10 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css",
-        "assets/sass/material-dashboard.scss"
+        "../node_modules/bootstrap/scss/bootstrap.scss",
+        "assets/sass/material-dashboard.scss",
+        "assets/css/roboto.css",
+        "styles.css"        
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
