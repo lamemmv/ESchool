@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { PagesModule } from './pages';
-import { SidebarModule } from './sidebar';
+import { TopbarModule } from './topbar';
 import { routing } from './app.routing';
 
 @NgModule({
@@ -17,7 +17,7 @@ import { routing } from './app.routing';
     FormsModule,
     HttpModule,
     PagesModule,
-    SidebarModule,
+    TopbarModule,
     routing
   ],
   providers: [],

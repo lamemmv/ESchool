@@ -1,0 +1,25 @@
+.nav:after, .nav:before, 
+.navbar-collapse:after, 
+.navbar-collapse:before, 
+.navbar-header:after, 
+.navbar-header:before, 
+.navbar:after, 
+.navbar:before {
+    display: table;
+    content: " ";
+}
+
+.nav {
+    display: block;
+}
+
+.nav > li {
+    position:relative;
+    display:block
+}
+
+.nav > li > a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
