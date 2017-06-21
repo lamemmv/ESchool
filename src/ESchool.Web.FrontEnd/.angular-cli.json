@@ -36,8 +36,7 @@
         "assets/js/chartist.min.js",
         "assets/js/bootstrap-notify.js",
         "assets/js/google-maps.js",
-        "assets/js/material-dashboard.js?v=1.2.0",
-        "assets/js/demo.js"
+        "assets/js/material-dashboard.js?v=1.2.0"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

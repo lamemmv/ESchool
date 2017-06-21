@@ -1,0 +1,15 @@
+@import "../assets/sass/md/variables";
+@import "../assets/sass/md/mixins";
+@import "../assets/sass/md/shadows";
+
+//plugin css
+@import "../assets/sass/md/plugins/_plugin-nouislider";
+@import "../assets/sass/md/plugins/_animate";
+
+// Core CSS
+@import "../assets/sass/md/typography";
+
+@import '../assets/sass/md/sidebar-and-main-panel';
+@import "../assets/sass/md/misc";
+
+@import "../assets/sass/md/responsive";
