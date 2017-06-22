@@ -5,6 +5,9 @@
  *
  * Made By MaterializeCSS.com
  */
+html, body {
+  height: 100%;
+}
 
 p {
   line-height: 2rem;

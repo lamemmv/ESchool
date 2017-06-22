@@ -1,0 +1,23 @@
+.login-page {
+    display: table;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.login-container {    
+    display: table-cell;
+    vertical-align: middle;
+    margin: 0;
+}
+
+.login-page, .login-container {
+    height: 100%;
+}
+
+.login-form {
+    width: 300px;
+}
+
+.margin {
+    margin: 0 !important;
+}
