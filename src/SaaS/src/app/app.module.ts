@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { routing } from './app.routing.module';
 import { PagesModule } from './pages';
 import { AppTranslationModule } from './translation.module';
+import { AuthService, AuthGuard } from './security';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,10 @@ import { AppTranslationModule } from './translation.module';
     PagesModule,
     routing
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    AuthGuard
+  ],
   bootstrap: [
     AppComponent
   ]

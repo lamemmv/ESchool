@@ -1,8 +1,8 @@
-import { Routes, RouterModule }  from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { ModuleWithProviders } from '@angular/core';
 
-//import { AuthGuard } from './../security';
+import { AuthGuard } from './../security';
 
 export const routes: Routes = [
   {
@@ -21,10 +21,14 @@ export const routes: Routes = [
     path: 'pages',
     component: PagesComponent,
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full',
-      /*canActivate: [AuthGuard]*/ },
-      { path: 'home', loadChildren: './home/home.module#HomeModule',
-      /*canLoad: [AuthGuard]*/ },
+      {
+        path: '', redirectTo: 'home', pathMatch: 'full',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'home', loadChildren: './home/home.module#HomeModule',
+        canLoad: [AuthGuard]
+      },
       { path: 'handbook', loadChildren: './handbook/handbook.module#HandbookModule' },
       { path: 'deviation', loadChildren: './deviation/deviation.module#DeviationModule' },
       { path: 'rm', loadChildren: './rm/rm.module#RiskManagementModule' },
