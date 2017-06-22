@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@angular/common": "4.2.3",
+    "@angular/animation": "4.0.0-beta.8",
     "@angular/compiler": "4.2.3",
     "@angular/compiler-cli": "4.2.3",
     "@angular/core": "4.2.3",
@@ -26,6 +27,8 @@
     "@angular/router": "4.2.3",
     "@angular/tsc-wrapped": "4.2.3",
     "@angular/upgrade": "4.2.3",
+    "@ngx-translate/core": "7.0.0",
+    "@ngx-translate/http-loader":"0.1.0",
     "angular-in-memory-web-api": "0.3.2",
     "core-js": "2.4.1",
     "jquery": "^3.2.1",
