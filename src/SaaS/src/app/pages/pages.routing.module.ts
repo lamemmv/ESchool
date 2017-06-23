@@ -29,9 +29,9 @@ export const routes: Routes = [
         path: 'home', loadChildren: './home/home.module#HomeModule',
         canLoad: [AuthGuard]
       },
-      { path: 'handbook', loadChildren: './handbook/handbook.module#HandbookModule' },
-      { path: 'deviation', loadChildren: './deviation/deviation.module#DeviationModule' },
-      { path: 'rm', loadChildren: './rm/rm.module#RiskManagementModule' },
+      { path: 'handbook', loadChildren: './components/handbook/handbook.module#HandbookModule' },
+      { path: 'deviation', loadChildren: './components/deviation/deviation.module#DeviationModule' },
+      { path: 'rm', loadChildren: './components/rm/rm.module#RiskManagementModule' },
       { path: 'admin', loadChildren: './admin/admin.module#AdminModule' }
     ],
   },

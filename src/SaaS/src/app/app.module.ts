@@ -8,6 +8,8 @@ import { routing } from './app.routing.module';
 import { PagesModule } from './pages';
 import { AppTranslationModule } from './translation.module';
 import { AuthService, AuthGuard } from './security';
+import { AppService } from './shared/app.service';
+import { ConfigService } from './shared/utils/config.service';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { AuthService, AuthGuard } from './security';
     routing
   ],
   providers: [
+    ConfigService,
+    AppService,
     AuthService,
     AuthGuard
   ],

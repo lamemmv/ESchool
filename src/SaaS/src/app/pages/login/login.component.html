@@ -11,7 +11,7 @@
                     </div>
                     <div class="row margin">
                         <div class="input-field col s12">
-                            <i class="material-icons prefix layout-row">face</i>
+                            <i class="material-icons prefix">face</i>
                             <input id="username" type="text" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);">
                             <label for="username" class="center-align">Username</label>
                         </div>
@@ -31,7 +31,8 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <a href="index.html" class="btn waves-effect waves-light col s12">Login</a>
+                            <a class="btn waves-effect waves-light col s12"
+                                (click)="submit()">Login</a>
                         </div>
                     </div>
                     <div class="row">
