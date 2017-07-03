@@ -52,11 +52,9 @@ namespace ESchool.API.Controllers
 
             if (application == null)
             {
-                ModelState.TryAddModelError(
+                return BadRequestApiError(
                     OpenIdConnectConstants.Errors.InvalidClient,
                     "Details concerning the calling client application cannot be found in the database.");
-
-                return BadRequest(new ApiError(ModelState));
             }
 
             // Flow the request_id to allow OpenIddict to restore
@@ -110,52 +108,42 @@ namespace ESchool.API.Controllers
 
             if (application == null)
             {
-                ModelState.TryAddModelError(
+                return BadRequestApiError(
                     OpenIdConnectConstants.Errors.InvalidClient,
                     "Details concerning the calling client application cannot be found in the database.");
-
-                return BadRequest(new ApiError(ModelState));
             }
 
             ApplicationUser user = await _userManager.FindByNameAsync(request.Username);
 
             if (user == null)
             {
-                ModelState.TryAddModelError(
+                return BadRequestApiError(
                     OpenIdConnectConstants.Errors.InvalidGrant,
                     "The username/password couple is invalid.");
-
-                return BadRequest(new ApiError(ModelState));
             }
 
             // Ensure the user is allowed to sign in.
             if (!await _signInManager.CanSignInAsync(user))
             {
-                ModelState.TryAddModelError(
+                return BadRequestApiError(
                     OpenIdConnectConstants.Errors.InvalidGrant,
                     "The specified user is not allowed to sign in.");
-
-                return BadRequest(new ApiError(ModelState));
             }
 
             // Reject the token request if two-factor authentication has been enabled by the user.
             if (_userManager.SupportsUserTwoFactor && await _userManager.GetTwoFactorEnabledAsync(user))
             {
-                ModelState.TryAddModelError(
+                return BadRequestApiError(
                     OpenIdConnectConstants.Errors.InvalidGrant,
                     "The specified user is not allowed to sign in.");
-
-                return BadRequest(new ApiError(ModelState));
             }
 
             // Ensure the user is not already locked out.
             if (_userManager.SupportsUserLockout && await _userManager.IsLockedOutAsync(user))
             {
-                ModelState.TryAddModelError(
+                return BadRequestApiError(
                     OpenIdConnectConstants.Errors.InvalidGrant,
                     "The username/password couple is invalid.");
-
-                return BadRequest(new ApiError(ModelState));
             }
 
             // Ensure the password is valid.
@@ -166,11 +154,9 @@ namespace ESchool.API.Controllers
                     await _userManager.AccessFailedAsync(user);
                 }
 
-                ModelState.TryAddModelError(
+                return BadRequestApiError(
                     OpenIdConnectConstants.Errors.InvalidGrant,
                     "The username/password couple is invalid.");
-
-                return BadRequest(new ApiError(ModelState));
             }
 
             if (_userManager.SupportsUserLockout)
@@ -198,21 +184,17 @@ namespace ESchool.API.Controllers
 
             if (user == null)
             {
-                ModelState.TryAddModelError(
-                    OpenIdConnectConstants.Errors.InvalidGrant,
-                    "The refresh token is no longer valid.");
-
-                return BadRequest(new ApiError(ModelState));
+                return BadRequestApiError(
+                     OpenIdConnectConstants.Errors.InvalidGrant,
+                     "The refresh token is no longer valid.");
             }
 
             // Ensure the user is still allowed to sign in.
             if (!await _signInManager.CanSignInAsync(user))
             {
-                ModelState.TryAddModelError(
+                return BadRequestApiError(
                     OpenIdConnectConstants.Errors.InvalidGrant,
                     "The user is no longer allowed to sign in.");
-
-                return BadRequest(new ApiError(ModelState));
             }
 
             // Create a new authentication ticket, but reuse the properties stored
@@ -281,6 +263,14 @@ namespace ESchool.API.Controllers
             }
 
             return ticket;
+        }
+
+        [NonAction]
+        private IActionResult BadRequestApiError(string source, string message)
+        {
+            ModelState.TryAddModelError(source, message);
+
+            return BadRequest(new ApiError(ModelState));
         }
     }
 }
