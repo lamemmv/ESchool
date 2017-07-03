@@ -116,8 +116,8 @@ namespace ESchool.Services.AppStart
                     Port = 587,
                     UserName = email,
                     Password = password,
-                    EnableSsl = true,
-                    UseDefaultCredentials = false,
+                    EnableSsl = false,
+                    UseDefaultCredentials = true,
                     IsDefaultEmailAccount = true
                 });
 
@@ -281,7 +281,7 @@ namespace ESchool.Services.AppStart
             IList<Question> daisoQuestions = null,
             IList<Question> hinhhocQuestions = null)
         {
-            var group = await groupDbSet.SingleOrDefaultAsync(g => g.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase));
+            var group = await groupDbSet.FirstOrDefaultAsync(g => g.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase));
 
             if (group == null)
             {

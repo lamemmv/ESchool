@@ -181,7 +181,7 @@ namespace ESchool.Services.Messages
         {
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync(emailAccount.Host, emailAccount.Port, MailKit.Security.SecureSocketOptions.StartTls);
+                await client.ConnectAsync(emailAccount.Host, emailAccount.Port, emailAccount.EnableSsl);
                     //emailAccount.EnableSsl);
 
                 // Note: since we don't have an OAuth2 token, disable the XOAUTH2 authentication mechanism.

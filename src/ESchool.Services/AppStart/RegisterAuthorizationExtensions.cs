@@ -4,6 +4,10 @@ using System.Reflection;
 using AspNet.Security.OpenIdConnect.Primitives;
 using ESchool.Data;
 using ESchool.Data.Entities.Accounts;
+using ESchool.Services.Authorizations;
+using ESchool.Services.Constants;
+using ESchool.Services.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -123,6 +127,29 @@ namespace ESchool.Services.AppStart
             });
 
             return services;
+        }
+
+        public static IServiceCollection AddCustomPolicies(this IServiceCollection services)
+        {
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy(
+                    ApiClaimTypes.ManageAccountsRead,
+                    policy => policy.Requirements.Add(new ApiClaimRequirement(ApiClaimTypes.ManageAccountsRead, Permissions.Read)));
+                opts.AddPolicy(
+                    ApiClaimTypes.ManageAccountsCreate,
+                    policy => policy.Requirements.Add(new ApiClaimRequirement(ApiClaimTypes.ManageAccountsCreate, Permissions.ReadCreate)));
+                opts.AddPolicy(
+                    ApiClaimTypes.ManageAccountsUpdate,
+                    policy => policy.Requirements.Add(new ApiClaimRequirement(ApiClaimTypes.ManageAccountsUpdate, Permissions.ReadUpdate)));
+                opts.AddPolicy(
+                    ApiClaimTypes.ManageAccountsDelete,
+                    policy => policy.Requirements.Add(new ApiClaimRequirement(ApiClaimTypes.ManageAccountsDelete, Permissions.ReadDelete)));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, ApiClaimHandler>();
+
+            return services;   
         }
 
         public static IApplicationBuilder UseCustomAuthorization(this IApplicationBuilder app)

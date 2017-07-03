@@ -1,7 +1,7 @@
-﻿using ESchool.Data.Entities.Systems;
+﻿using ESchool.Data.Entities.Logs;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.Data.Mapping.Systems
+namespace ESchool.Data.Mapping.Logs
 {
     public sealed class LogMap : IEntityMap
     {

@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.DTOs.Files;
 using ESchool.Data.Entities.Files;
-using ESchool.Services.Exceptions;
+using ESchool.Services.Enums;
+using ESchool.Services.Models;
 using ESchool.Services.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,9 @@ namespace ESchool.Services.Files
 
             if (entity == null)
             {
-                throw new EntityNotFoundException(id, nameof(Blob));
+                throw new ApiException(
+                    $"{nameof(Blob)} not found. Id = {id}",
+                    ApiErrorCode.NotFound);
             }
 
             if (File.Exists(entity.Path))

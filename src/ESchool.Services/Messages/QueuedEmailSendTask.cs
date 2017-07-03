@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ESchool.Data.Entities.Messages;
+using ESchool.Services.Enums;
 using ESchool.Services.Infrastructure.Tasks;
-using ESchool.Services.Models;
 using Microsoft.Extensions.Logging;
 
 namespace ESchool.Services.Messages

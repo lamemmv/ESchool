@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
-using ESchool.Services.Exceptions;
+using ESchool.Services.Enums;
 using ESchool.Services.Extensions;
+using ESchool.Services.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
@@ -52,7 +53,9 @@ namespace ESchool.Services.Examinations
                     totalGrade,
                     totalQuestion);
 
-                throw new RandomExamPaperException($"[{nameof(ExamPaperService)}]: Not enough Questions for random. Parameters: {parameterString}");
+                throw new ApiException(
+                    $"[{nameof(ExamPaperService)}]: Not enough Questions for random. Parameters: {parameterString}",
+                    ApiErrorCode.RandomExamPaperError);
             }
 
             return await query
@@ -71,7 +74,7 @@ namespace ESchool.Services.Examinations
             return await ExamPapers.AsNoTracking()
                 .Include(ep => ep.QuestionExamPapers)
                     .ThenInclude(qep => qep.Question)
-                .SingleOrDefaultAsync(ep => ep.Id == id);
+                .FirstOrDefaultAsync(ep => ep.Id == id);
         }
 
         public async Task<IPagedList<ExamPaper>> GetListAsync(int page, int size)
@@ -96,11 +99,13 @@ namespace ESchool.Services.Examinations
             var dbSet = ExamPapers;
             ExamPaper entity = await dbSet
                 .Include(ep => ep.QuestionExamPapers)
-                .SingleOrDefaultAsync(ep => ep.Id == id);
+                .FirstOrDefaultAsync(ep => ep.Id == id);
 
             if (entity == null)
             {
-                throw new EntityNotFoundException(id, nameof(ExamPaper));
+                throw new ApiException(
+                    $"{nameof(ExamPaper)} not found. Id = {id}",
+                    ApiErrorCode.NotFound);
             }
 
             dbSet.Remove(entity);

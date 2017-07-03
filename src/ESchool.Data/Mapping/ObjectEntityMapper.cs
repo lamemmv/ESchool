@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using ESchool.Data.Mapping.Examinations;
 using ESchool.Data.Mapping.Files;
+using ESchool.Data.Mapping.Logs;
 using ESchool.Data.Mapping.Messages;
-using ESchool.Data.Mapping.Systems;
+using ESchool.Data.Mapping.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Data.Mapping

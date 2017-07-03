@@ -1,4 +1,4 @@
-﻿namespace ESchool.Data.Entities.Systems
+﻿namespace ESchool.Data.Entities.Settings
 {
     public class Setting : BaseEntity
     {

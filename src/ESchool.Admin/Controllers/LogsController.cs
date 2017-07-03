@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ESchool.Data.Entities.Systems;
+using ESchool.Data.Entities.Logs;
 using ESchool.Data.Paginations;
-using ESchool.Services.Systems;
+using ESchool.Services.Logs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ESchool.Admin.Controllers

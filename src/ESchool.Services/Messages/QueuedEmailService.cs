@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Entities.Messages;
 using ESchool.Data.Enums;
 using ESchool.Data.Paginations;
-using ESchool.Services.Exceptions;
+using ESchool.Services.Enums;
 using ESchool.Services.Extensions;
+using ESchool.Services.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Messages
@@ -89,8 +89,7 @@ namespace ESchool.Services.Messages
         public async Task<QueuedEmail> CreateAsync(string email, string subject, string message, int emailAccountId = 0)
         {
             EmailAccount emailAccount = emailAccountId == 0 ?
-                await EmailAccounts.AsNoTracking()
-                    .SingleOrDefaultAsync(ea => ea.Id == emailAccountId && ea.IsDefaultEmailAccount) :
+                await EmailAccounts.AsNoTracking().FirstOrDefaultAsync(ea => ea.IsDefaultEmailAccount) :
                 await EmailAccounts.FindAsync(emailAccountId);
 
             if (emailAccount == null)
@@ -145,7 +144,9 @@ namespace ESchool.Services.Messages
 
             if (updatedEntity == null)
             {
-                throw new EntityNotFoundException(id, nameof(QueuedEmail));
+                throw new ApiException(
+                    $"{nameof(QueuedEmail)} not found. Id = {id}",
+                    ApiErrorCode.NotFound);
             }
 
             updatedEntity.SentTries = sentTries;

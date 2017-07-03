@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
-using ESchool.Admin.ViewModels.Accounts;
 using ESchool.Data.Entities.Accounts;
-using ESchool.Data.Entities.Messages;
-using ESchool.Data.Enums;
-using ESchool.Services.Messages;
 using ESchool.Services.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -22,12 +17,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenIddict.Core;
 using OpenIddict.Models;
-using MimeKit;
-using MailKit.Net.Smtp;
 
 namespace ESchool.API.Controllers
 {
-    [Route("api/[controller]")]
     public class AuthorizationController : Controller
     {
         private readonly ILogger<AuthorizationController> _logger;
@@ -37,17 +29,12 @@ namespace ESchool.API.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        private readonly IEmailAccountService _emailAccountService;
-        private readonly IQueuedEmailService _queuedEmailService;
-
         public AuthorizationController(
             ILogger<AuthorizationController> logger,
             OpenIddictApplicationManager<OpenIddictApplication> applicationManager,
             IOptions<IdentityOptions> identityOptions,
             SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager,
-            IEmailAccountService emailAccountService,
-            IQueuedEmailService queuedEmailService)
+            UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
 
@@ -55,9 +42,6 @@ namespace ESchool.API.Controllers
             _identityOptions = identityOptions;
             _signInManager = signInManager;
             _userManager = userManager;
-
-            _emailAccountService = emailAccountService;
-            _queuedEmailService = queuedEmailService;
         }
 
         [Authorize, HttpGet("~/connect/authorize")]
@@ -68,11 +52,11 @@ namespace ESchool.API.Controllers
 
             if (application == null)
             {
-                return BadRequest(new
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidClient,
-                    ErrorDescription = "Details concerning the calling client application cannot be found in the database"
-                });
+                ModelState.TryAddModelError(
+                    OpenIdConnectConstants.Errors.InvalidClient,
+                    "Details concerning the calling client application cannot be found in the database.");
+
+                return BadRequest(new ApiError(ModelState));
             }
 
             // Flow the request_id to allow OpenIddict to restore
@@ -118,52 +102,6 @@ namespace ESchool.API.Controllers
             });
         }
 
-        [HttpPost("forgotpassword")]
-        public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordViewModel viewModel)
-        {
-            string email = viewModel.Email.Trim();
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
-
-            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-            {
-                // Don't reveal that the user does not exist or is not confirmed.
-                return BadRequest(ApiErrorCode.Undefined);
-            }
-
-            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-            // Send an email with this link.
-            string code = await _userManager.GeneratePasswordResetTokenAsync(user);
-            string callbackUrl = $"{viewModel.Url.Trim()}?userId={user.Id}&code={code}";
-
-            await SendEmailAsync(
-                email,
-                "Reset Password",
-                "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
-
-            return NoContent();
-        }
-
-        [HttpPut("resetpassword")]
-        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel viewModel)
-        {
-            ApplicationUser user = await _userManager.FindByEmailAsync(viewModel.Email.Trim());
-
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist.
-                return BadRequest(ApiErrorCode.Undefined);
-            }
-
-            IdentityResult result = await _userManager.ResetPasswordAsync(user, viewModel.Code, viewModel.Password);
-
-            if (result.Succeeded)
-            {
-                return NoContent();
-            }
-
-            return BadRequest(result.Errors);
-        }
-
         [NonAction]
         private async Task<IActionResult> ProcessPasswordGrantType(OpenIdConnectRequest request)
         {
@@ -172,52 +110,52 @@ namespace ESchool.API.Controllers
 
             if (application == null)
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidClient,
-                    ErrorDescription = "Details concerning the calling client application cannot be found in the database."
-                });
+                ModelState.TryAddModelError(
+                    OpenIdConnectConstants.Errors.InvalidClient,
+                    "Details concerning the calling client application cannot be found in the database.");
+
+                return BadRequest(new ApiError(ModelState));
             }
 
             ApplicationUser user = await _userManager.FindByNameAsync(request.Username);
 
             if (user == null)
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "The username/password couple is invalid."
-                });
+                ModelState.TryAddModelError(
+                    OpenIdConnectConstants.Errors.InvalidGrant,
+                    "The username/password couple is invalid.");
+
+                return BadRequest(new ApiError(ModelState));
             }
 
             // Ensure the user is allowed to sign in.
             if (!await _signInManager.CanSignInAsync(user))
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "The specified user is not allowed to sign in."
-                });
+                ModelState.TryAddModelError(
+                    OpenIdConnectConstants.Errors.InvalidGrant,
+                    "The specified user is not allowed to sign in.");
+
+                return BadRequest(new ApiError(ModelState));
             }
 
             // Reject the token request if two-factor authentication has been enabled by the user.
             if (_userManager.SupportsUserTwoFactor && await _userManager.GetTwoFactorEnabledAsync(user))
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "The specified user is not allowed to sign in."
-                });
+                ModelState.TryAddModelError(
+                    OpenIdConnectConstants.Errors.InvalidGrant,
+                    "The specified user is not allowed to sign in.");
+
+                return BadRequest(new ApiError(ModelState));
             }
 
             // Ensure the user is not already locked out.
             if (_userManager.SupportsUserLockout && await _userManager.IsLockedOutAsync(user))
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "The username/password couple is invalid."
-                });
+                ModelState.TryAddModelError(
+                    OpenIdConnectConstants.Errors.InvalidGrant,
+                    "The username/password couple is invalid.");
+
+                return BadRequest(new ApiError(ModelState));
             }
 
             // Ensure the password is valid.
@@ -228,11 +166,11 @@ namespace ESchool.API.Controllers
                     await _userManager.AccessFailedAsync(user);
                 }
 
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "The username/password couple is invalid."
-                });
+                ModelState.TryAddModelError(
+                    OpenIdConnectConstants.Errors.InvalidGrant,
+                    "The username/password couple is invalid.");
+
+                return BadRequest(new ApiError(ModelState));
             }
 
             if (_userManager.SupportsUserLockout)
@@ -260,21 +198,21 @@ namespace ESchool.API.Controllers
 
             if (user == null)
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "The refresh token is no longer valid."
-                });
+                ModelState.TryAddModelError(
+                    OpenIdConnectConstants.Errors.InvalidGrant,
+                    "The refresh token is no longer valid.");
+
+                return BadRequest(new ApiError(ModelState));
             }
 
             // Ensure the user is still allowed to sign in.
             if (!await _signInManager.CanSignInAsync(user))
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "The user is no longer allowed to sign in."
-                });
+                ModelState.TryAddModelError(
+                    OpenIdConnectConstants.Errors.InvalidGrant,
+                    "The user is no longer allowed to sign in.");
+
+                return BadRequest(new ApiError(ModelState));
             }
 
             // Create a new authentication ticket, but reuse the properties stored
@@ -343,56 +281,6 @@ namespace ESchool.API.Controllers
             }
 
             return ticket;
-        }
-
-        [NonAction]
-        private async Task SendEmailAsync(string email, string subject, string message)
-        {
-            EmailAccount emailAccount = await _emailAccountService.GetDefaultAsync();
-
-            if (emailAccount == null)
-            {
-                _logger.LogWarning(
-                    new EventId((int)ApiErrorCode.Undefined), 
-                    $"[{nameof(AuthorizationController)} » {nameof(SendEmailAsync)}] Default Email Account is null.");
-
-                return;
-            }
-
-
-            var msg = new MimeMessage();
-            msg.From.Add(new MailboxAddress("ESchool Web", "eschoolapi@gmail.com"));
-            msg.To.Add(new MailboxAddress("Lam Mai", email));
-            msg.Subject = subject;
-            msg.Body = new TextPart("plain")
-            {
-                Text = message
-            };
-
-            using (var client = new SmtpClient())
-            {
-                client.Connect("smtp.gmail.com", 587, false);
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
-                client.Authenticate("eschoolapi@gmail.com", "1qaw3(OLP_");
-                // Note: since we don't have an OAuth2 token, disable 	// the XOAUTH2 authentication mechanism.     client.Authenticate("anuraj.p@example.com", "password");
-                client.Send(msg);
-                client.Disconnect(true);
-            }
-
-
-            QueuedEmail queuedEmail = new QueuedEmail
-            {
-                From = emailAccount.Email,
-                FromName = emailAccount.DisplayName,
-                To = email,
-                Subject = subject,
-                Body = message,
-                CreatedOnUtc = DateTime.UtcNow,
-                Priority = (int)QueuedEmailPriority.High,
-                EmailAccountId = emailAccount.Id
-            };
-
-            await _queuedEmailService.CreateAsync(queuedEmail);
         }
     }
 }

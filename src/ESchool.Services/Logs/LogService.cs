@@ -2,13 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ESchool.Data;
-using ESchool.Data.Entities.Systems;
+using ESchool.Data.Entities.Logs;
 using ESchool.Data.Paginations;
-using ESchool.Services.Exceptions;
+using ESchool.Services.Enums;
 using ESchool.Services.Extensions;
+using ESchool.Services.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ESchool.Services.Systems
+namespace ESchool.Services.Logs
 {
     public class LogService : BaseService, ILogService
     {
@@ -41,7 +42,9 @@ namespace ESchool.Services.Systems
 
             if (entity == null)
             {
-                throw new EntityNotFoundException(id, nameof(Log));
+                throw new ApiException(
+                    $"{nameof(Log)} not found. Id = {id}",
+                    ApiErrorCode.NotFound);
             }
 
             Logs.Remove(entity);
@@ -56,7 +59,9 @@ namespace ESchool.Services.Systems
 
             if (!logs.Any())
             {
-                throw new EntityNotFoundException($"Logs not found. Ids = {string.Join(",", ids)}");
+                throw new ApiException(
+                    $"Logs not found. Ids = {string.Join(",", ids)}",
+                    ApiErrorCode.NotFound);
             }
 
             dbSet.RemoveRange(logs);

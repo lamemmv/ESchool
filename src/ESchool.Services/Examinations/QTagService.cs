@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.DTOs.Examinations;
 using ESchool.Data.Entities.Examinations;
-using ESchool.Services.Exceptions;
+using ESchool.Services.Enums;
+using ESchool.Services.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
@@ -80,7 +81,9 @@ namespace ESchool.Services.Examinations
 
             if (duplicateEntity != null)
             {
-                throw new DuplicateQTagException(entity);
+                throw new ApiException(
+                    $"'QTag Name' is duplicated. Parameters: {LogQTag(entity)}",
+                    ApiErrorCode.DuplicateEntity);
             }
 
             await QTags.AddAsync(entity);
@@ -93,18 +96,22 @@ namespace ESchool.Services.Examinations
         {
             QTag updatedEntity = await QTags
                 .Include(t => t.Group)
-                .SingleOrDefaultAsync(t => t.Id == entity.Id);
+                .FirstOrDefaultAsync(t => t.Id == entity.Id);
 
             if (updatedEntity == null)
             {
-                throw new EntityNotFoundException(entity.Id, nameof(QTag));
+                throw new ApiException(
+                    $"{nameof(QTag)} not found. Id = {entity.Id}",
+                    ApiErrorCode.NotFound);
             }
 
             QTag duplicateEntity = await FindAsync(entity.Name, entity.GroupId, entity.ParentId);
 
             if (duplicateEntity != null && duplicateEntity.Id != entity.Id)
             {
-                throw new DuplicateQTagException(entity);
+                throw new ApiException(
+                    $"'QTag Name' is duplicated. Parameters: {LogQTag(entity)}",
+                    ApiErrorCode.DuplicateEntity);
             }
 
             updatedEntity.ParentId = entity.ParentId;
@@ -121,7 +128,9 @@ namespace ESchool.Services.Examinations
 
             if (entity == null)
             {
-                throw new EntityNotFoundException(id, nameof(QTag));
+                throw new ApiException(
+                    $"{nameof(QTag)} not found. Id = {id}",
+                    ApiErrorCode.NotFound);
             }
 
             QTags.Remove(entity);
@@ -140,7 +149,7 @@ namespace ESchool.Services.Examinations
         private async Task<QTag> FindAsync(string name, int groupId, int parentId)
         {
             return await QTags.AsNoTracking()
-                .SingleOrDefaultAsync(t =>
+                .FirstOrDefaultAsync(t =>
                     t.GroupId == groupId &&
                     t.ParentId == parentId &&
                     t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -153,7 +162,7 @@ namespace ESchool.Services.Examinations
 
             while (parentId != 0)
             {
-                qtag = qtags.SingleOrDefault(t => t.Id == parentId);
+                qtag = qtags.FirstOrDefault(t => t.Id == parentId);
 
                 if (qtag == null)
                 {
@@ -176,6 +185,11 @@ namespace ESchool.Services.Examinations
                 Name = entity.Name,
                 Description = entity.Description
             };
+        }
+
+        private string LogQTag(QTag entity)
+        {
+            return $"[GroupId] = {entity.GroupId}, [ParentId] = {entity.ParentId}, [QTagName] = {entity.Name}";
         }
     }
 }

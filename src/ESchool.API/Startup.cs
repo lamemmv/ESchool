@@ -1,4 +1,6 @@
-﻿using ESchool.Admin.Controllers;
+﻿using System.IO.Compression;
+using System.Linq;
+using ESchool.Admin.Controllers;
 using ESchool.Admin.Filters;
 using ESchool.Data.Configurations;
 using ESchool.Services.AppStart;
@@ -6,6 +8,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,6 +63,19 @@ namespace ESchool.API
             //services.AddDistributedMemoryCache();
             //services.AddSession(opts => opts.IdleTimeout = TimeSpan.FromMinutes(20));
 
+            services.Configure<GzipCompressionProviderOptions>(opts => opts.Level = CompressionLevel.Optimal);
+            services.AddResponseCompression(opts =>
+            {
+                opts.EnableForHttps = false;
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[]
+                    {
+                        "image/svg+xml",
+                        "application/atom+xml"
+                    });
+                opts.Providers.Add<GzipCompressionProvider>();
+            });
+
             // Add framework services.
             services
                 .AddMvc(opts =>
@@ -79,6 +95,8 @@ namespace ESchool.API
                     serializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 })
                 .AddFluentValidation(opts => opts.RegisterValidatorsFromAssemblyContaining<AdminController>());
+
+            services.AddCustomPolicies();
 
             services.AddApplicationService(Configuration);
         }
@@ -106,6 +124,8 @@ namespace ESchool.API
             app.UseCors("AllowAllOrigins");
 
             app.UseCustomAuthorization();
+
+            app.UseResponseCompression();
 
             app.UseMvcWithDefaultRoute();
 

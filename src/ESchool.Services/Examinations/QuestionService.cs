@@ -4,7 +4,8 @@ using ESchool.Data;
 using ESchool.Data.DTOs.Examinations;
 using ESchool.Data.Entities.Examinations;
 using ESchool.Data.Paginations;
-using ESchool.Services.Exceptions;
+using ESchool.Services.Enums;
+using ESchool.Services.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Examinations
@@ -20,7 +21,7 @@ namespace ESchool.Services.Examinations
         {
             Question entity = await Questions.AsNoTracking()
                 .Include(q => q.Answers)
-                .SingleOrDefaultAsync(q => q.Id == id);
+                .FirstOrDefaultAsync(q => q.Id == id);
 
             if (entity == null)
             {
@@ -52,7 +53,9 @@ namespace ESchool.Services.Examinations
 
             if (updatedEntity == null)
             {
-                throw new EntityNotFoundException(entity.Id, nameof(Question));
+                throw new ApiException(
+                    $"{nameof(Question)} not found. Id = {entity.Id}",
+                    ApiErrorCode.NotFound);
             }
 
             // Delete current QuestionTags & Answers.
@@ -76,11 +79,13 @@ namespace ESchool.Services.Examinations
             DbSet<Question> dbSet = Questions;
             Question entity = await dbSet
                 .Include(q => q.Answers)
-                .SingleOrDefaultAsync(q => q.Id == id);
+                .FirstOrDefaultAsync(q => q.Id == id);
 
             if (entity == null)
             {
-                throw new EntityNotFoundException(id, nameof(Question));
+                throw new ApiException(
+                    $"{nameof(Question)} not found. Id = {id}",
+                    ApiErrorCode.NotFound);
             }
 
             dbSet.Remove(entity);

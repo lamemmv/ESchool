@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using ESchool.Admin.ViewModels.Accounts;
 using ESchool.Data.Entities.Accounts;
+using ESchool.Services.Enums;
 using ESchool.Services.Messages;
-using ESchool.Services.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

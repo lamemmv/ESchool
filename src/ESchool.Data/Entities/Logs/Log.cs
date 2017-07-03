@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESchool.Data.Entities.Systems
+namespace ESchool.Data.Entities.Logs
 {
     public class Log : BaseEntity
     {

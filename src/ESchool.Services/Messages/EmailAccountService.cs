@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using ESchool.Data;
 using ESchool.Data.Entities.Messages;
 using ESchool.Services.Constants;
-using ESchool.Services.Exceptions;
+using ESchool.Services.Enums;
 using ESchool.Services.Infrastructure.Cache;
+using ESchool.Services.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ESchool.Services.Messages
@@ -39,7 +40,7 @@ namespace ESchool.Services.Messages
                 () =>
                 {
                     return EmailAccounts.AsNoTracking()
-                        .SingleOrDefaultAsync(ea => ea.IsDefaultEmailAccount);
+                        .FirstOrDefaultAsync(ea => ea.IsDefaultEmailAccount);
                 });
         }
 
@@ -57,7 +58,9 @@ namespace ESchool.Services.Messages
 
             if (updatedEntity == null)
             {
-                throw new EntityNotFoundException(entity.Id, nameof(EmailAccount));
+                throw new ApiException(
+                    $"{nameof(EmailAccount)} not found. Id = {entity.Id}",
+                    ApiErrorCode.NotFound);
             }
 
             updatedEntity.Email = entity.Email;
@@ -79,7 +82,9 @@ namespace ESchool.Services.Messages
 
             if (entity == null)
             {
-                throw new EntityNotFoundException(id, nameof(EmailAccount));
+                throw new ApiException(
+                    $"{nameof(EmailAccount)} not found. Id = {id}",
+                    ApiErrorCode.NotFound);
             }
 
             EmailAccounts.Remove(entity);

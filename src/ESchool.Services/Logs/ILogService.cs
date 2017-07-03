@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ESchool.Data.Entities.Logs;
 using ESchool.Data.Paginations;
-using ESchool.Data.Entities.Systems;
 
-namespace ESchool.Services.Systems
+namespace ESchool.Services.Logs
 {
     public interface ILogService : IService
     {
