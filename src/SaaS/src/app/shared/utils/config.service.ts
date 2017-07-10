@@ -13,9 +13,9 @@ export class DefaultConfiguration {
     forbiddenRoute = '/forbidden';
     // HTTP 401
     unauthorizedRoute = '/unauthorized';
-    postLogoutRedirectUri = 'https://localhost:53090/unauthorized';
+    postLogoutRedirectUri = 'https://localhost:4200/unauthorized';
     scope = 'openid email profile';
-    redirectUrl = 'https://localhost:53090';
+    redirectUrl = 'https://localhost:4200';
 }
 
 export class OpenIDConfiguration {

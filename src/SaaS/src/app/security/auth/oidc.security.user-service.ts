@@ -47,7 +47,7 @@ export class OidcSecurityUserService {
             headers.append('Authorization', 'Bearer ' + decodeURIComponent(token));
         }
 
-        return this.http.get(this.authWellKnownEndpoints.userinfo_endpoint, {
+        return this.http.get(this.authWellKnownEndpoints.userinfoEndpoint, {
             headers: headers,
             body: ''
         }).map((res: any) => res.json());

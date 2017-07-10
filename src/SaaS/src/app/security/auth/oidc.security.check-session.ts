@@ -36,7 +36,7 @@ export class OidcSecurityCheckSession {
             this.sessionIframe.id = 'myiFrameForCheckSession';
             this.oidcSecurityCommon.logDebug(this.sessionIframe);
             this.sessionIframe.style.display = 'none';
-            this.sessionIframe.src = this.authWellKnownEndpoints.check_session_iframe;
+            this.sessionIframe.src = this.authWellKnownEndpoints.checkSessionIframe;
 
             window.document.body.appendChild(this.sessionIframe);
             this.iframeMessageEvent = this.messageHandler.bind(this);

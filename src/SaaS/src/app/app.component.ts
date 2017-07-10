@@ -13,8 +13,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (window.location.hash) {
-      this.securityService.authorizedCallback();
-    }
+    // if (window.location.hash) {
+    //   this.securityService.authorizedCallback();
+    // }
   }
 }

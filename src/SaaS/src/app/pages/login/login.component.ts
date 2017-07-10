@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { LoginService } from './login.service';
+import { OidcSecurityCommon } from './../../security/auth';
 
 @Component({
   selector: 'app-login',
@@ -8,17 +9,18 @@ import { LoginService } from './login.service';
   styleUrls: [('./login.component.scss')]
 })
 export class LoginComponent {
-  constructor(private loginService: LoginService) {
+  constructor(private loginService: LoginService,
+    private oidcSecurityCommon: OidcSecurityCommon) {
 
   }
 
   submit() {
-    this.loginService.authenticate()
+    this.loginService.login({ username: 'lam', password: 'password' })
       .subscribe((authentication: any) => {
-        console.log(authentication);
+        this.oidcSecurityCommon.store(this.oidcSecurityCommon.storage_access_token, authentication.access_token);
       },
       error => {
         console.log(error);
-      });;
+      });
   }
 }
