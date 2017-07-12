@@ -1,51 +1,58 @@
 <div class="login-page">
     <div class="login-container">
         <div class="row">
-            <div class="col s12 z-depth-4 card-panel">
-                <form class="login-form">
-                    <div class="row">
-                        <div class="input-field col s12 center">
-                            <img src="./../../assets/images/logo.png" alt="" class="circle responsive-img valign profile-image-login">
-                            <p class="center login-form-text">QMS SaaS</p>
-                        </div>
+            <form class="login-form" #loginForm="ngForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-lg-12 logo">
+                        <img src="./../../assets/images/logo.png" alt="">
+                        <p class="center login-form-text">QMS SaaS</p>
                     </div>
-                    <div class="row margin">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">face</i>
-                            <input id="username" type="text" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);">
-                            <label for="username" class="center-align">Username</label>
-                        </div>
+                </div>
+                <div class="form-group label-floating is-empty">
+                    <div class="input-group">
+                        <span class="material-icons">face</span>
+                        <label for="username" class="control-label">{{'common.userName' | translate}}</label>
+                        <input id="username" type="text" class="form-control" required minlength="4" maxlength="30" name="username" [(ngModel)]="loginModel.userName"
+                            #username="ngModel" />
+                        <p class="help-block">The label is inside the <code>input-group</code> so that it is positioned properly as a placeholder.</p>
                     </div>
-                    <div class="row margin">
-                        <div class="input-field col s12">
-                            <i class="material-icons prefix">lock_outline</i>
-                            <input id="password" type="password" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);">
-                            <label for="password">Password</label>
+                    <!-- <div *ngIf="username.errors && (username.dirty || username.touched)" class="col-sm-12 alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        <div [hidden]="!username.errors.required">
+                            {{'messages.nameRequired' | translate}}
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12 m12 l12  login-text">
-                            <input type="checkbox" id="remember-me">
-                            <label for="remember-me">Remember me</label>
+                        <div [hidden]="!username.errors.minlength">
+                            {{'messages.nameLessLength' | translate}}
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <a class="btn waves-effect waves-light col s12"
-                                (click)="submit()">Login</a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6 m6 l6">
-                            <p class="margin medium-small"><a href="page-register.html">Register Now!</a></p>
-                        </div>
-                        <div class="input-field col s6 m6 l6">
-                            <p class="margin right-align medium-small"><a href="page-forgot-password.html">Forgot password ?</a></p>
-                        </div>
-                    </div>
+                    </div> -->
+                </div>
+                <div class="form-group label-floating is-empty">
+                    <label for="password" class="control-label">{{'common.password' | translate}}</label>
+                    <!-- <i class="material-icons prefix">lock_outline</i> -->
+                    <input id="password" type="password" class="form-control" required minlength="4" maxlength="30" name="password" [(ngModel)]="loginModel.password"
+                        #name="ngModel" />
 
-                </form>
-            </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m12 l12  login-text">
+                        <input type="checkbox" id="remember-me">
+                        <label for="remember-me">{{'common.rememberMe' | translate}}</label>
+                    </div>
+                </div>
+                <div class="">
+                    <button type="submit" class="btn btn-block btn-raised btn-primary">{{'common.login' | translate}}</button>
+                </div>
+                <div class="row">
+                    <div class="col s6 m6 l6">
+                        <p class=""><a href="page-register.html">{{'common.registerNow' | translate}}</a></p>
+                    </div>
+                    <div class="col s6 m6 l6">
+                        <p class=""><a href="page-forgot-password.html">{{'common.forgotPassword' | translate}} ?</a></p>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

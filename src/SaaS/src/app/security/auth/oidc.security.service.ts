@@ -103,7 +103,6 @@ export class OidcSecurityService {
         headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
         headers.append('Accept', 'application/json');
         let options = new RequestOptions({ headers: headers });
-        //request.grant_type = 'client_credentials';
         request.grant_type = 'password';
         request.scope = 'netpower.qms.saas.api.read';
         request.client_id = 'netpower.qms.saas.client';

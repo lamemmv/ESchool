@@ -6,6 +6,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/delay';
 
 import { Authentication } from './auth.model';
+import { OidcSecurityCommon } from './../security/auth';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,10 @@ export class AuthService {
 
   // store the URL so we can redirect after logging in
   redirectUrl: string;
+
+  constructor(private oidcSecurityCommon: OidcSecurityCommon){
+
+  }
 
   // simple check of logged in status: if there is a token, we're (probably) logged in.
   // ideally we check status and check token has not expired (server will back us up, if this not done, but it could be cleaner)
@@ -25,16 +30,16 @@ export class AuthService {
     const header = new Headers();
     header.append('Content-Type', 'application/json');
     header.append('Accept', 'application/json');
-    header.append('Authorization', 'Bearer ' + sessionStorage.getItem('bearer_token'));
+    header.append('Authorization', 'Bearer ' + this.oidcSecurityCommon.getAccessToken());
     return header;
   }
 
   // for requesting secure data from a form post
   authFormHeaders() {
     const header = new Headers();
-    header.append('Content-Type', 'application/x-www-form-urlencoded');
+    header.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     header.append('Accept', 'application/json');
-    header.append('Authorization', 'Bearer ' + sessionStorage.getItem('bearer_token'));
+    header.append('Authorization', 'Bearer ' + this.oidcSecurityCommon.getAccessToken());
     return header;
   }
 

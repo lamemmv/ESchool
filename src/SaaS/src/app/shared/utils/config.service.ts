@@ -43,8 +43,10 @@ export class ConfigService {
     private openIDConfiguration: OpenIDConfiguration;
     private defaultConfiguration = new DefaultConfiguration();
     constructor() {
-        this._apiURI = 'http://localhost:53090/';
-        this._adminApiURI = 'http://localhost:53090/admin/';
+        this._apiURI = 'http://local.qms.saas.api/';
+        //this._apiURI = 'http://localhost:53090/';
+        this._adminApiURI = 'http://local.qms.saas.api/admin/';
+        //this._adminApiURI = 'http://localhost:53090/admin/';
     }
 
     init(openIDConfiguration: OpenIDConfiguration) {

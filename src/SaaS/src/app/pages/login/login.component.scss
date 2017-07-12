@@ -1,3 +1,4 @@
+@import './../../../assets/sass/_colors';
 .login-page {
     display: table;
     margin: auto;
@@ -16,7 +17,24 @@
 
 .login-form {
     width: 300px;
+    background: white;
+    transition: box-shadow .25s;
+    padding: 20px;
+    margin: 0.5rem 0 1rem 0;
+    border-radius: 2px;
+    box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22), 0 25px 55px 0 rgba(0,0,0,0.21);
 }
+
+.login-form .logo {
+    text-align: center;
+    position: relative;
+    opacity: 0.8;
+}
+
+.login-form .logo img {
+    border-radius: 50%;
+}
+
 
 .margin {
     margin: 0 !important;
@@ -24,4 +42,8 @@
 
 .material-icons.prefix {
     top: 15px;
+}
+
+.btn-primary {
+    background-color: $pink-A200 !important;
 }

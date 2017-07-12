@@ -19,12 +19,19 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "assets/sass/materialize.scss",
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.css",
+        "../node_modules/bootstrap-material-design/dist/css/ripples.css",
         "styles.css"        
       ],
       "scripts": [
-        "../node_modules/jquery/dist/jquery.min.js",
-        "assets/js/bin/materialize.min.js"
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/tether/dist/js/tether.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../node_modules/bootstrap-material-design/dist/js/material.js",
+        "../node_modules/bootstrap-material-design/dist/js/ripples.js",
+        "assets/js/jquery.nouislider.min.js",
+        "assets/js/jquery.dropdown.js"
         ],
       "environmentSource": "environments/environment.ts",
       "environments": {
