@@ -1,0 +1,14 @@
+{
+    "common": {
+        "login": "Login",
+        "registerNow": "Register now",
+        "forgotPassword": "Forgot password",
+        "userName": "Username",
+        "password": "Password",
+        "rememberMe": "Remember me"
+    },
+    "messages": {
+        "nameRequired": "Name is required",
+        "nameLessLength": "Name must be at least {minLength} characters"
+    }
+}

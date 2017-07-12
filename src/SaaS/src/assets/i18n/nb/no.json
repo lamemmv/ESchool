@@ -1,3 +1,14 @@
 {
-    
+    "common": {
+        "login": "Innlogging",
+        "registerNow": "Registrer deg nå",
+        "forgotPassword": "Glemt passord",
+        "userName": "Brukernavn",
+        "password": "Passord",
+        "rememberMe": "Husk meg"
+    },
+    "messages": {
+        "nameRequired": "Navn er påkrevd",
+        "nameLessLength": "Navn må være minst {minLength} tegn"
+    }
 }
