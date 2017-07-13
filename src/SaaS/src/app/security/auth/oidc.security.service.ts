@@ -87,7 +87,7 @@ export class OidcSecurityService {
         return this.oidcSecurityUserService.userData;
     }
 
-    authorize(request: any) {
+    authenticate(request: any) {
 
         let data = this.oidcSecurityCommon.retrieve(this.oidcSecurityCommon.storage_well_known_endpoints);
         if (data && data !== '') {
@@ -109,6 +109,36 @@ export class OidcSecurityService {
         request.client_secret = 'superSecretPassword';
         let self = this;
         return this.http.post(self.authWellKnownEndpoints.tokenEndpoint, $.param(request), options)
+            .map((res: any) => {
+                return res.json();
+            })
+            .catch(self.handleError1);
+    }
+
+    authorize(request: any) {
+
+        let data = this.oidcSecurityCommon.retrieve(this.oidcSecurityCommon.storage_well_known_endpoints);
+        if (data && data !== '') {
+            this.authWellKnownEndpointsLoaded = true;
+        }
+
+        if (!this.authWellKnownEndpointsLoaded) {
+            this.oidcSecurityCommon.logError('Well known endpoints must be loaded before user can login!')
+            return;
+        }
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+        headers.append('Accept', 'application/json');
+        let options = new RequestOptions({ headers: headers });
+        request.scope = 'netpower.qms.saas.api.read';
+        request.client_id = 'netpower.qms.saas.client';
+        request.response_type = this.authConfiguration.responseType;
+        request.redirect_uri = 'http://localhost:4200';
+        request.state = 'abc';
+        request.nonce = 'xyz';
+        let self = this;
+        return this.http.post(self.authWellKnownEndpoints.authorizationEndpoint, $.param(request), options)
             .map((res: any) => {
                 return res.json();
             })

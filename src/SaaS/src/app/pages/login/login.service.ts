@@ -30,17 +30,16 @@ export class LoginService {
     }
 
     login(request: any) {
-        return this.securityService.authorize(request);
+        return this.securityService.authenticate(request);
     }
 
-    test() {
+    getUserInfo() {
         let self = this;
         let options = new RequestOptions({
             method: RequestMethod.Get,
-            headers: this.authService.authFormHeaders()/*, 
-            withCredentials: true*/
+            headers: this.authService.authFormHeaders()
         });
-        return self.http.get(this.baseUrl + "users/1", options)
+        return self.http.get(this.authWellKnownEndpoints.userinfoEndpoint, options)//this.authWellKnownEndpoints.userinfoEndpoint
             .map((res: Response) => {
                 return res.json();
             })

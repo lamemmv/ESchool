@@ -10,6 +10,7 @@
     },
     "messages": {
         "nameRequired": "Navn er påkrevd",
-        "nameLessLength": "Navn må være minst {minLength} tegn"
+        "nameLessLength": "Navn må være minst {minLength} tegn",
+        "orBeClassical": "Eller være klassisk"
     }
 }

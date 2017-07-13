@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { LoginService } from './login.service';
-import { OidcSecurityCommon } from './../../security/auth';
+import { OidcSecurityCommon } from './../../security/auth'; 
 import { LoginModel } from './login.models';
 
 @Component({
@@ -20,12 +20,12 @@ export class LoginComponent {
     this.loginService.login({ username: this.loginModel.userName, password: this.loginModel.password })
       .subscribe((authentication: any) => {
         this.oidcSecurityCommon.store(this.oidcSecurityCommon.storage_access_token, authentication.access_token);
-        this.loginService.test().subscribe((res: any) => {
+        this.loginService.getUserInfo().subscribe((res: any) => {
           console.log(res);
         },
-        error => {
-          console.log(error);
-        });
+          error => {
+            console.log(error);
+          });
       },
       error => {
         console.log(error);

@@ -1,58 +1,112 @@
-<div class="login-page">
-    <div class="login-container">
-        <div class="row">
-            <form class="login-form" #loginForm="ngForm" (ngSubmit)="onSubmit()">
+<div class="signup-page">
+    <div class="wrapper">
+        <div class="header header-filter" style="background-image: url('../assets/img/city.jpg'); background-size: cover; background-position: top center;">
+            <div class="container">
                 <div class="row">
-                    <div class="col-lg-12 logo">
-                        <img src="./../../assets/images/logo.png" alt="">
-                        <p class="center login-form-text">QMS SaaS</p>
-                    </div>
-                </div>
-                <div class="form-group label-floating is-empty">
-                    <div class="input-group">
-                        <span class="material-icons">face</span>
-                        <label for="username" class="control-label">{{'common.userName' | translate}}</label>
-                        <input id="username" type="text" class="form-control" required minlength="4" maxlength="30" name="username" [(ngModel)]="loginModel.userName"
-                            #username="ngModel" />
-                        <p class="help-block">The label is inside the <code>input-group</code> so that it is positioned properly as a placeholder.</p>
-                    </div>
-                    <!-- <div *ngIf="username.errors && (username.dirty || username.touched)" class="col-sm-12 alert alert-danger alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        <div [hidden]="!username.errors.required">
-                            {{'messages.nameRequired' | translate}}
-                        </div>
-                        <div [hidden]="!username.errors.minlength">
-                            {{'messages.nameLessLength' | translate}}
-                        </div>
-                    </div> -->
-                </div>
-                <div class="form-group label-floating is-empty">
-                    <label for="password" class="control-label">{{'common.password' | translate}}</label>
-                    <!-- <i class="material-icons prefix">lock_outline</i> -->
-                    <input id="password" type="password" class="form-control" required minlength="4" maxlength="30" name="password" [(ngModel)]="loginModel.password"
-                        #name="ngModel" />
+                    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+                        <div class="card card-signup">
+                            <form class="form" #loginForm="ngForm" (ngSubmit)="onSubmit()">
+                                <div class="header header-info text-center">
+                                    <h4>{{'common.signin' | translate}}</h4>
+                                    <div class="social-line">
+                                        <a routerLink="/authentication/facebook" class="btn btn-simple btn-just-icon">
+											<i class="fa fa-facebook-square"></i>
+										</a>
+                                        <a routerLink="/authentication/twitter" class="btn btn-simple btn-just-icon">
+											<i class="fa fa-twitter"></i>
+										</a>
+                                        <a routerLink="/authentication/google" class="btn btn-simple btn-just-icon">
+											<i class="fa fa-google-plus"></i>
+										</a>
+                                    </div>
+                                </div>
+                                <p class="text-divider">{{'messages.orBeClassical' | translate}}</p>
+                                <div class="content">
 
-                </div>
-                <div class="row">
-                    <div class="col s12 m12 l12  login-text">
-                        <input type="checkbox" id="remember-me">
-                        <label for="remember-me">{{'common.rememberMe' | translate}}</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+											<i class="material-icons">face</i>
+										</span>
+                                        <div class="form-group label-floating is-empty">
+                                            <label class="control-label" for="username">{{'common.userName' | translate}}</label>
+                                            <input id="username" type="text" class="form-control" minlength="3" maxlength="30" name="username" [(ngModel)]="loginModel.userName"
+                                                #username="ngModel" required />
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+											<i class="material-icons">lock_outline</i>
+										</span>
+                                        <div class="form-group label-floating is-empty">
+                                            <label for="password" class="control-label">{{'common.password' | translate}}</label>
+                                            <input id="password" type="password" class="form-control" minlength="4" maxlength="30" name="password" [(ngModel)]="loginModel.password"
+                                                #password="ngModel" required/>
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="rememberMe" [(ngModel)]="loginModel.rememberMe" />
+                                            <span class="checkbox-material"><span class="check"></span></span>
+                                            {{'common.rememberMe' | translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 text-center">
+                                    <button type="submit" 
+                                        class="btn btn-info btn-block"
+                                        [disabled]="!loginForm.valid">{{'common.login' | translate}}
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="pull-left">
+                                        <p class=""><a routerLink="/register">{{'common.registerNow' | translate}}</a></p>
+                                    </div>
+                                    <div class="pull-right">
+                                        <p class=""><a routerLink="/forgotPassword">{{'common.forgotPassword' | translate}} ?</a></p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <div class="">
-                    <button type="submit" class="btn btn-block btn-raised btn-primary">{{'common.login' | translate}}</button>
-                </div>
-                <div class="row">
-                    <div class="col s6 m6 l6">
-                        <p class=""><a href="page-register.html">{{'common.registerNow' | translate}}</a></p>
+            </div>
+
+            <footer class="footer">
+                <div class="container">
+                    <nav class="pull-left">
+                        <ul>
+                            <li>
+                                <a routerLink="/qms-team">
+									Netpower QMS Team
+								</a>
+                            </li>
+                            <li>
+                                <a routerLink="/about">
+								   About Us
+								</a>
+                            </li>
+                            <li>
+                                <a routerLink="http://netpower.no">
+								   Blog
+								</a>
+                            </li>
+                            <li>
+                                <a href="http://netpower.no/license">
+									Licenses
+								</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="copyright pull-right">
+                        © 2017, made with <i class="fa fa-heart heart"></i> by <a href="http://netpower.no" target="_blank">Netpower QMS team</a>
                     </div>
-                    <div class="col s6 m6 l6">
-                        <p class=""><a href="page-forgot-password.html">{{'common.forgotPassword' | translate}} ?</a></p>
-                    </div>
                 </div>
-            </form>
+            </footer>
+
         </div>
+
     </div>
 </div>

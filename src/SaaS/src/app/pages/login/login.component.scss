@@ -1,49 +1,35 @@
-@import './../../../assets/sass/_colors';
-.login-page {
-    display: table;
-    margin: auto;
-    box-sizing: border-box;
+@import './../../../assets/sass/material-kit/_colors';
+.signup-page .wrapper > .header {
+    min-height: 100vh;
 }
 
-.login-container {    
-    display: table-cell;
-    vertical-align: middle;
-    margin: 0;
+.wrapper > .header {
+    min-height: 300px;
+    background-position: center center;
+    background-size: cover;
 }
 
-.login-page, .login-container {
-    height: 100%;
-}
-
-.login-form {
-    width: 300px;
-    background: white;
-    transition: box-shadow .25s;
-    padding: 20px;
-    margin: 0.5rem 0 1rem 0;
-    border-radius: 2px;
-    box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22), 0 25px 55px 0 rgba(0,0,0,0.21);
-}
-
-.login-form .logo {
-    text-align: center;
+.header-filter {
     position: relative;
-    opacity: 0.8;
 }
 
-.login-form .logo img {
-    border-radius: 50%;
+.header-filter .container {
+    z-index: 2;
+    position: relative;
 }
 
-
-.margin {
-    margin: 0 !important;
+a, a:hover, a:focus{
+    color: $cyan-900;
 }
 
-.material-icons.prefix {
-    top: 15px;
+.form-group.is-focused .form-control {
+  background-image: linear-gradient($cyan-500, $cyan-500), linear-gradient(#D2D2D2, #D2D2D2);
 }
 
-.btn-primary {
-    background-color: $pink-A200 !important;
+.form-group.is-focused label, .form-group.is-focused label.control-label {
+    color: $cyan-500;
+}
+
+.checkbox input[type=checkbox]:checked + .checkbox-material .check {
+    background: $cyan-500;
 }

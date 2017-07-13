@@ -10,6 +10,7 @@
     },
     "messages": {
         "nameRequired": "Name is required",
-        "nameLessLength": "Name must be at least {minLength} characters"
+        "nameLessLength": "Name must be at least {minLength} characters",
+        "orBeClassical": "Or Be Classical"
     }
 }
