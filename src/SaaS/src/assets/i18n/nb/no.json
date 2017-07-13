@@ -5,7 +5,8 @@
         "forgotPassword": "Glemt passord",
         "userName": "Brukernavn",
         "password": "Passord",
-        "rememberMe": "Husk meg"
+        "rememberMe": "Husk meg",
+        "signin": "Signere på"
     },
     "messages": {
         "nameRequired": "Navn er påkrevd",

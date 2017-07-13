@@ -5,7 +5,8 @@
         "forgotPassword": "Forgot password",
         "userName": "Username",
         "password": "Password",
-        "rememberMe": "Remember me"
+        "rememberMe": "Remember me",
+        "signin": "Sign on"
     },
     "messages": {
         "nameRequired": "Name is required",
